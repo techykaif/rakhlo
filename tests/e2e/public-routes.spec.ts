@@ -3,8 +3,9 @@ import { expect, test } from "@playwright/test";
 test.describe("public routes", () => {
   test("landing page is usable", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: /buy it\. save it\. remember it\./i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /log in/i })).toHaveAttribute("href", "/login");
+    await expect(page.getByText("You bought it.")).toBeVisible();
+    await expect(page.getByText("Rakhlo remembers.")).toBeVisible();
+    await expect(page.getByRole("link", { name: /log in/i }).first()).toHaveAttribute("href", "/login");
     await expect(page.getByRole("link", { name: /get started/i }).first()).toHaveAttribute("href", "/signup");
   });
 
