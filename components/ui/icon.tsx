@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { ReactNode, SVGProps } from "react";
 
 export type IconName =
   | "home"
@@ -15,7 +15,7 @@ export type IconName =
   | "calendar"
   | "chevron-right";
 
-const paths: Record<IconName, React.ReactNode> = {
+const paths: Record<IconName, ReactNode> = {
   home: <path d="M3.5 10.7 12 3.5l8.5 7.2v8a1.8 1.8 0 0 1-1.8 1.8H5.3a1.8 1.8 0 0 1-1.8-1.8z" />,
   purchase: (
     <>
