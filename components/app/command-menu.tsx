@@ -8,7 +8,6 @@ import { Icon, type IconName } from "@/components/ui/icon";
 type CommandItem = {
   id: string;
   label: string;
-  shortcut?: string;
   href: string;
   icon: IconName;
 };
@@ -19,6 +18,7 @@ export function CommandMenu({ language }: { language: Language }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const items = useMemo<CommandItem[]>(
     () => [
@@ -29,12 +29,27 @@ export function CommandMenu({ language }: { language: Language }) {
     [t],
   );
 
-  const filteredItems = useMemo(() => {
+  const results = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
-    return normalized
+
+    const actions = normalized
       ? items.filter((item) => item.label.toLocaleLowerCase().includes(normalized))
       : items;
-  }, [items, query]);
+
+    if (normalized) {
+      return [
+        {
+          id: "search:" + normalized,
+          label: language === "hi" ? `“${query.trim()}” में खरीदारी खोजें` : `Search purchases for “${query.trim()}”`,
+          href: "/purchases?q=" + encodeURIComponent(query.trim()),
+          icon: "search" as const,
+        },
+        ...actions,
+      ];
+    }
+
+    return actions;
+  }, [items, language, query]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -44,6 +59,23 @@ export function CommandMenu({ language }: { language: Language }) {
         return;
       }
 
+      if (!open) return;
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setSelectedIndex((current) => Math.min(current + 1, results.length - 1));
+      }
+
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setSelectedIndex((current) => Math.max(current - 1, 0));
+      }
+
+      if (event.key === "Enter" && results[selectedIndex]) {
+        event.preventDefault();
+        navigate(results[selectedIndex].href);
+      }
+
       if (event.key === "Escape") {
         setOpen(false);
       }
@@ -51,14 +83,19 @@ export function CommandMenu({ language }: { language: Language }) {
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [open, results, selectedIndex]);
 
   useEffect(() => {
     if (open) {
       setQuery("");
+      setSelectedIndex(0);
       requestAnimationFrame(() => inputRef.current?.focus());
     }
   }, [open]);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
 
   function navigate(href: string) {
     setOpen(false);
@@ -102,17 +139,29 @@ export function CommandMenu({ language }: { language: Language }) {
             </div>
 
             <div className="command-list">
-              {filteredItems.length ? (
-                filteredItems.map((item) => (
-                  <button type="button" className="command-item" key={item.id} onClick={() => navigate(item.href)}>
+              {results.length ? (
+                results.map((item, index) => (
+                  <button
+                    type="button"
+                    className={index === selectedIndex ? "command-item selected" : "command-item"}
+                    key={item.id}
+                    onMouseEnter={() => setSelectedIndex(index)}
+                    onClick={() => navigate(item.href)}
+                  >
                     <span className="command-item__icon"><Icon name={item.icon} size={16} /></span>
                     <span className="command-item__label">{item.label}</span>
-                    {item.shortcut ? <kbd>{item.shortcut}</kbd> : <Icon name="chevron-right" size={15} />}
+                    <Icon name="chevron-right" size={15} />
                   </button>
                 ))
               ) : (
                 <p className="command-empty">{t.noCommandResults}</p>
               )}
+            </div>
+
+            <div className="command-footer">
+              <span><kbd>↑↓</kbd> {language === "hi" ? "चुनें" : "Navigate"}</span>
+              <span><kbd>↵</kbd> {language === "hi" ? "खोलें" : "Open"}</span>
+              <span><kbd>ESC</kbd> {language === "hi" ? "बंद करें" : "Close"}</span>
             </div>
           </div>
         </div>
