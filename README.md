@@ -388,6 +388,7 @@ The actual structure should follow the implementation rather than forcing empty 
 Product and technical decisions live under \`docs/\`.
 
 - [PRD v1.1](./docs/PRD-v1.1.md)
+- [Authentication setup](./docs/AUTH-SETUP.md)
 
 Documentation should be updated when product scope or important architectural decisions change.
 
