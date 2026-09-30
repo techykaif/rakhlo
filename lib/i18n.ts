@@ -49,6 +49,9 @@ export const copy = {
       resetSuccessTitle: "Password updated",
       resetSuccessText: "Your new password is saved. You can continue to your Rakhlo account.",
       goToSignIn: "Go to sign in",
+      orContinueWith: "Or continue with",
+      continueWith: "Continue with {provider}",
+      oauthError: "Unable to continue with that provider. Please try again.",
     },
     dashboard: {
       greeting: "Good evening",
@@ -270,6 +273,9 @@ export const copy = {
       resetSuccessTitle: "पासवर्ड अपडेट हो गया",
       resetSuccessText: "आपका नया पासवर्ड सेव हो गया है। अब अपने Rakhlo खाते में जा सकते हैं।",
       goToSignIn: "साइन इन पर जाएँ",
+      orContinueWith: "या इसके साथ जारी रखें",
+      continueWith: "{provider} के साथ जारी रखें",
+      oauthError: "इस प्रदाता के साथ आगे नहीं बढ़ सके। कृपया फिर से कोशिश करें।",
     },
     dashboard: {
       greeting: "शुभ संध्या",
