@@ -6,12 +6,14 @@ import { copy, type Language } from "@/lib/i18n";
 import { Icon, type IconName } from "@/components/ui/icon";
 
 const navItems: Array<{
-  key: "home" | "purchases";
+  key: "home" | "purchases" | "addPurchase";
   href: string;
   icon: IconName;
+  mobileOnly?: boolean;
 }> = [
   { key: "home", href: "/dashboard", icon: "home" },
   { key: "purchases", href: "/purchases", icon: "purchase" },
+  { key: "addPurchase", href: "/purchases/new", icon: "plus", mobileOnly: true },
 ];
 
 export function AppNav({ language, mobile = false }: { language: Language; mobile?: boolean }) {
@@ -20,11 +22,13 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
 
   return (
     <nav className={mobile ? "app-nav app-nav--mobile" : "app-nav"} aria-label={t.navigation}>
-      {navItems.map((item) => {
+      {navItems.filter((item) => !item.mobileOnly || mobile).map((item) => {
         const active =
           item.key === "home"
             ? pathname === "/dashboard"
-            : pathname.startsWith("/purchases");
+            : item.key === "purchases"
+              ? pathname.startsWith("/purchases")
+              : false;
 
         return (
           <Link
