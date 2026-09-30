@@ -6,10 +6,10 @@ Rakhlo uses layered verification so production is only deployed after the applic
 
 The pull-request workflow runs four independent jobs in parallel:
 
-1. TypeScript typecheck — `Rakhlo CI / Typecheck`
-2. Unit tests — `Rakhlo CI / Unit tests`
-3. Production build — `Rakhlo CI / Production build`
-4. Playwright E2E tests — `Rakhlo CI / E2E tests`
+1. TypeScript typecheck: `Rakhlo CI / Typecheck`
+2. Unit tests: `Rakhlo CI / Unit tests`
+3. Production build: `Rakhlo CI / Production build`
+4. Playwright E2E tests: `Rakhlo CI / E2E tests`
 
 E2E tests run on Desktop Chrome and a Pixel 7 mobile profile. All four jobs are intended to be required status checks for merging into `main`.
 
