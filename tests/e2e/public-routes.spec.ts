@@ -4,7 +4,8 @@ test.describe("public routes", () => {
   test("landing page is usable", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { name: /buy it\. save it\. remember it\./i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /get started/i })).toHaveAttribute("href", "/signup");
+    await expect(page.getByRole("link", { name: /log in/i })).toHaveAttribute("href", "/login");
+    await expect(page.getByRole("link", { name: /get started/i }).first()).toHaveAttribute("href", "/signup");
   });
 
   test("sign up page renders", async ({ page }) => {

@@ -68,6 +68,9 @@ export const copy = {
       noPurchases: "No purchases yet.",
       noPurchasesText: "When you add something, it will appear here.",
       navigation: "App navigation",
+      searchOrJump: "Search or jump",
+      openCommandMenu: "Open search and navigation",
+      noCommandResults: "No matching actions.",
     },
     purchases: {
       eyebrow: "Your memory",
@@ -213,6 +216,9 @@ export const copy = {
       noPurchases: "अभी कोई खरीदारी नहीं है।",
       noPurchasesText: "जब आप कुछ जोड़ेंगे, वह यहाँ दिखाई देगा।",
       navigation: "ऐप नेविगेशन",
+      searchOrJump: "खोजें या सीधे जाएँ",
+      openCommandMenu: "खोज और नेविगेशन खोलें",
+      noCommandResults: "कोई मिलती कार्रवाई नहीं मिली।",
     },
     purchases: {
       eyebrow: "आपकी याद",

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 const copy = {
@@ -8,6 +9,7 @@ const copy = {
     navHow: "How it works",
     navFeatures: "Features",
     navHindi: "हिंदी",
+    navLogin: "Log in",
     heroEyebrow: "A simple memory for everything you buy",
     heroTitle: "Buy it. Save it. Remember it.",
     heroText:
@@ -68,7 +70,7 @@ const copy = {
     ctaTitle: "You buy it once. Rakhlo remembers the rest.",
     ctaText:
       "Rakhlo is being built as a lightweight PWA for Android and the web.",
-    ctaButton: "Rakhlo is coming soon",
+    ctaButton: "Get started",
     footer:
       "Your purchases, documents, memories and important dates — together.",
     footerNote: "Built for people, not inventory departments.",
@@ -78,6 +80,7 @@ const copy = {
     navHow: "कैसे काम करता है",
     navFeatures: "फीचर्स",
     navHindi: "English",
+    navLogin: "लॉग इन",
     heroEyebrow: "आपकी खरीदी हुई चीज़ों की आसान याददाश्त",
     heroTitle: "खरीदा। रख लिया। याद रहेगा।",
     heroText:
@@ -138,7 +141,7 @@ const copy = {
     ctaTitle: "आपने एक बार खरीदा। बाकी Rakhlo याद रखेगा।",
     ctaText:
       "Rakhlo Android और web के लिए एक हल्का PWA बनाया जा रहा है।",
-    ctaButton: "Rakhlo जल्द आ रहा है",
+    ctaButton: "शुरू करें",
     footer:
       "आपकी खरीदारियाँ, डॉक्यूमेंट, यादें और ज़रूरी तारीखें — एक जगह।",
     footerNote: "लोगों के लिए बनाया गया है, इन्वेंटरी डिपार्टमेंट के लिए नहीं।",
@@ -242,14 +245,23 @@ export default function HomePage() {
           <a href="#features">{t.navFeatures}</a>
         </div>
 
-        <button
-          type="button"
-          className="language-toggle"
-          onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-          aria-label="Change language"
-        >
-          {t.navHindi}
-        </button>
+        <div className="nav-actions">
+          <Link className="nav-login" href="/login">
+            {t.navLogin}
+          </Link>
+          <Link className="nav-get-started" href="/signup">
+            {t.primary}
+            <Icon name="arrow" />
+          </Link>
+          <button
+            type="button"
+            className="language-toggle"
+            onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+            aria-label="Change language"
+          >
+            {t.navHindi}
+          </button>
+        </div>
       </nav>
 
       <section className="hero container" id="top">
@@ -262,10 +274,10 @@ export default function HomePage() {
           <p className="hero-text">{t.heroText}</p>
 
           <div className="hero-actions">
-            <a className="button button-dark" href="/signup">
+            <Link className="button button-dark" href="/signup">
               {t.primary}
               <Icon name="arrow" />
-            </a>
+            </Link>
             <a className="button button-light" href="#how">
               {t.secondary}
             </a>
@@ -472,10 +484,10 @@ export default function HomePage() {
             <p className="section-eyebrow light-eyebrow">Rakhlo</p>
             <h2>{t.ctaTitle}</h2>
             <p>{t.ctaText}</p>
-            <a className="button button-lime" href="/signup">
+            <Link className="button button-lime" href="/signup">
               {t.ctaButton}
               <Icon name="arrow" />
-            </a>
+            </Link>
           </div>
           <div className="cta-mark" aria-hidden="true">
             <LogoMark />

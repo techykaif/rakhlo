@@ -32,16 +32,18 @@ Vercel's Git integration therefore creates a Production deployment for `main` wh
 
 GitHub Actions remains the verification gate.
 
-Every pull request runs `Rakhlo CI / Verify application` with:
+Every pull request runs four independent CI checks in parallel:
 
-- TypeScript typecheck
-- unit tests
-- production build
-- Playwright E2E tests on desktop and mobile
+- `Rakhlo CI / Typecheck`
+- `Rakhlo CI / Unit tests`
+- `Rakhlo CI / Production build`
+- `Rakhlo CI / E2E tests`
 
-`main` runs the same verification after merge.
+Each check has its own isolated runner and dependency install, so a slow browser test does not block typechecking or unit tests from starting. The workflow uses `npm install` because this repository does not currently commit a package lockfile; npm's cache is shared per runner job to keep repeated installs fast.
 
-GitHub branch protection should require the CI check before merging to `main`. With that protection in place, the Vercel production deployment can only be triggered by a merge that has already passed the required tests.
+`main` runs the same four checks after merge.
+
+The `main` branch ruleset should require all four checks before a pull request can merge. This makes the merge gate explicit: every required verification job must be green.
 
 ## No GitHub Vercel secrets
 
@@ -61,7 +63,14 @@ Vercel documents that connected Git repositories normally create deployments for
 
 ## Branch protection
 
-Configure a GitHub ruleset for `main` that requires `Rakhlo CI / Verify application` before merging and restricts direct pushes to `main`.
+Configure a GitHub ruleset for `main` that requires these status checks before merging:
+
+- `Rakhlo CI / Typecheck`
+- `Rakhlo CI / Unit tests`
+- `Rakhlo CI / Production build`
+- `Rakhlo CI / E2E tests`
+
+Also restrict direct pushes to `main`.
 
 The connected GitHub integration does not currently expose repository-ruleset mutation, so this final protection setting must be enabled in GitHub.
 
