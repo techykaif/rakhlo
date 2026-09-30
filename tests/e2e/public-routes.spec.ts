@@ -31,7 +31,7 @@ test.describe("public routes", () => {
 
   test("reminders page requires authentication", async ({ page }) => {
     await page.goto("/reminders");
-    await expect(page).toHaveURL(/\\/login$/);
+    await expect(page).toHaveURL(/\/login$/);
   });
 
   test("language toggle changes auth copy", async ({ page }) => {
