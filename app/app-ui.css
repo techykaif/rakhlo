@@ -1163,3 +1163,47 @@
     transform: none;
   }
 }
+
+/* Small interaction details that make the shell feel finished */
+.app-nav__item {
+  position: relative;
+}
+
+.app-nav__item.active::before {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  content: "";
+  border-radius: 0 2px 2px 0;
+  background: var(--app-accent);
+}
+
+.app-nav__item.active {
+  padding-left: 12px;
+}
+
+.user-chip {
+  box-shadow: 0 8px 18px rgba(22,22,19,0.03);
+}
+
+.app-topbar {
+  box-shadow: 0 1px 0 rgba(22,22,19,0.01);
+}
+
+@media (max-width: 760px) {
+  .app-nav--mobile .app-nav__item.active::before {
+    left: 7px;
+    right: 7px;
+    top: auto;
+    bottom: 3px;
+    width: auto;
+    height: 2px;
+    border-radius: 2px;
+  }
+
+  .app-nav--mobile .app-nav__item.active {
+    padding-left: 4px;
+  }
+}
