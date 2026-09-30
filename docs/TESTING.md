@@ -151,3 +151,5 @@ Automated tests use synthetic data only. Never commit real receipts, payment scr
 A release candidate is deployable only when all required CI checks are green and the production workflow uses the exact commit SHA verified by CI.
 
 Any feature changing user-visible or domain behavior must add or update regression tests before merge.
+
+The CI test runner intentionally excludes Playwright specs from Vitest so browser tests execute only through the Playwright runner.
