@@ -11,15 +11,26 @@ export default async function PurchaseDetailPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
-  const { data: purchase, error } = await supabase
-    .from("purchases")
-    .select(
-      "id,title,purchase_date,amount,currency,seller_name,category_id,quantity,status,notes,created_at,updated_at,categories(name)",
-    )
-    .eq("id", id)
-    .maybeSingle();
 
-  if (error || !purchase) {
+  const [
+    { data: purchase, error: purchaseError },
+    { data: documents, error: documentsError },
+  ] = await Promise.all([
+    supabase
+      .from("purchases")
+      .select(
+        "id,title,purchase_date,amount,currency,seller_name,category_id,quantity,status,notes,created_at,updated_at,categories(name)",
+      )
+      .eq("id", id)
+      .maybeSingle(),
+    supabase
+      .from("documents")
+      .select("id,purchase_id,type,storage_path,filename,mime_type,size_bytes,created_at")
+      .eq("purchase_id", id)
+      .order("created_at", { ascending: false }),
+  ]);
+
+  if (purchaseError || !purchase) {
     notFound();
   }
 
@@ -34,7 +45,10 @@ export default async function PurchaseDetailPage({
         backHref="/purchases"
         backLabel={t.backToPurchases}
       />
-      <PurchaseDetail purchase={purchase} />
+      <PurchaseDetail
+        purchase={purchase}
+        documents={documentsError ? [] : documents ?? []}
+      />
     </>
   );
 }
