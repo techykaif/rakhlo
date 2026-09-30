@@ -43,9 +43,9 @@ Application navigation uses Next.js links so internal navigation can use the fra
 
 The UI is modular at three levels:
 
-1. **Atoms** — `components/ui/*` for icons, language controls, logos, and other primitives.
-2. **App shell** — `components/app/*` for navigation, command menu, page headers, dashboard composition, and shared application chrome.
-3. **Feature modules** — `components/purchases/*`, document UI, and future domain-specific UI.
+1. **Atoms:** `components/ui/*` for icons, language controls, logos, and other primitives.
+2. **App shell:** `components/app/*` for navigation, command menu, page headers, dashboard composition, and shared application chrome.
+3. **Feature modules:** `components/purchases/*`, document UI, and future domain-specific UI.
 
 Domain logic stays outside components in `lib/*`, while persistence is handled through Supabase server/client modules.
 
