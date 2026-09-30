@@ -4,6 +4,18 @@ import Link from "next/link";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { DeletePurchaseButton } from "@/components/purchases/delete-purchase-button";
+import { PurchaseDocuments } from "@/components/purchases/purchase-documents";
+
+type PurchaseDocument = {
+  id: string;
+  purchase_id: string;
+  type: string;
+  storage_path: string;
+  filename: string;
+  mime_type: string;
+  size_bytes: number;
+  created_at: string;
+};
 
 type PurchaseDetailValue = {
   id: string;
@@ -19,7 +31,13 @@ type PurchaseDetailValue = {
   categories: { name: string } | null;
 };
 
-export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) {
+export function PurchaseDetail({
+  purchase,
+  documents,
+}: {
+  purchase: PurchaseDetailValue;
+  documents: PurchaseDocument[];
+}) {
   const { language } = useLanguage();
   const t = copy[language].purchases;
   const locale = language === "hi" ? "hi-IN" : "en-IN";
@@ -28,7 +46,7 @@ export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) 
     month: "long",
     year: "numeric",
     timeZone: "UTC",
-  }).format(new Date(`${purchase.purchase_date}T00:00:00Z`));
+  }).format(new Date(purchase.purchase_date + "T00:00:00Z"));
   const money = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "INR",
@@ -79,8 +97,10 @@ export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) 
         </section>
       </div>
 
+      <PurchaseDocuments purchaseId={purchase.id} initialDocuments={documents} />
+
       <div className="purchase-detail__actions">
-        <Link href={`/purchases/${purchase.id}/edit`} className="button button-light">
+        <Link href={"/purchases/" + purchase.id + "/edit"} className="button button-light">
           {t.editPurchase}
         </Link>
         <DeletePurchaseButton purchaseId={purchase.id} />
