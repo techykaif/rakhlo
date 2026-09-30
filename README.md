@@ -38,14 +38,14 @@ Everything else is optional.
 
 ### Core principles
 
-1. **Simple first** — ordinary people should understand the interface immediately.
-2. **Receipt optional** — a purchase can exist without a receipt.
+1. **Simple first:** ordinary people should understand the interface immediately.
+2. **Receipt optional:** a purchase can exist without a receipt.
 3. **AI optional** — the core application must work without AI.
 4. **Evidence-aware** — distinguish uploaded/verified documents from user-entered memories.
 5. **Reminder-first** — important dates should be actionable, not buried in records.
-6. **India-first** — support ₹, Hindi, English, UPI/payment screenshots, local purchases, and informal purchase experiences.
-7. **Mobile-first** — the primary experience should feel natural on Android.
-8. **Privacy-first** — receipts, payment proofs, serial numbers, and purchase history are sensitive user data.
+6. **India-first:** support ₹, Hindi, English, UPI/payment screenshots, local purchases, and informal purchase experiences.
+7. **Mobile-first:** the primary experience should feel natural on Android.
+8. **Privacy-first:** receipts, payment proofs, serial numbers, and purchase history are sensitive user data.
 9. **Offline-friendly** — users should be able to capture important purchase information even with unreliable connectivity.
 10. **Progressive complexity** — start with a tiny number of fields and reveal advanced options only when needed.
 
