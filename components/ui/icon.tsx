@@ -13,6 +13,7 @@ export type IconName =
   | "logout"
   | "file"
   | "calendar"
+  | "check"
   | "chevron-right";
 
 const paths: Record<IconName, ReactNode> = {
@@ -66,6 +67,7 @@ const paths: Record<IconName, ReactNode> = {
       <path d="M8 3.5v4M16 3.5v4M4 9.5h16" />
     </>
   ),
+  check: <path d="m5 12 4 4L19 6" />,
   "chevron-right": <path d="m9 6 6 6-6 6" />,
 };
 

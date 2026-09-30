@@ -6,13 +6,14 @@ import { copy, type Language } from "@/lib/i18n";
 import { Icon, type IconName } from "@/components/ui/icon";
 
 const navItems: Array<{
-  key: "home" | "purchases" | "addPurchase";
+  key: "home" | "purchases" | "reminders" | "addPurchase";
   href: string;
   icon: IconName;
   mobileOnly?: boolean;
 }> = [
   { key: "home", href: "/dashboard", icon: "home" },
   { key: "purchases", href: "/purchases", icon: "purchase" },
+  { key: "reminders", href: "/reminders", icon: "bell" },
   { key: "addPurchase", href: "/purchases/new", icon: "plus", mobileOnly: true },
 ];
 
@@ -28,7 +29,9 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
             ? pathname === "/dashboard"
             : item.key === "purchases"
               ? pathname.startsWith("/purchases")
-              : false;
+              : item.key === "reminders"
+                ? pathname.startsWith("/reminders")
+                : false;
 
         return (
           <Link
