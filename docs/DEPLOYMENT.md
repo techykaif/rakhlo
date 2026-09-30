@@ -2,57 +2,82 @@
 
 ## Goal
 
-Rakhlo uses a test-gated, production-only deployment model.
+Rakhlo uses a test-gated, production-only Vercel Git deployment model.
 
-feature branch -> Pull Request -> Rakhlo CI -> merge to main -> Rakhlo CI on main -> successful CI -> Vercel Production
+feature branch -> Pull Request -> GitHub CI -> merge to main -> Vercel Production
 
-There should be no Vercel Preview Deployments from Git pushes or pull requests.
+Preview deployments are disabled for non-main branches.
 
 ## Vercel
 
-vercel.json sets git.deploymentEnabled to false. This disables Vercel Git-triggered deployments.
+The repository config is:
 
-Production deployment is controlled by GitHub Actions after Rakhlo CI succeeds.
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "*": false,
+      "main": true
+    }
+  }
+}
+```
 
-Vercel documents git.deploymentEnabled as the mechanism for disabling automatic Git deployments. The repository uses this so GitHub Actions is the single production deploy path. See the current Vercel deployment guidance for Git-triggered preview behavior.
+`git.deploymentEnabled` supports branch-specific boolean rules. Vercel's Git configuration defaults unspecified branches to enabled, so the repository explicitly disables the wildcard and enables only `main`.
 
-## Required GitHub secrets
+Vercel's Git integration therefore creates a Production deployment for `main` while feature branches and pull requests do not trigger Vercel deployments.
 
-- VERCEL_TOKEN
-- VERCEL_ORG_ID
-- VERCEL_PROJECT_ID
+## Test gate
 
-These values must live in GitHub Actions secrets and must never be committed.
+GitHub Actions remains the verification gate.
 
-## Deployment gate
+Every pull request runs `Rakhlo CI / Verify application` with:
 
-The deploy workflow listens only to completed Rakhlo CI runs on main.
+- TypeScript typecheck
+- unit tests
+- production build
+- Playwright E2E tests on desktop and mobile
 
-A deploy can start only when workflow_run.conclusion is success.
+`main` runs the same verification after merge.
 
-The deploy job checks out the exact workflow_run.head_sha so the deployment target is the commit that CI verified.
+GitHub branch protection should require the CI check before merging to `main`. With that protection in place, the Vercel production deployment can only be triggered by a merge that has already passed the required tests.
+
+## No GitHub Vercel secrets
+
+Rakhlo does not use a GitHub Actions Vercel token, organization ID, project ID, or deploy command.
+
+The deployment is performed by the Vercel GitHub integration itself after the tested change is merged into `main`.
 
 ## Cost-control policy
 
-- Pull requests: GitHub CI only.
-- Feature branches: GitHub CI only.
-- main: GitHub CI first.
-- Successful main CI: one Vercel Production deployment.
+- Pull requests: GitHub CI only; no Vercel Preview deployment.
+- Feature branches: GitHub CI only; no Vercel Preview deployment.
+- `main`: one Vercel Production deployment after merge.
 
-This prevents one Preview deployment from being created for every feature branch or pull request.
+This avoids the repeated Vercel Preview build/deployment cycle during feature development.
+
+Vercel documents that connected Git repositories normally create deployments for commits and provides branch-specific `deploymentEnabled` configuration to disable deployment for selected branches.
 
 ## Branch protection
 
-Enable a GitHub ruleset for main that requires the Rakhlo CI / Verify application status check before merge and restricts direct pushes.
+Configure a GitHub ruleset for `main` that requires `Rakhlo CI / Verify application` before merging and restricts direct pushes to `main`.
 
-The connected GitHub integration currently cannot mutate repository rulesets, so this final branch-protection setting must be enabled in the GitHub UI.
+The connected GitHub integration does not currently expose repository-ruleset mutation, so this final protection setting must be enabled in GitHub.
 
 ## Local verification
 
-Run npm install, npm run typecheck, npm run test, npm run build, install Chromium for Playwright, and npm run test:e2e.
+Run:
 
-The npm run verify script covers typecheck, unit tests, and the production build.
+```bash
+npm install
+npm run typecheck
+npm run test
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
 
-## Future changes
+## Future policy
 
-Every feature touching authentication, purchases, documents, payments, warranties, reminders, notifications, localization, PWA behavior, or authorization must add or update regression tests before merge.
+Every feature changing authentication, purchases, documents, payments, warranties, reminders, notifications, localization, PWA behavior, or authorization must add or update regression tests before merge.
