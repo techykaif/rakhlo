@@ -10,9 +10,9 @@ export const metadata = {
 export default function ResetPasswordPage() {
   return (
     <AuthCard
-      eyebrow="Rakhlo"
-      title={copy.en.auth.resetTitle}
-      subtitle={copy.en.auth.resetSubtitle}
+      eyebrow={{ en: "Rakhlo", hi: "Rakhlo" }}
+      title={{ en: copy.en.auth.resetTitle, hi: copy.hi.auth.resetTitle }}
+      subtitle={{ en: copy.en.auth.resetSubtitle, hi: copy.hi.auth.resetSubtitle }}
     >
       <ResetPasswordForm />
     </AuthCard>
