@@ -1,15 +1,21 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { AppShell } from "@/components/app/app-shell";
+import { DashboardContent } from "@/components/app/dashboard-content";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
-  const claims = data?.claims;
 
-  if (!claims?.sub) {
+  if (!data?.claims?.sub) {
     redirect("/login");
   }
 
-  return <AppShell email={typeof claims.email === "string" ? claims.email : ""} />;
+  const { data: recentPurchases } = await supabase
+    .from("purchases")
+    .select("id,title,purchase_date,amount,currency,seller_name")
+    .order("purchase_date", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  return <DashboardContent recentPurchases={recentPurchases ?? []} />;
 }
