@@ -3545,7 +3545,10 @@ a {
   }
 
   .landing-language {
-    display: none;
+    display: inline-flex;
+    min-height: 34px;
+    padding: 0 9px;
+    font-size: 10px;
   }
 
   .landing-nav-cta {
