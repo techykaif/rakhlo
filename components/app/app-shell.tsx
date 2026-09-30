@@ -39,11 +39,11 @@ export function AppShell({ email, children }: AppShellProps) {
           className="app-sidebar__brand"
           aria-label={copy[language].common.brand}
         >
-          <Logo />
+          <Logo size="md" />
         </Link>
 
         <div className="app-sidebar__workspace">
-          <span>Rakhlo</span>
+          <span>{t.workspaceLabel}</span>
         </div>
 
         <AppNav language={language} />
