@@ -16,7 +16,7 @@ type PurchaseDetailValue = {
   quantity: number;
   status: string;
   notes: string | null;
-  categories: { name: string }[] | null;
+  categories: { name: string } | null;
 };
 
 export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) {
@@ -60,7 +60,7 @@ export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) 
           </div>
           <div className="detail-cell">
             <span>{t.category}</span>
-            <strong>{purchase.categories?.[0]?.name || t.categoryUnknown}</strong>
+            <strong>{purchase.categories?.name || t.categoryUnknown}</strong>
           </div>
           <div className="detail-cell">
             <span>{t.quantity}</span>
