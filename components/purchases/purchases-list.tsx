@@ -13,7 +13,7 @@ type PurchaseListItem = {
   seller_name: string | null;
   quantity: number;
   notes: string | null;
-  categories: { name: string }[] | null;
+  categories: { name: string } | null;
 };
 
 export function PurchasesList({ purchases, query }: { purchases: PurchaseListItem[]; query: string }) {
@@ -50,7 +50,7 @@ export function PurchasesList({ purchases, query }: { purchases: PurchaseListIte
                 <span>
                   {dateFormatter.format(new Date(`${purchase.purchase_date}T00:00:00Z`))}
                   {" · "}
-                  {purchase.categories?.[0]?.name ?? t.categoryUnknown}
+                  {purchase.categories?.name ?? t.categoryUnknown}
                   {purchase.seller_name ? ` · ${purchase.seller_name}` : ""}
                 </span>
               </div>
