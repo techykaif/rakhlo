@@ -1,4 +1,4 @@
-""use client";
+"use client";
 
 import Link from "next/link";
 import { copy } from "@/lib/i18n";
@@ -71,4 +71,3 @@ export function PurchasesList({ purchases, query }: { purchases: PurchaseListIte
     </section>
   );
 }
-"
