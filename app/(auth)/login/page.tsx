@@ -10,9 +10,9 @@ export const metadata = {
 export default function LoginPage() {
   return (
     <AuthCard
-      eyebrow="Rakhlo"
-      title={copy.en.auth.signInTitle}
-      subtitle={copy.en.auth.signInSubtitle}
+      eyebrow={{ en: "Rakhlo", hi: "Rakhlo" }}
+      title={{ en: copy.en.auth.signInTitle, hi: copy.hi.auth.signInTitle }}
+      subtitle={{ en: copy.en.auth.signInSubtitle, hi: copy.hi.auth.signInSubtitle }}
     >
       <AuthForm mode="signin" />
     </AuthCard>
