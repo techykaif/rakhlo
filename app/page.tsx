@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 const copy = {
@@ -245,10 +246,10 @@ export default function HomePage() {
         </div>
 
         <div className="nav-actions">
-          <a className="nav-login" href="/login">
+          <Link className="nav-login" href="/login">
             {t.navLogin}
-          </a>
-          <a className="nav-get-started" href="/signup">
+          </Link>
+          <Link className="nav-get-started" href="/signup">
             {t.primary}
             <Icon name="arrow" />
           </a>
@@ -273,7 +274,7 @@ export default function HomePage() {
           <p className="hero-text">{t.heroText}</p>
 
           <div className="hero-actions">
-            <a className="button button-dark" href="/signup">
+            <Link className="button button-dark" href="/signup">
               {t.primary}
               <Icon name="arrow" />
             </a>
@@ -483,7 +484,7 @@ export default function HomePage() {
             <p className="section-eyebrow light-eyebrow">Rakhlo</p>
             <h2>{t.ctaTitle}</h2>
             <p>{t.ctaText}</p>
-            <a className="button button-lime" href="/signup">
+            <Link className="button button-lime" href="/signup">
               {t.ctaButton}
               <Icon name="arrow" />
             </a>
