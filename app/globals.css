@@ -56,9 +56,9 @@ a {
 
 .nav {
   min-height: 84px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
   border-bottom: 1px solid rgba(23, 23, 19, 0.08);
 }
@@ -115,22 +115,70 @@ a {
   color: var(--ink);
 }
 
+.nav-actions {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-login,
+.nav-get-started {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 760;
+  letter-spacing: -0.01em;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+
+.nav-login {
+  padding: 0 12px;
+  color: #5f6059;
+}
+
+.nav-login:hover {
+  color: var(--ink);
+  background: rgba(23, 23, 19, 0.045);
+}
+
+.nav-get-started {
+  gap: 8px;
+  padding: 0 15px 0 16px;
+  color: #fff;
+  background: var(--ink);
+  box-shadow: 0 8px 18px rgba(23, 23, 19, 0.13);
+}
+
+.nav-get-started svg {
+  width: 17px;
+  height: 17px;
+}
+
+.nav-get-started:hover {
+  background: #2b2b26;
+  box-shadow: 0 10px 22px rgba(23, 23, 19, 0.17);
+}
+
 .language-toggle {
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.78);
   color: var(--ink);
   border-radius: 999px;
-  padding: 10px 15px;
+  padding: 10px 14px;
   font: inherit;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 180ms ease, background 180ms ease;
+  transition: background 140ms ease, border-color 140ms ease;
 }
 
 .language-toggle:hover {
-  transform: translateY(-1px);
   background: var(--surface);
+  border-color: #cfcfc6;
 }
 
 .hero {
@@ -892,10 +940,40 @@ a {
 
   .nav {
     min-height: 73px;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
   }
 
   .nav-links {
     display: none;
+  }
+
+  .nav-actions {
+    gap: 3px;
+  }
+
+  .nav-login {
+    min-height: 38px;
+    padding: 0 9px;
+    font-size: 12px;
+  }
+
+  .nav-get-started {
+    min-height: 38px;
+    padding: 0 11px 0 12px;
+    border-radius: 10px;
+    font-size: 12px;
+  }
+
+  .nav-get-started svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .language-toggle {
+    min-height: 38px;
+    padding: 8px 10px;
+    font-size: 12px;
   }
 
   .hero {
