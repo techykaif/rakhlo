@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
+import { Icon } from "@/components/ui/icon";
 
 type PurchaseListItem = {
   id: string;
@@ -57,6 +58,7 @@ export function PurchasesList({ purchases, query }: { purchases: PurchaseListIte
               <strong className="purchase-result__amount">
                 {moneyFormatter.format(Number(purchase.amount))}
               </strong>
+              <Icon name="chevron-right" size={15} className="purchase-result__chevron" />
             </Link>
           ))}
         </div>
