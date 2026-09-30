@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { copy, type Language } from "@/lib/i18n";
+import { useLanguage } from "@/components/ui/language-provider";
 
 type AuthMode = "signin" | "signup";
 
@@ -12,7 +12,7 @@ type AuthFormProps = {
 };
 
 export function AuthForm({ mode }: AuthFormProps) {
-  const [language, setLanguage] = useState<Language>("en");
+  const { language, copy } = useLanguage();
   const t = copy[language].auth;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,15 +20,6 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
-  function syncLanguage() {
-    const saved = window.localStorage.getItem("rakhlo-language");
-    if (saved === "en" || saved === "hi") setLanguage(saved);
-  }
-
-  if (typeof window !== "undefined") {
-    syncLanguage();
-  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -147,8 +138,8 @@ export function AuthForm({ mode }: AuthFormProps) {
         </label>
       ) : null}
 
-      {error ? <div className="auth-message auth-message--error">{error}</div> : null}
-      {message ? <div className="auth-message auth-message--success">{message}</div> : null}
+      {error ? <div className="auth-message auth-message--error" role="alert">{error}</div> : null}
+      {message ? <div className="auth-message auth-message--success" role="status">{message}</div> : null}
 
       <button className="button button-dark auth-submit" type="submit" disabled={loading}>
         {loading ? copy[language].common.loading : mode === "signin" ? t.signInButton : t.signUpButton}
