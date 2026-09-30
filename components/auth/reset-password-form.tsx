@@ -3,22 +3,17 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { copy, type Language } from "@/lib/i18n";
+import { useLanguage } from "@/components/ui/language-provider";
 
 export function ResetPasswordForm() {
   const router = useRouter();
-  const [language, setLanguage] = useState<Language>("en");
+  const { language, copy } = useLanguage();
   const t = copy[language].auth;
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
-  if (typeof window !== "undefined") {
-    const saved = window.localStorage.getItem("rakhlo-language");
-    if (saved === "en" || saved === "hi") setLanguage(saved);
-  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,7 +42,7 @@ export function ResetPasswordForm() {
       }
 
       setMessage(\`\${t.resetSuccessTitle}: \${t.resetSuccessText}\`);
-      setTimeout(() => router.push("/dashboard"), 900);
+      window.setTimeout(() => router.push("/dashboard"), 900);
     } catch {
       setError(t.genericError);
     } finally {
