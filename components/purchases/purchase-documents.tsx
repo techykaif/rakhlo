@@ -21,7 +21,16 @@ type DocumentItem = {
   created_at: string;
 };
 
-const typeLabel = (type: string, t: typeof copy.en.purchases) => {
+type DocumentCopy = {
+  receipt: string;
+  invoice: string;
+  warrantyCard: string;
+  paymentProof: string;
+  productPhoto: string;
+  otherDocument: string;
+};
+
+const typeLabel = (type: string, t: DocumentCopy) => {
   switch (type) {
     case "receipt":
       return t.receipt;
