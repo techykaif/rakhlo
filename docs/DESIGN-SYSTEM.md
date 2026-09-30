@@ -53,10 +53,10 @@ Domain logic stays outside components in `lib/*`, while persistence is handled t
 
 The direction is informed by public design guidance and product interfaces from:
 
-- **Linear** — compact sidebar organization and information-dense utility navigation.
-- **Vercel Geist** — disciplined typography, spacing, contrast, and high-signal interface primitives.
-- **Supabase Design System** — reusable atoms, fragments, UI patterns, predictable page layout, navigation, dialogs, and accessibility.
-- **Arc** — command-driven navigation as a fast path for experienced users.
+- **Linear** - compact sidebar organization and information-dense utility navigation.
+- **Vercel Geist** - disciplined typography, spacing, contrast, and high-signal interface primitives.
+- **Supabase Design System** - reusable atoms, fragments, UI patterns, predictable page layout, navigation, dialogs, and accessibility.
+- **Arc** - command-driven navigation as a fast path for experienced users.
 
 These references inform principles and interaction patterns; Rakhlo's visual language and information hierarchy remain its own.
 
