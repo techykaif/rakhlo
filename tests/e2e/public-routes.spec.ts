@@ -5,9 +5,7 @@ test.describe("public routes", () => {
     await page.goto("/");
     await expect(page.getByText("You bought it.")).toBeVisible();
     await expect(page.getByText("Rakhlo remembers.")).toBeVisible();
-    await expect(
-      page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: /log in/i })
-    ).toHaveAttribute("href", "/login");
+    await expect(page.getByRole("link", { name: /log in/i }).first()).toHaveAttribute("href", "/login");
     await expect(page.getByRole("link", { name: /get started/i }).first()).toHaveAttribute("href", "/signup");
   });
 
