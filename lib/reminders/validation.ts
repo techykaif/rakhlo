@@ -27,14 +27,54 @@ export type ReminderValidationResult =
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:?\d{2})$/;
+const ISO_DATE_RE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,3}))?)?(Z|[+-]\d{2}:?\d{2})$/;
 
 function parseDueAt(value: unknown) {
   if (typeof value !== "string" || !ISO_DATE_RE.test(value.trim())) {
     return null;
   }
 
-  const date = new Date(value.trim());
+  const normalized = value.trim();
+  const match = normalized.match(ISO_DATE_RE);
+
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const hour = Number(match[4]);
+  const minute = Number(match[5]);
+  const second = Number(match[6] ?? "0");
+  const milliseconds = Number((match[7] ?? "0").padEnd(3, "0"));
+
+  const dateOnly = new Date(Date.UTC(year, month - 1, day));
+
+  if (
+    dateOnly.getUTCFullYear() !== year ||
+    dateOnly.getUTCMonth() !== month - 1 ||
+    dateOnly.getUTCDate() !== day ||
+    hour > 23 ||
+    minute > 59 ||
+    second > 59 ||
+    milliseconds > 999
+  ) {
+    return null;
+  }
+
+  const timezone = match[8];
+  if (timezone !== "Z") {
+    const timezoneParts = timezone.slice(1).split(":");
+    const timezoneHour = Number(timezoneParts[0]);
+    const timezoneMinute = Number(timezoneParts[1]);
+
+    if (timezoneHour > 23 || timezoneMinute > 59) {
+      return null;
+    }
+  }
+
+  const date = new Date(normalized);
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
