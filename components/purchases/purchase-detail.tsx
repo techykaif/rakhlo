@@ -1,4 +1,4 @@
-""use client";
+"use client";
 
 import Link from "next/link";
 import { copy } from "@/lib/i18n";
@@ -88,4 +88,3 @@ export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) 
     </>
   );
 }
-"
