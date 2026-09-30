@@ -41,7 +41,7 @@ export function ResetPasswordForm() {
         return;
       }
 
-      setMessage(\`\${t.resetSuccessTitle}: \${t.resetSuccessText}\`);
+      setMessage(`${t.resetSuccessTitle}: ${t.resetSuccessText}`);
       window.setTimeout(() => router.push("/dashboard"), 900);
     } catch {
       setError(t.genericError);

@@ -65,6 +65,9 @@ export const copy = {
       firstPurchase: "Add your first purchase",
       signedInAs: "Signed in as",
       signOut: "Sign out",
+      noPurchases: "No purchases yet.",
+      noPurchasesText: "When you add something, it will appear here.",
+      navigation: "App navigation",
     },
   },
   hi: {
@@ -133,6 +136,9 @@ export const copy = {
       firstPurchase: "पहली खरीदारी जोड़ें",
       signedInAs: "साइन इन हैं",
       signOut: "साइन आउट करें",
+      noPurchases: "अभी कोई खरीदारी नहीं है।",
+      noPurchasesText: "जब आप कुछ जोड़ेंगे, वह यहाँ दिखाई देगा।",
+      navigation: "ऐप नेविगेशन",
     },
   },
 } as const;

@@ -6,7 +6,7 @@ type LogoProps = {
 export function Logo({ size = "md", inverted = false }: LogoProps) {
   return (
     <span
-      className={\`brand-logo brand-logo--\${size}\${inverted ? " brand-logo--inverted" : ""}\`}
+      className={`brand-logo brand-logo--${size}${inverted ? " brand-logo--inverted" : ""}`}
       aria-label="Rakhlo"
     >
       <span className="brand-logo__mark" aria-hidden="true">

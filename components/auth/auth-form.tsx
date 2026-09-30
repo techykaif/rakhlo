@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
+import { validateAuthInput } from "@/lib/validation/auth";
 
 type AuthMode = "signin" | "signup";
 
@@ -26,25 +27,19 @@ export function AuthForm({ mode }: AuthFormProps) {
     setError("");
     setMessage("");
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const validation = validateAuthInput(
+      { email, password, confirmation },
+      mode,
+      {
+        emailRequired: t.emailRequired,
+        passwordRequired: t.passwordRequired,
+        passwordTooShort: t.passwordTooShort,
+        passwordMismatch: t.passwordMismatch,
+      }
+    );
 
-    if (!normalizedEmail) {
-      setError(t.emailRequired);
-      return;
-    }
-
-    if (!password) {
-      setError(t.passwordRequired);
-      return;
-    }
-
-    if (password.length < 6) {
-      setError(t.passwordTooShort);
-      return;
-    }
-
-    if (mode === "signup" && password !== confirmation) {
-      setError(t.passwordMismatch);
+    if (!validation.ok) {
+      setError(validation.error);
       return;
     }
 
@@ -55,7 +50,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       if (mode === "signin") {
         const { error: signInError } = await supabase.auth.signInWithPassword({
-          email: normalizedEmail,
+          email: validation.email,
           password,
         });
 
@@ -70,10 +65,10 @@ export function AuthForm({ mode }: AuthFormProps) {
       }
 
       const { data, error: signUpError } = await supabase.auth.signUp({
-        email: normalizedEmail,
+        email: validation.email,
         password,
         options: {
-          emailRedirectTo: \`\${window.location.origin}/auth/callback\`,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
@@ -87,7 +82,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      setMessage(\`\${t.signUpSuccessTitle}: \${t.signUpSuccessText}\`);
+      setMessage(`${t.signUpSuccessTitle}: ${t.signUpSuccessText}`);
     } catch {
       setError(t.genericError);
     } finally {
