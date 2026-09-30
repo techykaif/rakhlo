@@ -8,7 +8,7 @@ import { LanguageProvider } from "@/components/ui/language-provider";
 export const metadata: Metadata = {
   metadataBase: new URL("https://rakhlo.xyz"),
   title: {
-    default: "Rakhlo — Buy it. Save it. Remember it.",
+    default: "Rakhlo | Buy it. Save it. Remember it.",
     template: "%s | Rakhlo",
   },
   description:
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Rakhlo — Buy it. Save it. Remember it.",
+    title: "Rakhlo | Buy it. Save it. Remember it.",
     description: "Keep purchases, proof, memories and important dates in one simple place.",
     url: "https://rakhlo.xyz",
     siteName: "Rakhlo",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rakhlo — Buy it. Save it. Remember it.",
+    title: "Rakhlo | Buy it. Save it. Remember it.",
     description: "Keep purchases, proof, memories and important dates in one simple place.",
   },
   robots: {
