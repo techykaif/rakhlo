@@ -691,7 +691,7 @@ Notification content should minimize sensitive information.
 
 ---
 
-## 24. Data Model — Initial Concept
+## 24. Data Model - Initial Concept
 
 The initial schema should be designed around:
 
