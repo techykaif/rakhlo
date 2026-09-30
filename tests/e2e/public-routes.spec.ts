@@ -28,6 +28,12 @@ test.describe("public routes", () => {
     await expect(page.getByRole("button", { name: /send reset link|रीसेट लिंक भेजें/i })).toBeVisible();
   });
 
+
+  test("reminders page requires authentication", async ({ page }) => {
+    await page.goto("/reminders");
+    await expect(page).toHaveURL(/\\/login$/);
+  });
+
   test("language toggle changes auth copy", async ({ page }) => {
     await page.goto("/login");
     await page.getByRole("button", { name: "हिंदी" }).click();
