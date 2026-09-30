@@ -1,4 +1,4 @@
-"use client";
+""use client";
 
 import Link from "next/link";
 import { copy } from "@/lib/i18n";
@@ -16,7 +16,7 @@ type PurchaseDetailValue = {
   quantity: number;
   status: string;
   notes: string | null;
-  categories: { name: string } | null;
+  categories: { name: string }[] | null;
 };
 
 export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) {
@@ -60,7 +60,7 @@ export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) 
           </div>
           <div className="detail-cell">
             <span>{t.category}</span>
-            <strong>{purchase.categories?.name || t.categoryUnknown}</strong>
+            <strong>{purchase.categories?.[0]?.name || t.categoryUnknown}</strong>
           </div>
           <div className="detail-cell">
             <span>{t.quantity}</span>
@@ -70,7 +70,11 @@ export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) 
 
         <section className="purchase-detail__section">
           <span className="panel-kicker">{t.notes}</span>
-          {purchase.notes ? <p className="purchase-note">{purchase.notes}</p> : <p className="purchase-note purchase-note--empty">{t.notesPlaceholder}</p>}
+          {purchase.notes ? (
+            <p className="purchase-note">{purchase.notes}</p>
+          ) : (
+            <p className="purchase-note purchase-note--empty">{t.notesPlaceholder}</p>
+          )}
           {purchase.notes ? <small>{t.notesHint}</small> : null}
         </section>
       </div>
@@ -84,3 +88,4 @@ export function PurchaseDetail({ purchase }: { purchase: PurchaseDetailValue }) 
     </>
   );
 }
+"
