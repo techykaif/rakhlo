@@ -71,7 +71,7 @@ export function DashboardContent({
                   )}
                 </span>
                 <span aria-hidden="true">·</span>
-                <span>{latest.seller_name || t.sellerUnknown}</span>
+                <span>{latest.seller_name || p.sellerUnknown}</span>
               </div>
               <strong className="dashboard-hero__amount">
                 {moneyFormatter.format(Number(latest.amount))}
