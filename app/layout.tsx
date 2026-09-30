@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./app-ui.css";
 import { RegisterServiceWorker } from "@/components/pwa/register-sw";
 import { LanguageProvider } from "@/components/ui/language-provider";
 
