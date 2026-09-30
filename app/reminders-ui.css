@@ -472,3 +472,9 @@
     transition: none;
   }
 }
+
+@media (max-width: 760px) {
+  .app-nav--mobile {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
