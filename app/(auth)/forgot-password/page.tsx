@@ -10,9 +10,9 @@ export const metadata = {
 export default function ForgotPasswordPage() {
   return (
     <AuthCard
-      eyebrow="Rakhlo"
-      title={copy.en.auth.forgotTitle}
-      subtitle={copy.en.auth.forgotSubtitle}
+      eyebrow={{ en: "Rakhlo", hi: "Rakhlo" }}
+      title={{ en: copy.en.auth.forgotTitle, hi: copy.hi.auth.forgotTitle }}
+      subtitle={{ en: copy.en.auth.forgotSubtitle, hi: copy.hi.auth.forgotSubtitle }}
     >
       <RecoveryForm />
     </AuthCard>
