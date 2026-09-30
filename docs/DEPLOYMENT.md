@@ -39,7 +39,7 @@ Every pull request runs four independent CI checks in parallel:
 - `Rakhlo CI / Production build`
 - `Rakhlo CI / E2E tests`
 
-Each check has its own isolated runner and dependency install, so a slow browser test does not block typechecking or unit tests from starting.
+Each check has its own isolated runner and dependency install, so a slow browser test does not block typechecking or unit tests from starting. The workflow uses `npm install` because this repository does not currently commit a package lockfile; npm's cache is shared per runner job to keep repeated installs fast.
 
 `main` runs the same four checks after merge.
 
