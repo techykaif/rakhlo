@@ -6,7 +6,7 @@ Rakhlo is a lightweight, India-first Progressive Web App (PWA) for keeping a sim
 
 A purchase does not need to have a receipt to be useful in Rakhlo. Users can save a product with a date, price, seller, notes, photos, payment proof, receipt/invoice, warranty information, and reminders when available.
 
-The core product is deliberately **AI-independent**. Everything essential — saving purchases, attaching documents, adding notes, tracking dates, searching records, and receiving reminders — should work without AI. AI will be introduced later as an optional layer for extraction, analysis, and natural-language experiences.
+The core product is deliberately **AI-independent**. Everything essential - saving purchases, attaching documents, adding notes, tracking dates, searching records, and receiving reminders - should work without AI. AI will be introduced later as an optional layer for extraction, analysis, and natural-language experiences.
 
 ## Why Rakhlo?
 
@@ -38,16 +38,16 @@ Everything else is optional.
 
 ### Core principles
 
-1. **Simple first** — ordinary people should understand the interface immediately.
-2. **Receipt optional** — a purchase can exist without a receipt.
-3. **AI optional** — the core application must work without AI.
-4. **Evidence-aware** — distinguish uploaded/verified documents from user-entered memories.
-5. **Reminder-first** — important dates should be actionable, not buried in records.
-6. **India-first** — support ₹, Hindi, English, UPI/payment screenshots, local purchases, and informal purchase experiences.
-7. **Mobile-first** — the primary experience should feel natural on Android.
-8. **Privacy-first** — receipts, payment proofs, serial numbers, and purchase history are sensitive user data.
-9. **Offline-friendly** — users should be able to capture important purchase information even with unreliable connectivity.
-10. **Progressive complexity** — start with a tiny number of fields and reveal advanced options only when needed.
+1. **Simple first:** ordinary people should understand the interface immediately.
+2. **Receipt optional:** a purchase can exist without a receipt.
+3. **AI optional** - the core application must work without AI.
+4. **Evidence-aware** - distinguish uploaded/verified documents from user-entered memories.
+5. **Reminder-first** - important dates should be actionable, not buried in records.
+6. **India-first:** support ₹, Hindi, English, UPI/payment screenshots, local purchases, and informal purchase experiences.
+7. **Mobile-first:** the primary experience should feel natural on Android.
+8. **Privacy-first:** receipts, payment proofs, serial numbers, and purchase history are sensitive user data.
+9. **Offline-friendly** - users should be able to capture important purchase information even with unreliable connectivity.
+10. **Progressive complexity** - start with a tiny number of fields and reveal advanced options only when needed.
 
 ## Core Product
 
@@ -247,8 +247,8 @@ For example:
     ₹7,500
 
     Items
-    ├── SSD — ₹5,500
-    └── USB Cable — ₹2,000
+    ├── SSD - ₹5,500
+    └── USB Cable - ₹2,000
 
     Documents
     └── Invoice
@@ -286,7 +286,7 @@ The application should follow least-privilege principles from the beginning.
 
 ## Roadmap
 
-### Phase 1 — Foundation
+### Phase 1 - Foundation
 
 - project architecture
 - authentication
@@ -297,7 +297,7 @@ The application should follow least-privilege principles from the beginning.
 - localization foundation
 - security/RLS
 
-### Phase 2 — Core MVP
+### Phase 2 - Core MVP
 
 - purchases
 - documents
@@ -308,7 +308,7 @@ The application should follow least-privilege principles from the beginning.
 - search
 - purchase details
 
-### Phase 3 — Quality
+### Phase 3 - Quality
 
 - offline-first improvements
 - sync handling
@@ -319,7 +319,7 @@ The application should follow least-privilege principles from the beginning.
 - error recovery
 - observability
 
-### Phase 4 — Intelligence
+### Phase 4 - Intelligence
 
 - OCR/extraction
 - automatic categorization
@@ -327,7 +327,7 @@ The application should follow least-privilege principles from the beginning.
 - spending insights
 - warranty intelligence
 
-### Phase 5 — Expansion
+### Phase 5 - Expansion
 
 Potential future areas:
 

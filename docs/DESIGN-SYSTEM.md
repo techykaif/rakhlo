@@ -43,9 +43,9 @@ Application navigation uses Next.js links so internal navigation can use the fra
 
 The UI is modular at three levels:
 
-1. **Atoms** — `components/ui/*` for icons, language controls, logos, and other primitives.
-2. **App shell** — `components/app/*` for navigation, command menu, page headers, dashboard composition, and shared application chrome.
-3. **Feature modules** — `components/purchases/*`, document UI, and future domain-specific UI.
+1. **Atoms:** `components/ui/*` for icons, language controls, logos, and other primitives.
+2. **App shell:** `components/app/*` for navigation, command menu, page headers, dashboard composition, and shared application chrome.
+3. **Feature modules:** `components/purchases/*`, document UI, and future domain-specific UI.
 
 Domain logic stays outside components in `lib/*`, while persistence is handled through Supabase server/client modules.
 
@@ -53,10 +53,10 @@ Domain logic stays outside components in `lib/*`, while persistence is handled t
 
 The direction is informed by public design guidance and product interfaces from:
 
-- **Linear** — compact sidebar organization and information-dense utility navigation.
-- **Vercel Geist** — disciplined typography, spacing, contrast, and high-signal interface primitives.
-- **Supabase Design System** — reusable atoms, fragments, UI patterns, predictable page layout, navigation, dialogs, and accessibility.
-- **Arc** — command-driven navigation as a fast path for experienced users.
+- **Linear** - compact sidebar organization and information-dense utility navigation.
+- **Vercel Geist** - disciplined typography, spacing, contrast, and high-signal interface primitives.
+- **Supabase Design System** - reusable atoms, fragments, UI patterns, predictable page layout, navigation, dialogs, and accessibility.
+- **Arc** - command-driven navigation as a fast path for experienced users.
 
 These references inform principles and interaction patterns; Rakhlo's visual language and information hierarchy remain its own.
 

@@ -1,4 +1,4 @@
-# Rakhlo — Product Requirements Document v1.1
+# Rakhlo: Product Requirements Document v1.1
 
 **Status:** Approved product foundation  
 **Version:** 1.1  
@@ -346,8 +346,8 @@ Total: ₹7,500
 
 **Items**
 
-- SSD — ₹5,500
-- USB cable — ₹2,000
+- SSD: ₹5,500
+- USB cable: ₹2,000
 
 This allows the application to evolve toward item-level warranty, serial number, and ownership information without redesigning the entire database.
 
@@ -691,7 +691,7 @@ Notification content should minimize sensitive information.
 
 ---
 
-## 24. Data Model — Initial Concept
+## 24. Data Model - Initial Concept
 
 The initial schema should be designed around:
 
