@@ -252,7 +252,7 @@ export default function HomePage() {
           <Link className="nav-get-started" href="/signup">
             {t.primary}
             <Icon name="arrow" />
-          </a>
+          </Link>
           <button
             type="button"
             className="language-toggle"
@@ -277,7 +277,7 @@ export default function HomePage() {
             <Link className="button button-dark" href="/signup">
               {t.primary}
               <Icon name="arrow" />
-            </a>
+            </Link>
             <a className="button button-light" href="#how">
               {t.secondary}
             </a>
@@ -487,7 +487,7 @@ export default function HomePage() {
             <Link className="button button-lime" href="/signup">
               {t.ctaButton}
               <Icon name="arrow" />
-            </a>
+            </Link>
           </div>
           <div className="cta-mark" aria-hidden="true">
             <LogoMark />
