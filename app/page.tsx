@@ -262,7 +262,7 @@ export default function HomePage() {
           <p className="hero-text">{t.heroText}</p>
 
           <div className="hero-actions">
-            <a className="button button-dark" href="#how">
+            <a className="button button-dark" href="/signup">
               {t.primary}
               <Icon name="arrow" />
             </a>
@@ -310,7 +310,7 @@ export default function HomePage() {
 
             <div className="preview-heading">
               <span>{t.recent}</span>
-              <a href="#features">View all</a>
+              <a href="#features">{language === "en" ? "View all" : "सब देखें"}</a>
             </div>
 
             <div className="purchase-list">
@@ -472,7 +472,7 @@ export default function HomePage() {
             <p className="section-eyebrow light-eyebrow">Rakhlo</p>
             <h2>{t.ctaTitle}</h2>
             <p>{t.ctaText}</p>
-            <a className="button button-lime" href="https://rakhlo.xyz">
+            <a className="button button-lime" href="/signup">
               {t.ctaButton}
               <Icon name="arrow" />
             </a>
