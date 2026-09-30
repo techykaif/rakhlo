@@ -64,7 +64,14 @@ export function ReminderList({
     const active = reminders.filter((reminder) => reminder.completed_at === null);
     const overdue = active.filter((reminder) => new Date(reminder.due_at).getTime() < now);
     const upcoming = active.filter((reminder) => new Date(reminder.due_at).getTime() >= now);
-    return { overdue, upcoming };
+    const completed = reminders
+      .filter((reminder) => reminder.completed_at !== null)
+      .sort(
+        (a, b) =>
+          new Date(b.completed_at ?? 0).getTime() -
+          new Date(a.completed_at ?? 0).getTime(),
+      );
+    return { overdue, upcoming, completed };
   }, [reminders, now]);
 
   const renderRow = (reminder: ReminderWithPurchase) => {
@@ -151,7 +158,14 @@ export function ReminderList({
         </div>
       ) : null}
 
-      {!groups.overdue.length && !groups.upcoming.length ? (
+      {groups.completed.length ? (
+        <div className="reminder-group">
+          <h3>{t.completedTitle}</h3>
+          <div className="reminder-rows">{groups.completed.map(renderRow)}</div>
+        </div>
+      ) : null}
+
+      {!groups.overdue.length && !groups.upcoming.length && !groups.completed.length ? (
         <div className="reminder-empty">
           <div className="reminder-empty__icon"><Icon name="bell" size={18} /></div>
           <strong>{t.emptyTitle}</strong>
