@@ -5,6 +5,13 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
 import { validateAuthInput } from "@/lib/validation/auth";
+import {
+  asSupabaseProvider,
+  createOAuthRedirectUrl,
+  oauthProviders,
+  type OAuthProvider,
+} from "@/lib/auth/oauth";
+import { Icon } from "@/components/ui/icon";
 
 type AuthMode = "signin" | "signup";
 
@@ -21,6 +28,30 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  async function handleOAuth(provider: OAuthProvider) {
+    setError("");
+    setMessage("");
+    setLoading(true);
+
+    try {
+      const supabase = createClient();
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider: asSupabaseProvider(provider),
+        options: {
+          redirectTo: createOAuthRedirectUrl(window.location.origin),
+        },
+      });
+
+      if (oauthError) {
+        setError(t.oauthError);
+        setLoading(false);
+      }
+    } catch {
+      setError(t.oauthError);
+      setLoading(false);
+    }
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -139,6 +170,25 @@ export function AuthForm({ mode }: AuthFormProps) {
       <button className="button button-dark auth-submit" type="submit" disabled={loading}>
         {loading ? copy[language].common.loading : mode === "signin" ? t.signInButton : t.signUpButton}
       </button>
+
+      <div className="auth-divider" aria-hidden="true">
+        <span>{t.orContinueWith}</span>
+      </div>
+
+      <div className="auth-oauth">
+        {oauthProviders.map(({ provider, label }) => (
+          <button
+            key={provider}
+            type="button"
+            className="auth-oauth__button"
+            onClick={() => handleOAuth(provider)}
+            disabled={loading}
+          >
+            <Icon name={provider} size={17} strokeWidth={1.9} />
+            <span>{t.continueWith.replace("{provider}", label)}</span>
+          </button>
+        ))}
+      </div>
 
       {mode === "signin" ? (
         <Link className="auth-link auth-link--center" href="/forgot-password">
