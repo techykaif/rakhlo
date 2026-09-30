@@ -231,7 +231,7 @@ export function ReminderForm({
           </label>
 
           <label>
-            <span>{t.title}</span>
+            <span>{t.reminderTitle}</span>
             <input
               value={form.title}
               onChange={(event) => update("title", event.target.value)}
