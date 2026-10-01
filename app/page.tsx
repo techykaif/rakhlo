@@ -403,7 +403,7 @@ export default function HomePage() {
               type="button"
               className="landing-language"
               onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-              aria-label={language === "en" ? "Switch to Hindi" : "Switch to English"}
+              aria-label="Change language"
               title={language === "en" ? "Switch to Hindi" : "Switch to English"}
             >
               <span
