@@ -3897,3 +3897,82 @@ a {
     transition: none;
   }
 }
+
+
+/* Landing-page language control and Devanagari typography refinements */
+.landing-language {
+  min-height: 38px;
+  min-width: 78px;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid #d7d7cf;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--landing-ink);
+  box-shadow: 0 5px 16px rgba(24, 24, 20, 0.05);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 780;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.landing-language:hover {
+  border-color: #bdbdb5;
+  background: #fff;
+  box-shadow: 0 7px 20px rgba(24, 24, 20, 0.08);
+}
+
+.landing-language:focus-visible {
+  outline: 2px solid var(--landing-accent);
+  outline-offset: 3px;
+}
+
+.landing-language-option {
+  min-width: 33px;
+  height: 30px;
+  padding: 0 7px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #77786f;
+  white-space: nowrap;
+  line-height: 1;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.landing-language-option.is-active {
+  background: var(--landing-ink);
+  color: #fff;
+}
+
+.landing-features-title {
+  text-wrap: balance;
+}
+
+.landing-shell[lang="hi"] .landing-features-title {
+  line-height: 1.12;
+}
+
+@media (max-width: 720px) {
+  .landing-language {
+    min-height: 36px;
+    min-width: 74px;
+    padding: 3px;
+    font-size: 9.5px;
+  }
+
+  .landing-language-option {
+    min-width: 30px;
+    height: 28px;
+    padding: 0 6px;
+  }
+
+  .landing-shell[lang="hi"] .landing-features-title {
+    line-height: 1.12;
+  }
+}
