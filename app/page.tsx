@@ -376,7 +376,8 @@ export default function HomePage() {
   const t = copy[language];
 
   return (
-    <main className="landing-shell">
+    <main className="landing-shell" lang={language}>
+
       <header className="landing-nav-wrap">
         <nav className="landing-nav" aria-label="Primary navigation">
           <a className="landing-brand" href="#top" aria-label="Rakhlo home">
@@ -402,9 +403,21 @@ export default function HomePage() {
               type="button"
               className="landing-language"
               onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-              aria-label="Change language"
+              aria-label={language === "en" ? "Switch to Hindi" : "Switch to English"}
+              title={language === "en" ? "Switch to Hindi" : "Switch to English"}
             >
-              {t.language}
+              <span
+                className={`landing-language-option ${language === "en" ? "is-active" : ""}`}
+                aria-hidden="true"
+              >
+                EN
+              </span>
+              <span
+                className={`landing-language-option ${language === "hi" ? "is-active" : ""}`}
+                aria-hidden="true"
+              >
+                हिं
+              </span>
             </button>
           </div>
         </nav>
@@ -515,7 +528,7 @@ export default function HomePage() {
         <div className="landing-container">
           <div className="landing-section-heading">
             <span className="landing-section-label">{t.featuresEyebrow}</span>
-            <h2>{t.featuresTitle}</h2>
+            <h2 className="landing-features-title">{t.featuresTitle}</h2>
           </div>
 
           <div className="landing-feature-table">
