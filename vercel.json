@@ -5,11 +5,5 @@
       "*": false,
       "main": true
     }
-  },
-  "crons": [
-    {
-      "path": "/api/notifications/process",
-      "schedule": "*/10 * * * *"
-    }
-  ]
+  }
 }
