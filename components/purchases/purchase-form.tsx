@@ -95,7 +95,6 @@ export function PurchaseForm({
             return_end_date: returnEnd || null,
             return_source: returnEnd ? "user" : null,
             return_note: returnNote || null,
-          status,
             status,
           }),
         },
