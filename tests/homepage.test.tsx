@@ -1,10 +1,15 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { LanguageProvider } from "../components/ui/language-provider";
 import HomePage from "../app/page";
 
 describe("landing page", () => {
   it("renders the Rakhlo core promise and product proof", () => {
-    render(<HomePage />);
+    render(
+      <LanguageProvider>
+        <HomePage />
+      </LanguageProvider>,
+    );
 
     expect(screen.getByText("You bought it.")).toBeTruthy();
     expect(screen.getByText("Rakhlo remembers.")).toBeTruthy();
@@ -14,9 +19,13 @@ describe("landing page", () => {
   });
 
   it("switches the public page language", () => {
-    render(<HomePage />);
+    render(
+      <LanguageProvider>
+        <HomePage />
+      </LanguageProvider>,
+    );
 
-    fireEvent.click(screen.getByRole("button", { name: /change language/i }));
+    fireEvent.click(screen.getByRole("button", { name: "हिंदी" }));
 
     expect(screen.getByText("आपने खरीदा।")).toBeTruthy();
     expect(screen.getByText("Rakhlo याद रखेगा।")).toBeTruthy();

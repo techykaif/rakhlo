@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
-const LANGUAGE_STORAGE_KEY = "rakhlo-language";
+import { useLanguage } from "@/components/ui/language-provider";
+import { LanguageToggle } from "@/components/ui/language-toggle";
 
 const copy = {
   en: {
@@ -374,27 +373,11 @@ function ProductPreview({ t }: { t: (typeof copy)[Language] }) {
 }
 
 export default function HomePage() {
-  const [language, setLanguage] = useState<Language>("en");
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (saved === "en" || saved === "hi") {
-      setLanguage(saved);
-      document.documentElement.lang = saved;
-    }
-  }, []);
-
-  function changeLanguage(next: Language) {
-    setLanguage(next);
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, next);
-    document.documentElement.lang = next;
-  }
-
+  const { language } = useLanguage();
   const t = copy[language];
 
   return (
     <main className="landing-shell" lang={language}>
-
       <header className="landing-nav-wrap">
         <nav className="landing-nav" aria-label="Primary navigation">
           <a className="landing-brand" href="#top" aria-label="Rakhlo home">
@@ -416,26 +399,7 @@ export default function HomePage() {
               {t.start}
               <Icon name="arrow" />
             </Link>
-            <button
-              type="button"
-              className="landing-language"
-              onClick={() => changeLanguage(language === "en" ? "hi" : "en")}
-              aria-label="Change language"
-              title={language === "en" ? "Switch to Hindi" : "Switch to English"}
-            >
-              <span
-                className={`landing-language-option ${language === "en" ? "is-active" : ""}`}
-                aria-hidden="true"
-              >
-                EN
-              </span>
-              <span
-                className={`landing-language-option ${language === "hi" ? "is-active" : ""}`}
-                aria-hidden="true"
-              >
-                हिं
-              </span>
-            </button>
+            <LanguageToggle />
           </div>
         </nav>
       </header>
