@@ -34,7 +34,7 @@ export default async function PurchaseDetailPage({
     notFound();
   }
 
-  const t = copy.purchases;
+  const t = { en: copy.en.purchases, hi: copy.hi.purchases };
 
   return (
     <>
