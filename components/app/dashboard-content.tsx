@@ -5,6 +5,8 @@ import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
 
+type Attention = { id: string; title: string; due_at: string; purchase_id: string; purchases: { title: string } | null };
+
 type RecentPurchase = {
   id: string;
   title: string;
@@ -16,8 +18,10 @@ type RecentPurchase = {
 
 export function DashboardContent({
   recentPurchases,
+  attention,
 }: {
   recentPurchases: RecentPurchase[];
+  attention: Attention[];
 }) {
   const { language } = useLanguage();
   const t = copy[language].dashboard;
@@ -101,6 +105,34 @@ export function DashboardContent({
           <span />
           <span />
         </div>
+      </section>
+
+
+      <section className="recent-panel dashboard-attention-panel">
+        <div className="recent-panel__heading">
+          <div>
+            <span className="panel-kicker">{t.attentionTitle}</span>
+            <h2>{t.attentionTitle}</h2>
+          </div>
+        </div>
+        {attention.length ? (
+          <div className="dashboard-purchase-list">
+            {attention.map((reminder) => (
+              <Link className="dashboard-purchase-row" key={reminder.id} href={`/purchases/${reminder.purchase_id}`}>
+                <div className="purchase-icon purchase-blue" aria-hidden="true">!</div>
+                <div className="purchase-meta">
+                  <strong>{reminder.title}</strong>
+                  <span>{reminder.purchases?.title ?? ""} · {new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" }).format(new Date(reminder.due_at))}</span>
+                </div>
+                <Icon name="chevron-right" size={15} className="dashboard-row-chevron" />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="recent-panel__empty">
+            <strong>{t.attentionEmpty}</strong>
+          </div>
+        )}
       </section>
 
       <section className="recent-panel">

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { validateDocumentUpload } from "@/lib/documents/validation";
+import { validateFileSignature } from "@/lib/documents/signature";
 import {
   getDocumentBasename,
   isOwnedPurchaseDocumentPath,
@@ -107,6 +108,27 @@ export async function POST(request: Request, context: Context) {
       { error: "Upload has not completed. Please try again." },
       { status: 409 },
     );
+  }
+
+  const { data: uploadedFile, error: downloadError } = await supabase.storage
+    .from(PURCHASE_DOCUMENTS_BUCKET)
+    .download(path);
+
+  if (downloadError || !uploadedFile) {
+    return NextResponse.json({ error: "Unable to verify the uploaded file." }, { status: 422 });
+  }
+
+  if (uploadedFile.size !== validation.data.size_bytes) {
+    await supabase.storage.from(PURCHASE_DOCUMENTS_BUCKET).remove([path]);
+    return NextResponse.json({ error: "Uploaded file size does not match." }, { status: 422 });
+  }
+
+  const bytes = new Uint8Array(await uploadedFile.slice(0, 32).arrayBuffer());
+  const signature = validateFileSignature(validation.data.mime_type, bytes);
+
+  if (!signature.ok) {
+    await supabase.storage.from(PURCHASE_DOCUMENTS_BUCKET).remove([path]);
+    return NextResponse.json({ error: signature.reason ?? "Invalid file content." }, { status: 422 });
   }
 
   const { data: document, error } = await supabase

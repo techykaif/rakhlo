@@ -8,16 +8,10 @@ import type { ReminderWithPurchase } from "@/lib/reminders/service";
 import type { ReminderType } from "@/lib/reminders/validation";
 import { ReminderForm } from "@/components/reminders/reminder-form";
 import { ReminderList } from "@/components/reminders/reminder-list";
+import { NotificationSettings } from "@/components/reminders/notification-settings";
 
-type PurchaseOption = {
-  id: string;
-  title: string;
-};
-
-type ReminderPageProps = {
-  initialReminders: ReminderWithPurchase[];
-  purchases: PurchaseOption[];
-};
+type PurchaseOption = { id: string; title: string };
+type ReminderPageProps = { initialReminders: ReminderWithPurchase[]; purchases: PurchaseOption[] };
 
 function formValueFromReminder(reminder: ReminderWithPurchase) {
   return {
@@ -33,10 +27,7 @@ function formValueFromReminder(reminder: ReminderWithPurchase) {
   };
 }
 
-export function RemindersPage({
-  initialReminders,
-  purchases,
-}: ReminderPageProps) {
+export function RemindersPage({ initialReminders, purchases }: ReminderPageProps) {
   const { language } = useLanguage();
   const t = copy[language].reminders;
   const [reminders, setReminders] = useState(initialReminders);
@@ -52,8 +43,7 @@ export function RemindersPage({
     setReminders((current) => {
       const without = current.filter((item) => item.id !== reminder.id);
       return [reminder, ...without].sort(
-        (a, b) =>
-          new Date(a.due_at).getTime() - new Date(b.due_at).getTime(),
+        (a, b) => new Date(a.due_at).getTime() - new Date(b.due_at).getTime(),
       );
     });
     setEditing(null);
@@ -62,22 +52,14 @@ export function RemindersPage({
 
   async function completeReminder(reminder: ReminderWithPurchase) {
     const completed = reminder.completed_at === null;
-
     try {
       const response = await fetch(`/api/reminders/${reminder.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          completed_at: completed ? new Date().toISOString() : null,
-        }),
+        body: JSON.stringify({ completed_at: completed ? new Date().toISOString() : null }),
       });
-
       const data = await response.json().catch(() => null);
-
-      if (!response.ok || !data?.reminder) {
-        throw new Error();
-      }
-
+      if (!response.ok || !data?.reminder) throw new Error();
       handleSaved(data.reminder as ReminderWithPurchase);
       setMessage(completed ? t.completed : t.reopened);
     } catch {
@@ -86,23 +68,12 @@ export function RemindersPage({
   }
 
   async function deleteReminder(reminder: ReminderWithPurchase) {
-    if (!window.confirm(t.deleteConfirm)) {
-      return;
-    }
-
+    if (!window.confirm(t.deleteConfirm)) return;
     try {
-      const response = await fetch(`/api/reminders/${reminder.id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error();
-      }
-
+      const response = await fetch(`/api/reminders/${reminder.id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error();
       setReminders((current) => current.filter((item) => item.id !== reminder.id));
-      if (editing?.id === reminder.id) {
-        setEditing(null);
-      }
+      if (editing?.id === reminder.id) setEditing(null);
       setMessage(t.deleted);
     } catch {
       setMessage(t.errors.delete);
@@ -117,13 +88,8 @@ export function RemindersPage({
         description={t.subtitle}
         action={<span className="reminder-header-count">{activeCount} {t.activeLabel}</span>}
       />
-
-      {message ? (
-        <div className="reminder-page-message" role="status">
-          {message}
-        </div>
-      ) : null}
-
+      {message ? <div className="reminder-page-message" role="status">{message}</div> : null}
+      <NotificationSettings />
       <div className="reminders-layout">
         <ReminderList
           reminders={reminders}

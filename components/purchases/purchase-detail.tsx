@@ -5,6 +5,7 @@ import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { DeletePurchaseButton } from "@/components/purchases/delete-purchase-button";
 import { PurchaseDocuments } from "@/components/purchases/purchase-documents";
+import { PurchaseExtras } from "@/components/purchases/purchase-extras";
 
 type PurchaseDocument = {
   id: string;
@@ -29,6 +30,10 @@ type PurchaseDetailValue = {
   status: string;
   notes: string | null;
   categories: { name: string } | null;
+  return_start_date: string | null;
+  return_end_date: string | null;
+  return_source: string | null;
+  return_note: string | null;
 };
 
 export function PurchaseDetail({
@@ -98,6 +103,14 @@ export function PurchaseDetail({
       </div>
 
       <PurchaseDocuments purchaseId={purchase.id} initialDocuments={documents} />
+
+      <PurchaseExtras
+        purchaseId={purchase.id}
+        returnStart={purchase.return_start_date}
+        returnEnd={purchase.return_end_date}
+        returnSource={purchase.return_source}
+        returnNote={purchase.return_note}
+      />
 
       <div className="purchase-detail__actions">
         <Link href={"/purchases/" + purchase.id + "/edit"} className="button button-light">
