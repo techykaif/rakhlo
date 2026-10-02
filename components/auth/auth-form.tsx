@@ -12,6 +12,10 @@ import {
   type OAuthProvider,
 } from "@/lib/auth/oauth";
 import { Icon } from "@/components/ui/icon";
+import {
+  getReturnedAuthErrorMessage,
+  getUnexpectedAuthErrorMessage,
+} from "@/lib/auth/errors";
 
 type AuthMode = "signin" | "signup";
 
@@ -47,8 +51,14 @@ export function AuthForm({ mode }: AuthFormProps) {
         setError(t.oauthError);
         setLoading(false);
       }
-    } catch {
-      setError(t.oauthError);
+    } catch (error) {
+      setError(
+        getUnexpectedAuthErrorMessage(error, {
+          config: t.authConfigError,
+          network: t.authNetworkError,
+          fallback: t.oauthError,
+        }),
+      );
       setLoading(false);
     }
   }
@@ -86,8 +96,16 @@ export function AuthForm({ mode }: AuthFormProps) {
         });
 
         if (signInError) {
-          const known = signInError.message.toLowerCase().includes("confirm");
-          setError(known ? t.emailNotConfirmed : t.invalidCredentials);
+          const message = getReturnedAuthErrorMessage(signInError.message, {
+            network: t.authNetworkError,
+          });
+
+          if (message === t.authNetworkError) {
+            setError(message);
+          } else {
+            const known = signInError.message.toLowerCase().includes("confirm");
+            setError(known ? t.emailNotConfirmed : t.invalidCredentials);
+          }
           return;
         }
 
@@ -104,7 +122,11 @@ export function AuthForm({ mode }: AuthFormProps) {
       });
 
       if (signUpError) {
-        setError(signUpError.message || t.genericError);
+        setError(
+          getReturnedAuthErrorMessage(signUpError.message, {
+            network: t.authNetworkError,
+          }) || t.genericError,
+        );
         return;
       }
 
@@ -114,8 +136,14 @@ export function AuthForm({ mode }: AuthFormProps) {
       }
 
       setMessage(`${t.signUpSuccessTitle}: ${t.signUpSuccessText}`);
-    } catch {
-      setError(t.genericError);
+    } catch (error) {
+      setError(
+        getUnexpectedAuthErrorMessage(error, {
+          config: t.authConfigError,
+          network: t.authNetworkError,
+          fallback: t.genericError,
+        }),
+      );
     } finally {
       setLoading(false);
     }
