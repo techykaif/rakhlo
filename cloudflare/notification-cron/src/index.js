@@ -14,10 +14,9 @@ async function runNotificationProcess(env) {
   }
 
   const response = await fetch(env.RAKHLO_PROCESS_URL, {
-    method: "POST",
+    method: "GET",
     headers: {
       Authorization: `Bearer ${env.CRON_SECRET}`,
-      "Content-Type": "application/json",
     },
   });
 
