@@ -13,7 +13,7 @@ function base64ToUint8Array(value: string) {
 
 export function NotificationSettings() {
   const { language } = useLanguage();
-  const t = copy[language].notifications;
+  const t = copy[language].reminders;
   const [supported, setSupported] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [enabled, setEnabled] = useState(true);
@@ -21,113 +21,78 @@ export function NotificationSettings() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    setSupported(
+    const available =
       typeof window !== "undefined" &&
       "serviceWorker" in navigator &&
       "PushManager" in window &&
-      "Notification" in window,
-    );
+      "Notification" in window;
+    setSupported(available);
+    if (!available) return;
 
     fetch("/api/notifications/preferences")
       .then((response) => response.json())
       .then((data) => {
-        if (typeof data.preferences?.enabled === "boolean") {
-          setEnabled(data.preferences.enabled);
-        }
+        if (typeof data.preferences?.enabled === "boolean") setEnabled(data.preferences.enabled);
       })
       .catch(() => undefined);
 
-    navigator.serviceWorker?.ready
+    navigator.serviceWorker.ready
       .then((registration) => registration.pushManager.getSubscription())
       .then((subscription) => setSubscribed(Boolean(subscription)))
       .catch(() => undefined);
   }, []);
 
-  async function enable() {
+  async function toggle() {
     setBusy(true);
     setMessage("");
     try {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        setMessage(t.denied);
-        return;
-      }
+      if (!subscribed) {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") throw new Error();
 
-      const keyResponse = await fetch("/api/notifications/vapid-public-key");
-      const keyPayload = await keyResponse.json();
-      if (!keyResponse.ok || !keyPayload.publicKey) throw new Error();
+        const keyResponse = await fetch("/api/notifications/vapid-public-key");
+        const keyPayload = await keyResponse.json();
+        if (!keyResponse.ok || !keyPayload.publicKey) throw new Error();
 
-      const registration = await navigator.serviceWorker.ready;
-      const existing = await registration.pushManager.getSubscription();
-      const subscription = existing ?? await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: base64ToUint8Array(keyPayload.publicKey),
-      });
-
-      const response = await fetch("/api/notifications/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(subscription.toJSON()),
-      });
-
-      if (!response.ok) throw new Error();
-      setSubscribed(true);
-      setEnabled(true);
-      setMessage(t.enabled);
-    } catch {
-      setMessage(t.error);
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function disable() {
-    setBusy(true);
-    setMessage("");
-    try {
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
-      if (subscription) {
-        await fetch("/api/notifications/subscribe", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ endpoint: subscription.endpoint }),
+        const registration = await navigator.serviceWorker.ready;
+        const existing = await registration.pushManager.getSubscription();
+        const subscription = existing ?? await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: base64ToUint8Array(keyPayload.publicKey),
         });
-        await subscription.unsubscribe();
+
+        const response = await fetch("/api/notifications/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(subscription.toJSON()),
+        });
+        if (!response.ok) throw new Error();
+
+        setSubscribed(true);
+        setEnabled(true);
+      } else {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) {
+          await fetch("/api/notifications/subscribe", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ endpoint: subscription.endpoint }),
+          });
+          await subscription.unsubscribe();
+        } else {
+          await fetch("/api/notifications/preferences", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ enabled: false }),
+          });
+        }
+        setSubscribed(false);
+        setEnabled(false);
       }
-
-      await fetch("/api/notifications/preferences", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enabled: false }),
-      });
-
-      setSubscribed(false);
-      setEnabled(false);
-      setMessage(t.disabled);
+      setMessage(t.saved);
     } catch {
-      setMessage(t.error);
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function toggleEnabled() {
-    if (!subscribed) return enable();
-
-    setBusy(true);
-    const next = !enabled;
-    try {
-      const response = await fetch("/api/notifications/preferences", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enabled: next }),
-      });
-      if (!response.ok) throw new Error();
-      setEnabled(next);
-      setMessage(next ? t.enabled : t.disabled);
-    } catch {
-      setMessage(t.error);
+      setMessage(t.errors.save);
     } finally {
       setBusy(false);
     }
@@ -138,15 +103,13 @@ export function NotificationSettings() {
   return (
     <section className="notification-settings" aria-labelledby="notification-settings-title">
       <div>
-        <span className="panel-kicker">{t.kicker}</span>
-        <h2 id="notification-settings-title">{t.title}</h2>
-        <p>{t.description}</p>
+        <span className="panel-kicker">{t.listKicker}</span>
+        <h2 id="notification-settings-title">{t.pageTitle}</h2>
+        <p>{t.subtitle}</p>
       </div>
-      <div className="notification-settings__actions">
-        <button type="button" className="button button-dark" onClick={toggleEnabled} disabled={busy}>
-          {subscribed && enabled ? t.turnOff : t.turnOn}
-        </button>
-      </div>
+      <button type="button" className="button button-dark" onClick={toggle} disabled={busy}>
+        {subscribed && enabled ? t.delete : t.createReminder}
+      </button>
       {message ? <p className="notification-settings__message" role="status">{message}</p> : null}
     </section>
   );
