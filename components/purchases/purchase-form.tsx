@@ -22,6 +22,7 @@ type PurchaseValue = {
   return_end_date?: string | null;
   return_source?: string | null;
   return_note?: string | null;
+  status?: string;
 };
 
 export function PurchaseForm({
@@ -48,6 +49,7 @@ export function PurchaseForm({
   const [returnStart, setReturnStart] = useState(initialPurchase?.return_start_date ?? "");
   const [returnEnd, setReturnEnd] = useState(initialPurchase?.return_end_date ?? "");
   const [returnNote, setReturnNote] = useState(initialPurchase?.return_note ?? "");
+  const [status, setStatus] = useState(initialPurchase?.status ?? "active");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -93,6 +95,8 @@ export function PurchaseForm({
             return_end_date: returnEnd || null,
             return_source: returnEnd ? "user" : null,
             return_note: returnNote || null,
+          status,
+            status,
           }),
         },
       );
@@ -197,6 +201,17 @@ export function PurchaseForm({
       <label>
         <span>{returnLabels.note} <em>{t.optional}</em></span>
         <input value={returnNote} onChange={(event) => setReturnNote(event.target.value)} placeholder={returnLabels.placeholder} maxLength={5000} />
+      </label>
+
+
+      <label>
+        <span>{language === "hi" ? "स्थिति" : "Status"} <em>{t.optional}</em></span>
+        <select value={status} onChange={(event) => setStatus(event.target.value)}>
+          <option value="active">{language === "hi" ? "सक्रिय" : "Active"}</option>
+          <option value="archived">{language === "hi" ? "संग्रहीत" : "Archived"}</option>
+          <option value="sold">{language === "hi" ? "बेचा गया" : "Sold"}</option>
+          <option value="lost">{language === "hi" ? "खो गया" : "Lost"}</option>
+        </select>
       </label>
 
       <label>
