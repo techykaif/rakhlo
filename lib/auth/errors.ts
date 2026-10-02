@@ -3,7 +3,7 @@ import { SupabaseConfigError } from "@/lib/supabase/config";
 type AuthErrorMessages = {
   config: string;
   network: string;
-  googleConfig: string;
+  googleConfig?: string;
   fallback: string;
 };
 
@@ -12,7 +12,7 @@ export function getUnexpectedAuthErrorMessage(
   messages: AuthErrorMessages,
 ) {
   if (/unsupported provider|provider.*not.*enabled|google.*not.*enabled|google.*not.*configured/i.test(error instanceof Error ? error.message : "")) {
-    return messages.googleConfig;
+    return messages.googleConfig || messages.fallback;
   }
 
   if (error instanceof SupabaseConfigError) {
@@ -21,6 +21,9 @@ export function getUnexpectedAuthErrorMessage(
   }
 
   const message = error instanceof Error ? error.message : "";
+  if (/unsupported provider|provider.*not.*enabled|google.*not.*enabled|google.*not.*configured/i.test(message)) {
+    return messages.googleConfig || message;
+  }
   if (/failed to fetch|fetch failed|network error|load failed/i.test(message)) {
     return messages.network;
   }
@@ -34,7 +37,7 @@ export function getUnexpectedAuthErrorMessage(
 
 export function getReturnedAuthErrorMessage(
   message: string | undefined,
-  messages: Pick<AuthErrorMessages, "network">,
+  messages: Pick<AuthErrorMessages, "network" | "googleConfig">,
 ) {
   if (!message) return undefined;
   if (/failed to fetch|fetch failed|network error|load failed/i.test(message)) {
