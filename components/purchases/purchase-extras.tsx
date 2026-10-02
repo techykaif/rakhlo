@@ -13,7 +13,7 @@ const labels = {
     itemName: "Item name", quantity: "Quantity", unitPrice: "Unit price", serial: "Serial number", imei: "IMEI",
     addItem: "Add item", method: "Payment method", paymentAmount: "Amount", paidAt: "Paid at", reference: "Reference", addPayment: "Add payment",
     start: "Starts", end: "Ends", provider: "Provider", source: "Source", addWarranty: "Add warranty",
-    user: "Added by you", document: "From document", system: "System", remove: "Remove", saved: "Saved", error: "Unable to save this detail.",
+    user: "Added by you", document: "From document", system: "System", remove: "Remove", returnPeriod: "Return period", saved: "Saved", error: "Unable to save this detail.",
     cash: "Cash", upi: "UPI", card: "Card", bank_transfer: "Bank transfer", other: "Other",
   },
   hi: {
@@ -21,7 +21,7 @@ const labels = {
     itemName: "चीज़ का नाम", quantity: "संख्या", unitPrice: "प्रति इकाई कीमत", serial: "सीरियल नंबर", imei: "IMEI",
     addItem: "चीज़ जोड़ें", method: "भुगतान का तरीका", paymentAmount: "राशि", paidAt: "भुगतान समय", reference: "संदर्भ", addPayment: "भुगतान जोड़ें",
     start: "शुरू", end: "समाप्त", provider: "प्रदाता", source: "स्रोत", addWarranty: "वारंटी जोड़ें",
-    user: "आपने जोड़ा", document: "दस्तावेज़ से", system: "सिस्टम", remove: "हटाएँ", saved: "सेव हो गया", error: "जानकारी सेव नहीं हो सकी।",
+    user: "आपने जोड़ा", document: "दस्तावेज़ से", system: "सिस्टम", remove: "हटाएँ", returnPeriod: "रिटर्न अवधि", saved: "सेव हो गया", error: "जानकारी सेव नहीं हो सकी।",
     cash: "कैश", upi: "UPI", card: "कार्ड", bank_transfer: "बैंक ट्रांसफर", other: "अन्य",
   },
 } as const;
@@ -151,7 +151,7 @@ export function PurchaseExtras({
 
       {returnEnd ? (
         <div className="purchase-extras__block">
-          <h3>Return period</h3>
+          <h3>{t.returnPeriod}</h3>
           <p>{returnStart ? `${returnStart} → ${returnEnd}` : returnEnd}</p>
           {returnSource ? <small>{returnSource === "document" ? t.document : returnSource === "system" ? t.system : t.user}</small> : null}
           {returnNote ? <p>{returnNote}</p> : null}
