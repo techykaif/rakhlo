@@ -164,21 +164,53 @@ a {
 }
 
 .language-toggle {
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.78);
-  color: var(--ink);
+  min-height: 38px;
+  min-width: 88px;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid #d7d7cf;
   border-radius: 999px;
-  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  box-shadow: 0 5px 16px rgba(24, 24, 20, 0.05);
   font: inherit;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 780;
+  line-height: 1;
   cursor: pointer;
-  transition: background 140ms ease, border-color 140ms ease;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
 }
 
 .language-toggle:hover {
-  background: var(--surface);
-  border-color: #cfcfc6;
+  border-color: #bdbdb5;
+  background: #fff;
+  box-shadow: 0 7px 20px rgba(24, 24, 20, 0.08);
+}
+
+.language-toggle:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+.language-toggle span {
+  min-width: 37px;
+  height: 30px;
+  padding: 0 7px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #77786f;
+  white-space: nowrap;
+  line-height: 1;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.language-toggle span.is-active {
+  background: var(--ink);
+  color: #fff;
 }
 
 .hero {
