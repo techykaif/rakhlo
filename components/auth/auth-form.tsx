@@ -143,6 +143,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         getUnexpectedAuthErrorMessage(error, {
           config: t.authConfigError,
           network: t.authNetworkError,
+          googleConfig: t.googleConfig,
           fallback: t.genericError,
         }),
       );
