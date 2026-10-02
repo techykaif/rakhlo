@@ -13,7 +13,7 @@ const labels = {
     itemName: "Item name", quantity: "Quantity", unitPrice: "Unit price", serial: "Serial number", imei: "IMEI",
     addItem: "Add item", method: "Payment method", paymentAmount: "Amount", paidAt: "Paid at", reference: "Reference", addPayment: "Add payment",
     start: "Starts", end: "Ends", provider: "Provider", source: "Source", addWarranty: "Add warranty",
-    user: "Added by you", document: "From document", system: "System", remove: "Remove", returnPeriod: "Return period", saved: "Saved", error: "Unable to save this detail.",
+    user: "Added by you", document: "From document", system: "System", remove: "Remove", edit: "Edit", saveChanges: "Save changes", returnPeriod: "Return period", saved: "Saved", error: "Unable to save this detail.",
     cash: "Cash", upi: "UPI", card: "Card", bank_transfer: "Bank transfer", other: "Other",
   },
   hi: {
@@ -21,7 +21,7 @@ const labels = {
     itemName: "चीज़ का नाम", quantity: "संख्या", unitPrice: "प्रति इकाई कीमत", serial: "सीरियल नंबर", imei: "IMEI",
     addItem: "चीज़ जोड़ें", method: "भुगतान का तरीका", paymentAmount: "राशि", paidAt: "भुगतान समय", reference: "संदर्भ", addPayment: "भुगतान जोड़ें",
     start: "शुरू", end: "समाप्त", provider: "प्रदाता", source: "स्रोत", addWarranty: "वारंटी जोड़ें",
-    user: "आपने जोड़ा", document: "दस्तावेज़ से", system: "सिस्टम", remove: "हटाएँ", returnPeriod: "रिटर्न अवधि", saved: "सेव हो गया", error: "जानकारी सेव नहीं हो सकी।",
+    user: "आपने जोड़ा", document: "दस्तावेज़ से", system: "सिस्टम", remove: "हटाएँ", edit: "बदलें", saveChanges: "बदलाव सेव करें", returnPeriod: "रिटर्न अवधि", saved: "सेव हो गया", error: "जानकारी सेव नहीं हो सकी।",
     cash: "कैश", upi: "UPI", card: "कार्ड", bank_transfer: "बैंक ट्रांसफर", other: "अन्य",
   },
 } as const;
@@ -45,6 +45,7 @@ export function PurchaseExtras({
   const [payments, setPayments] = useState<Payment[]>([]);
   const [warranties, setWarranties] = useState<Warranty[]>([]);
   const [message, setMessage] = useState("");
+  const [editing, setEditing] = useState<{ kind: "item" | "payment" | "warranty"; id: string } | null>(null);
 
   const [item, setItem] = useState({ name: "", quantity: "1", unit_price: "", serial_number: "", imei: "" });
   const [payment, setPayment] = useState({ amount: "", method: "upi", paid_at: "", reference: "" });
@@ -69,16 +70,20 @@ export function PurchaseExtras({
         ? { kind, ...payment }
         : { kind, ...warranty };
 
-    const response = await fetch(`/api/purchases/${purchaseId}/extras`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(
+      `/api/purchases/${purchaseId}/extras${editing ? `?id=${editing.id}` : ""}`,
+      {
+        method: editing ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editing ? { ...body, id: editing.id } : body),
+      },
+    );
     if (!response.ok) {
       setMessage(t.error);
       return;
     }
     setMessage(t.saved);
+    setEditing(null);
     if (kind === "item") setItem({ name: "", quantity: "1", unit_price: "", serial_number: "", imei: "" });
     if (kind === "payment") setPayment({ amount: "", method: "upi", paid_at: "", reference: "" });
     if (kind === "warranty") setWarranty({ start_date: "", end_date: "", provider: "", source: "user" });
@@ -100,7 +105,7 @@ export function PurchaseExtras({
         {items.map((value) => (
           <div key={value.id} className="purchase-extra-row">
             <div><strong>{value.name}</strong><span>{value.quantity}{value.serial_number ? ` · ${value.serial_number}` : ""}{value.imei ? ` · IMEI ${value.imei}` : ""}</span></div>
-            <button type="button" className="button button-light" onClick={() => remove("item", value.id)}>{t.remove}</button>
+            <div><button type="button" className="button button-light" onClick={() => { setEditing({ kind: "item", id: value.id }); setItem({ name: value.name, quantity: String(value.quantity), unit_price: value.unit_price == null ? "" : String(value.unit_price), serial_number: value.serial_number ?? "", imei: value.imei ?? "" }); }}>{t.edit}</button> <button type="button" className="button button-light" onClick={() => remove("item", value.id)}>{t.remove}</button></div>
           </div>
         ))}
         <div className="purchase-extras__form">
@@ -109,7 +114,7 @@ export function PurchaseExtras({
           <input type="number" min="0" step="0.01" value={item.unit_price} onChange={(e) => setItem({ ...item, unit_price: e.target.value })} placeholder={t.unitPrice} />
           <input value={item.serial_number} onChange={(e) => setItem({ ...item, serial_number: e.target.value })} placeholder={t.serial} />
           <input value={item.imei} onChange={(e) => setItem({ ...item, imei: e.target.value })} placeholder={t.imei} />
-          <button type="button" className="button button-dark" onClick={() => add("item")}>{t.addItem}</button>
+          <button type="button" className="button button-dark" onClick={() => add("item")}>{editing?.kind === "item" ? t.saveChanges : t.addItem}</button>
         </div>
       </div>
 
@@ -118,7 +123,7 @@ export function PurchaseExtras({
         {payments.map((value) => (
           <div key={value.id} className="purchase-extra-row">
             <div><strong>₹{Number(value.amount).toFixed(2)} · {value.method === "bank_transfer" ? t.bank_transfer : value.method === "cash" ? t.cash : value.method === "upi" ? t.upi : value.method === "card" ? t.card : t.other}</strong><span>{value.reference ?? ""}</span></div>
-            <button type="button" className="button button-light" onClick={() => remove("payment", value.id)}>{t.remove}</button>
+            <div><button type="button" className="button button-light" onClick={() => { setEditing({ kind: "payment", id: value.id }); setPayment({ amount: String(value.amount), method: value.method, paid_at: value.paid_at ? value.paid_at.slice(0, 16) : "", reference: value.reference ?? "" }); }}>{t.edit}</button> <button type="button" className="button button-light" onClick={() => remove("payment", value.id)}>{t.remove}</button></div>
           </div>
         ))}
         <div className="purchase-extras__form">
@@ -128,7 +133,7 @@ export function PurchaseExtras({
           </select>
           <input type="datetime-local" value={payment.paid_at} onChange={(e) => setPayment({ ...payment, paid_at: e.target.value })} aria-label={t.paidAt} />
           <input value={payment.reference} onChange={(e) => setPayment({ ...payment, reference: e.target.value })} placeholder={t.reference} />
-          <button type="button" className="button button-dark" onClick={() => add("payment")}>{t.addPayment}</button>
+          <button type="button" className="button button-dark" onClick={() => add("payment")}>{editing?.kind === "payment" ? t.saveChanges : t.addPayment}</button>
         </div>
       </div>
 
@@ -137,7 +142,7 @@ export function PurchaseExtras({
         {warranties.map((value) => (
           <div key={value.id} className="purchase-extra-row">
             <div><strong>{value.end_date}</strong><span>{value.provider ?? ""} · {value.source === "document" ? t.document : value.source === "system" ? t.system : t.user}</span></div>
-            <button type="button" className="button button-light" onClick={() => remove("warranty", value.id)}>{t.remove}</button>
+            <div><button type="button" className="button button-light" onClick={() => { setEditing({ kind: "warranty", id: value.id }); setWarranty({ start_date: value.start_date ?? "", end_date: value.end_date, provider: value.provider ?? "", source: value.source }); }}>{t.edit}</button> <button type="button" className="button button-light" onClick={() => remove("warranty", value.id)}>{t.remove}</button></div>
           </div>
         ))}
         <div className="purchase-extras__form">
@@ -145,7 +150,7 @@ export function PurchaseExtras({
           <input type="date" value={warranty.end_date} onChange={(e) => setWarranty({ ...warranty, end_date: e.target.value })} aria-label={t.end} />
           <input value={warranty.provider} onChange={(e) => setWarranty({ ...warranty, provider: e.target.value })} placeholder={t.provider} />
           <select value={warranty.source} onChange={(e) => setWarranty({ ...warranty, source: e.target.value })}><option value="user">{t.user}</option><option value="document">{t.document}</option><option value="system">{t.system}</option></select>
-          <button type="button" className="button button-dark" onClick={() => add("warranty")}>{t.addWarranty}</button>
+          <button type="button" className="button button-dark" onClick={() => add("warranty")}>{editing?.kind === "warranty" ? t.saveChanges : t.addWarranty}</button>
         </div>
       </div>
 
