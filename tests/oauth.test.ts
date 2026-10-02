@@ -7,9 +7,8 @@ import {
 
 describe("OAuth configuration", () => {
   it("exposes the supported providers", () => {
-    expect(oauthProviders.map((item) => item.provider)).toEqual(["google", "github"]);
+    expect(oauthProviders.map((item) => item.provider)).toEqual(["google"]);
     expect(asSupabaseProvider("google")).toBe("google");
-    expect(asSupabaseProvider("github")).toBe("github");
   });
 
   it("creates a callback URL with a safe post-auth destination", () => {
