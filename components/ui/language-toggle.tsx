@@ -3,20 +3,20 @@
 import { useLanguage } from "@/components/ui/language-provider";
 
 export function LanguageToggle() {
-  const { language, setLanguage, copy } = useLanguage();
-  const label =
-    language === "en"
-      ? copy.en.common.languageHindi
-      : copy.hi.common.languageEnglish;
+  const { language, setLanguage } = useLanguage();
+
+  const nextLanguage = language === "en" ? "hi" : "en";
 
   return (
     <button
       type="button"
       className="language-toggle"
-      onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-      aria-label={label}
+      onClick={() => setLanguage(nextLanguage)}
+      aria-label={language === "en" ? "Switch to Hindi" : "Switch to English"}
+      title={language === "en" ? "Switch to Hindi" : "Switch to English"}
     >
-      {label}
+      <span className={language === "en" ? "is-active" : ""}>EN</span>
+      <span className={language === "hi" ? "is-active" : ""}>हिंदी</span>
     </button>
   );
 }
