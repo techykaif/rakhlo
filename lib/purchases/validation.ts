@@ -11,6 +11,7 @@ export type PurchaseInput = {
   return_end_date: string | null;
   return_source: "user" | "document" | "system" | null;
   return_note: string | null;
+  status: "active" | "archived" | "sold" | "lost";
 };
 
 export type PurchaseValidationResult =
@@ -64,6 +65,7 @@ export function validatePurchaseInput(input: unknown): PurchaseValidationResult 
   const returnEnd = value.return_end_date === "" || value.return_end_date == null ? null : typeof value.return_end_date === "string" ? value.return_end_date.trim() : "";
   const returnSource = value.return_source === "" || value.return_source == null ? null : value.return_source;
   const returnNote = value.return_note;
+  const status = value.status == null || value.status === "" ? "active" : String(value.status);
 
   if (!title) errors.title = "Product name is required.";
   else if (title.length > 200) errors.title = "Product name is too long.";
@@ -87,6 +89,7 @@ export function validatePurchaseInput(input: unknown): PurchaseValidationResult 
   if (returnStart !== null && !isValidDate(returnStart)) errors.return_start_date = "Return start date is invalid.";
   if (returnEnd !== null && !isValidDate(returnEnd)) errors.return_end_date = "Return end date is invalid.";
   if (returnStart && returnEnd && returnEnd < returnStart) errors.return_end_date = "Return end date must be on or after the start date.";
+  if (!["active", "archived", "sold", "lost"].includes(status)) errors.status = "Status is invalid.";
   if (returnSource !== null && !["user", "document", "system"].includes(String(returnSource))) errors.return_source = "Return source is invalid.";
   if (returnNote !== undefined && returnNote !== null && typeof returnNote !== "string") errors.return_note = "Return note is invalid.";
   else if (typeof returnNote === "string" && returnNote.length > 5000) errors.return_note = "Return note is too long.";
@@ -110,6 +113,7 @@ export function validatePurchaseInput(input: unknown): PurchaseValidationResult 
       return_end_date: returnEnd,
       return_source: returnSource as "user" | "document" | "system" | null,
       return_note: optionalText(returnNote, 5000),
+      status: status as "active" | "archived" | "sold" | "lost",
     },
   };
 }
