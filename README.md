@@ -391,6 +391,7 @@ Product and technical decisions live under \`docs/\`.
 - [Authentication setup](./docs/AUTH-SETUP.md)
 - [Deployment policy](./docs/DEPLOYMENT.md)
 - [Testing strategy](./docs/TESTING.md)
+- [Notifications setup](./docs/NOTIFICATIONS.md)
 
 Documentation should be updated when product scope or important architectural decisions change.
 
@@ -411,9 +412,9 @@ Before implementing a feature:
 
 ## Status
 
-**Stage:** Product definition / foundation
+**Stage:** MVP implementation / release hardening
 
-The repository is being built from the product requirements upward. The first goal is a reliable, simple MVP rather than a feature-heavy launch.
+The core MVP workflows are implemented end to end and are being hardened through automated verification before production rollout. The goal remains a reliable, simple product rather than a feature-heavy launch.
 
 ## License
 
