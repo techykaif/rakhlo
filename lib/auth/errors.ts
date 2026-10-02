@@ -40,6 +40,9 @@ export function getReturnedAuthErrorMessage(
   messages: Pick<AuthErrorMessages, "network" | "googleConfig">,
 ) {
   if (!message) return undefined;
+  if (/unsupported provider|provider.*not.*enabled|google.*not.*enabled|google.*not.*configured/i.test(message)) {
+    return messages.googleConfig || message;
+  }
   if (/failed to fetch|fetch failed|network error|load failed/i.test(message)) {
     return messages.network;
   }
