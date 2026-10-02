@@ -1,5 +1,5 @@
 import { describe, expect, it, afterEach } from "vitest";
-import { SupabaseConfigError, getSupabaseConfig } from "@/lib/supabase/config";
+import { SupabaseConfigError, getSupabaseConfig } from "../lib/supabase/config";
 
 const originalUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const originalKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
