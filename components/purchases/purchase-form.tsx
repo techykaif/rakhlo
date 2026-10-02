@@ -33,6 +33,9 @@ export function PurchaseForm({
 }) {
   const { language } = useLanguage();
   const t = copy[language].purchases;
+  const returnLabels = language === "hi"
+    ? { start: "रिटर्न शुरू", end: "रिटर्न समाप्त", note: "रिटर्न नोट", placeholder: "रिटर्न की शर्तें या विक्रेता की बात" }
+    : { start: "Return starts", end: "Return ends", note: "Return note", placeholder: "Return conditions or seller note" };
   const router = useRouter();
   const isEditing = Boolean(initialPurchase?.id);
   const [title, setTitle] = useState(initialPurchase?.title ?? "");
@@ -181,19 +184,19 @@ export function PurchaseForm({
 
       <div className="purchase-form-grid">
         <label>
-          <span>Return starts <em>{t.optional}</em></span>
+          <span>{returnLabels.start} <em>{t.optional}</em></span>
           <input type="date" value={returnStart} onChange={(event) => setReturnStart(event.target.value)} />
         </label>
         <label>
-          <span>Return ends <em>{t.optional}</em></span>
+          <span>{returnLabels.end} <em>{t.optional}</em></span>
           <input type="date" value={returnEnd} onChange={(event) => setReturnEnd(event.target.value)} />
           {errors.return_end_date ? <small className="field-error">{errors.return_end_date}</small> : null}
         </label>
       </div>
 
       <label>
-        <span>Return note <em>{t.optional}</em></span>
-        <input value={returnNote} onChange={(event) => setReturnNote(event.target.value)} placeholder="Return conditions or seller note" maxLength={5000} />
+        <span>{returnLabels.note} <em>{t.optional}</em></span>
+        <input value={returnNote} onChange={(event) => setReturnNote(event.target.value)} placeholder={returnLabels.placeholder} maxLength={5000} />
       </label>
 
       <label>
