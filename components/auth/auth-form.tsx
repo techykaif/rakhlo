@@ -48,7 +48,12 @@ export function AuthForm({ mode }: AuthFormProps) {
       });
 
       if (oauthError) {
-        setError(t.oauthError);
+        setError(
+          getReturnedAuthErrorMessage(oauthError.message, {
+            network: t.authNetworkError,
+            googleConfig: t.googleConfig,
+          }) || t.oauthError,
+        );
         setLoading(false);
       }
     } catch (error) {
