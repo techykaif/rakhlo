@@ -4,6 +4,10 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
+import {
+  getReturnedAuthErrorMessage,
+  getUnexpectedAuthErrorMessage,
+} from "@/lib/auth/errors";
 
 export function RecoveryForm() {
   const { language, copy } = useLanguage();
@@ -33,14 +37,24 @@ export function RecoveryForm() {
       });
 
       if (resetError) {
-        setError(resetError.message || t.genericError);
+        setError(
+          getReturnedAuthErrorMessage(resetError.message, {
+            network: t.authNetworkError,
+          }) || t.genericError,
+        );
         setStatus("error");
         return;
       }
 
       setStatus("sent");
-    } catch {
-      setError(t.genericError);
+    } catch (error) {
+      setError(
+        getUnexpectedAuthErrorMessage(error, {
+          config: t.authConfigError,
+          network: t.authNetworkError,
+          fallback: t.genericError,
+        }),
+      );
       setStatus("error");
     } finally {
       setLoading(false);
