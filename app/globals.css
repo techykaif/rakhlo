@@ -1683,20 +1683,73 @@ a {
 
 @media (max-width: 760px) {
   .auth-shell {
-    padding: 15px;
+    padding: 14px;
   }
 
   .auth-content {
-    padding: 26px 0 22px;
+    padding: 22px 0 20px;
   }
 
   .auth-card {
-    padding: 26px 20px;
-    border-radius: 24px;
+    width: 100%;
+    padding: 32px 24px 28px;
+    border-radius: 28px;
   }
 
   .auth-card h1 {
-    font-size: 42px;
+    font-size: clamp(40px, 10vw, 50px);
+    line-height: 1;
+  }
+
+  .auth-card > p {
+    margin-top: 17px;
+    font-size: 16px;
+  }
+
+  .auth-form {
+    gap: 17px;
+    margin-top: 30px;
+  }
+
+  .auth-form label {
+    gap: 8px;
+  }
+
+  .auth-form label > span {
+    font-size: 14px;
+  }
+
+  .auth-form input {
+    min-height: 58px;
+    padding: 0 16px;
+    border-radius: 16px;
+    font-size: 16px;
+  }
+
+  .auth-submit {
+    min-height: 58px;
+    border-radius: 16px;
+    font-size: 15px;
+  }
+
+  .auth-divider {
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .auth-oauth {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-oauth__button {
+    min-height: 56px;
+    border-radius: 15px;
+    font-size: 14px;
+  }
+
+  .auth-link,
+  .auth-switch {
+    font-size: 13px;
   }
 
   .app-shell {
@@ -1799,7 +1852,8 @@ a {
 
 @media (max-width: 440px) {
   .auth-card {
-    padding: 24px 17px;
+    padding: 28px 18px 24px;
+    border-radius: 24px;
   }
 
   .auth-card h1 {
@@ -1808,6 +1862,21 @@ a {
 
   .auth-card > p {
     font-size: 14px;
+  }
+
+  .auth-form {
+    margin-top: 26px;
+    gap: 15px;
+  }
+
+  .auth-form input {
+    min-height: 54px;
+    border-radius: 15px;
+  }
+
+  .auth-submit {
+    min-height: 54px;
+    border-radius: 15px;
   }
 
   .app-header {
