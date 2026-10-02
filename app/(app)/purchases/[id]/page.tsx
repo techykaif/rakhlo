@@ -34,16 +34,16 @@ export default async function PurchaseDetailPage({
     notFound();
   }
 
-  const t = copy.en.purchases;
+  const t = copy.purchases;
 
   return (
     <>
       <PageHeader
-        eyebrow={t.detailsEyebrow}
+        eyebrow={{ en: t.en.detailsEyebrow, hi: t.hi.detailsEyebrow }}
         title={purchase.title}
-        description={t.newSubtitle}
+        description={{ en: t.en.newSubtitle, hi: t.hi.newSubtitle }}
         backHref="/purchases"
-        backLabel={t.backToPurchases}
+        backLabel={{ en: t.en.backToPurchases, hi: t.hi.backToPurchases }}
       />
       <PurchaseDetail
         purchase={purchase}
