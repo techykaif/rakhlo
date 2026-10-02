@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useLanguage } from "@/components/ui/language-provider";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 
-
 const copy = {
   en: {
     navWhy: "Why Rakhlo",
@@ -373,13 +372,12 @@ function ProductPreview({ t }: { t: (typeof copy)[Language] }) {
   );
 }
 
-export default function HomePage() {  const { language, setLanguage } = useLanguage();
+export default function HomePage() {
+  const { language } = useLanguage();
   const t = copy[language];
-
 
   return (
     <main className="landing-shell" lang={language}>
-
       <header className="landing-nav-wrap">
         <nav className="landing-nav" aria-label="Primary navigation">
           <a className="landing-brand" href="#top" aria-label="Rakhlo home">
