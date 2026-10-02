@@ -1,6 +1,6 @@
 import type { Provider } from "@supabase/supabase-js";
 
-export const OAUTH_PROVIDERS = ["google", "github"] as const;
+export const OAUTH_PROVIDERS = ["google"] as const;
 
 export type OAuthProvider = (typeof OAUTH_PROVIDERS)[number];
 
@@ -11,7 +11,6 @@ export type OAuthProviderConfig = {
 
 export const oauthProviders: readonly OAuthProviderConfig[] = [
   { provider: "google", label: "Google" },
-  { provider: "github", label: "GitHub" },
 ];
 
 export function asSupabaseProvider(provider: OAuthProvider): Provider {
