@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { validateFileSignature } from "@/lib/documents/signature";
+import { validateFileSignature } from "../lib/documents/signature";
 
 describe("document content signatures", () => {
   it("accepts matching signatures", () => {
