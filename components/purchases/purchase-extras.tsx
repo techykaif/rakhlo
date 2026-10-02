@@ -1,0 +1,162 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useLanguage } from "@/components/ui/language-provider";
+
+type Item = { id: string; name: string; quantity: number; unit_price: number | null; serial_number: string | null; imei: string | null; notes: string | null; status: string };
+type Payment = { id: string; amount: number; method: string; paid_at: string | null; reference: string | null; notes: string | null; document_id: string | null };
+type Warranty = { id: string; item_id: string | null; start_date: string | null; end_date: string; provider: string | null; source: string; notes: string | null };
+
+const labels = {
+  en: {
+    details: "Purchase details", items: "Items", payments: "Payments", warranty: "Warranty",
+    itemName: "Item name", quantity: "Quantity", unitPrice: "Unit price", serial: "Serial number", imei: "IMEI",
+    addItem: "Add item", method: "Payment method", paymentAmount: "Amount", paidAt: "Paid at", reference: "Reference", addPayment: "Add payment",
+    start: "Starts", end: "Ends", provider: "Provider", source: "Source", addWarranty: "Add warranty",
+    user: "Added by you", document: "From document", system: "System", remove: "Remove", saved: "Saved", error: "Unable to save this detail.",
+    cash: "Cash", upi: "UPI", card: "Card", bank_transfer: "Bank transfer", other: "Other",
+  },
+  hi: {
+    details: "खरीदारी की जानकारी", items: "चीज़ें", payments: "भुगतान", warranty: "वारंटी",
+    itemName: "चीज़ का नाम", quantity: "संख्या", unitPrice: "प्रति इकाई कीमत", serial: "सीरियल नंबर", imei: "IMEI",
+    addItem: "चीज़ जोड़ें", method: "भुगतान का तरीका", paymentAmount: "राशि", paidAt: "भुगतान समय", reference: "संदर्भ", addPayment: "भुगतान जोड़ें",
+    start: "शुरू", end: "समाप्त", provider: "प्रदाता", source: "स्रोत", addWarranty: "वारंटी जोड़ें",
+    user: "आपने जोड़ा", document: "दस्तावेज़ से", system: "सिस्टम", remove: "हटाएँ", saved: "सेव हो गया", error: "जानकारी सेव नहीं हो सकी।",
+    cash: "कैश", upi: "UPI", card: "कार्ड", bank_transfer: "बैंक ट्रांसफर", other: "अन्य",
+  },
+} as const;
+
+export function PurchaseExtras({
+  purchaseId,
+  returnStart,
+  returnEnd,
+  returnSource,
+  returnNote,
+}: {
+  purchaseId: string;
+  returnStart?: string | null;
+  returnEnd?: string | null;
+  returnSource?: string | null;
+  returnNote?: string | null;
+}) {
+  const language = useLanguage().language;
+  const t = labels[language];
+  const [items, setItems] = useState<Item[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [warranties, setWarranties] = useState<Warranty[]>([]);
+  const [message, setMessage] = useState("");
+
+  const [item, setItem] = useState({ name: "", quantity: "1", unit_price: "", serial_number: "", imei: "" });
+  const [payment, setPayment] = useState({ amount: "", method: "upi", paid_at: "", reference: "" });
+  const [warranty, setWarranty] = useState({ start_date: "", end_date: "", provider: "", source: "user" });
+
+  async function load() {
+    const response = await fetch(`/api/purchases/${purchaseId}/extras`);
+    const data = await response.json().catch(() => ({}));
+    if (response.ok) {
+      setItems(data.items ?? []);
+      setPayments(data.payments ?? []);
+      setWarranties(data.warranties ?? []);
+    }
+  }
+
+  useEffect(() => { void load(); }, [purchaseId]);
+
+  async function add(kind: "item" | "payment" | "warranty") {
+    const body = kind === "item"
+      ? { kind, ...item, quantity: Number(item.quantity) }
+      : kind === "payment"
+        ? { kind, ...payment }
+        : { kind, ...warranty };
+
+    const response = await fetch(`/api/purchases/${purchaseId}/extras`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      setMessage(t.error);
+      return;
+    }
+    setMessage(t.saved);
+    if (kind === "item") setItem({ name: "", quantity: "1", unit_price: "", serial_number: "", imei: "" });
+    if (kind === "payment") setPayment({ amount: "", method: "upi", paid_at: "", reference: "" });
+    if (kind === "warranty") setWarranty({ start_date: "", end_date: "", provider: "", source: "user" });
+    await load();
+  }
+
+  async function remove(kind: "item" | "payment" | "warranty", id: string) {
+    const response = await fetch(`/api/purchases/${purchaseId}/extras?kind=${kind}&id=${id}`, { method: "DELETE" });
+    if (response.ok) await load();
+  }
+
+  return (
+    <section className="purchase-extras">
+      <span className="panel-kicker">{t.details}</span>
+      {message ? <p role="status">{message}</p> : null}
+
+      <div className="purchase-extras__block">
+        <h3>{t.items}</h3>
+        {items.map((value) => (
+          <div key={value.id} className="purchase-extra-row">
+            <div><strong>{value.name}</strong><span>{value.quantity}{value.serial_number ? ` · ${value.serial_number}` : ""}{value.imei ? ` · IMEI ${value.imei}` : ""}</span></div>
+            <button type="button" className="button button-light" onClick={() => remove("item", value.id)}>{t.remove}</button>
+          </div>
+        ))}
+        <div className="purchase-extras__form">
+          <input value={item.name} onChange={(e) => setItem({ ...item, name: e.target.value })} placeholder={t.itemName} />
+          <input type="number" min="0.001" step="0.001" value={item.quantity} onChange={(e) => setItem({ ...item, quantity: e.target.value })} placeholder={t.quantity} />
+          <input type="number" min="0" step="0.01" value={item.unit_price} onChange={(e) => setItem({ ...item, unit_price: e.target.value })} placeholder={t.unitPrice} />
+          <input value={item.serial_number} onChange={(e) => setItem({ ...item, serial_number: e.target.value })} placeholder={t.serial} />
+          <input value={item.imei} onChange={(e) => setItem({ ...item, imei: e.target.value })} placeholder={t.imei} />
+          <button type="button" className="button button-dark" onClick={() => add("item")}>{t.addItem}</button>
+        </div>
+      </div>
+
+      <div className="purchase-extras__block">
+        <h3>{t.payments}</h3>
+        {payments.map((value) => (
+          <div key={value.id} className="purchase-extra-row">
+            <div><strong>₹{Number(value.amount).toFixed(2)} · {value.method === "bank_transfer" ? t.bank_transfer : value.method === "cash" ? t.cash : value.method === "upi" ? t.upi : value.method === "card" ? t.card : t.other}</strong><span>{value.reference ?? ""}</span></div>
+            <button type="button" className="button button-light" onClick={() => remove("payment", value.id)}>{t.remove}</button>
+          </div>
+        ))}
+        <div className="purchase-extras__form">
+          <input type="number" min="0" step="0.01" value={payment.amount} onChange={(e) => setPayment({ ...payment, amount: e.target.value })} placeholder={t.paymentAmount} />
+          <select value={payment.method} onChange={(e) => setPayment({ ...payment, method: e.target.value })}>
+            <option value="upi">{t.upi}</option><option value="cash">{t.cash}</option><option value="card">{t.card}</option><option value="bank_transfer">{t.bank_transfer}</option><option value="other">{t.other}</option>
+          </select>
+          <input type="datetime-local" value={payment.paid_at} onChange={(e) => setPayment({ ...payment, paid_at: e.target.value })} aria-label={t.paidAt} />
+          <input value={payment.reference} onChange={(e) => setPayment({ ...payment, reference: e.target.value })} placeholder={t.reference} />
+          <button type="button" className="button button-dark" onClick={() => add("payment")}>{t.addPayment}</button>
+        </div>
+      </div>
+
+      <div className="purchase-extras__block">
+        <h3>{t.warranty}</h3>
+        {warranties.map((value) => (
+          <div key={value.id} className="purchase-extra-row">
+            <div><strong>{value.end_date}</strong><span>{value.provider ?? ""} · {value.source === "document" ? t.document : value.source === "system" ? t.system : t.user}</span></div>
+            <button type="button" className="button button-light" onClick={() => remove("warranty", value.id)}>{t.remove}</button>
+          </div>
+        ))}
+        <div className="purchase-extras__form">
+          <input type="date" value={warranty.start_date} onChange={(e) => setWarranty({ ...warranty, start_date: e.target.value })} aria-label={t.start} />
+          <input type="date" value={warranty.end_date} onChange={(e) => setWarranty({ ...warranty, end_date: e.target.value })} aria-label={t.end} />
+          <input value={warranty.provider} onChange={(e) => setWarranty({ ...warranty, provider: e.target.value })} placeholder={t.provider} />
+          <select value={warranty.source} onChange={(e) => setWarranty({ ...warranty, source: e.target.value })}><option value="user">{t.user}</option><option value="document">{t.document}</option><option value="system">{t.system}</option></select>
+          <button type="button" className="button button-dark" onClick={() => add("warranty")}>{t.addWarranty}</button>
+        </div>
+      </div>
+
+      {returnEnd ? (
+        <div className="purchase-extras__block">
+          <h3>Return period</h3>
+          <p>{returnStart ? `${returnStart} → ${returnEnd}` : returnEnd}</p>
+          {returnSource ? <small>{returnSource === "document" ? t.document : returnSource === "system" ? t.system : t.user}</small> : null}
+          {returnNote ? <p>{returnNote}</p> : null}
+        </div>
+      ) : null}
+    </section>
+  );
+}
