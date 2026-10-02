@@ -3976,3 +3976,34 @@ a {
     line-height: 1.12;
   }
 }
+
+
+/* Shared Devanagari typography: never apply Latin tracking to Hindi glyphs. */
+html[lang="hi"] body {
+  font-family: "Noto Sans Devanagari", "Nirmala UI", "Mangal", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: normal;
+  word-spacing: 0.04em;
+  text-rendering: optimizeLegibility;
+}
+
+html[lang="hi"] :is(h1, h2, h3, h4, h5, h6, p, a, button, label, input, textarea, select, option, span, strong, small, li) {
+  letter-spacing: normal;
+}
+
+html[lang="hi"] :is(h1, h2, h3, h4, h5, h6) {
+  line-height: 1.15;
+}
+
+html[lang="hi"] .landing-shell {
+  font-family: "Noto Sans Devanagari", "Nirmala UI", "Mangal", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+}
+
+html[lang="hi"] .landing-shell :is(h1, h2, h3, h4, h5, h6) {
+  letter-spacing: normal;
+  line-height: 1.15;
+}
+
+html[lang="hi"] .landing-shell :is(p, li, button, a, label, input, textarea, select) {
+  letter-spacing: normal;
+  line-height: 1.65;
+}

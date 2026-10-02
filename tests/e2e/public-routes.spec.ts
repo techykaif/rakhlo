@@ -36,4 +36,32 @@ test.describe("public routes", () => {
     await expect(page.getByRole("heading", { name: /वापस स्वागत है/i })).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("lang", "hi");
   });
+
+  test("language persists from auth into another public route", async ({ page }) => {
+    await page.goto("/login");
+    await page.getByRole("button", { name: "हिंदी" }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "hi");
+
+    await page.goto("/signup");
+    await expect(page.getByRole("heading", { name: /अपना Rakhlo खाता बनाएँ/i })).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("lang", "hi");
+  });
+
+  test("Hindi headings do not inherit negative Latin tracking", async ({ page }) => {
+    await page.goto("/login");
+    await page.getByRole("button", { name: "हिंदी" }).click();
+    const heading = page.getByRole("heading", { name: /वापस स्वागत है/i });
+    await expect(heading).toBeVisible();
+
+    const typography = await heading.evaluate((element) => {
+      const style = window.getComputedStyle(element);
+      return {
+        letterSpacing: style.letterSpacing,
+        lineHeight: style.lineHeight,
+      };
+    });
+
+    expect(typography.letterSpacing).not.toMatch(/^-/);
+    expect(typography.lineHeight).not.toBe("normal");
+  });
 });
