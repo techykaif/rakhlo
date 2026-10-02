@@ -19,7 +19,11 @@ describe("landing page", () => {
   });
 
   it("switches the public page language", () => {
-    render(<HomePage />);
+    render(
+      <LanguageProvider>
+        <HomePage />
+      </LanguageProvider>,
+    );
 
     fireEvent.click(screen.getByRole("button", { name: /change language/i }));
 
