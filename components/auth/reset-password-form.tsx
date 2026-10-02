@@ -4,6 +4,10 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
+import {
+  getReturnedAuthErrorMessage,
+  getUnexpectedAuthErrorMessage,
+} from "@/lib/auth/errors";
 
 export function ResetPasswordForm() {
   const router = useRouter();
@@ -37,14 +41,24 @@ export function ResetPasswordForm() {
       const { error: updateError } = await supabase.auth.updateUser({ password });
 
       if (updateError) {
-        setError(updateError.message || t.genericError);
+        setError(
+          getReturnedAuthErrorMessage(updateError.message, {
+            network: t.authNetworkError,
+          }) || t.genericError,
+        );
         return;
       }
 
       setMessage(`${t.resetSuccessTitle}: ${t.resetSuccessText}`);
       window.setTimeout(() => router.push("/dashboard"), 900);
-    } catch {
-      setError(t.genericError);
+    } catch (error) {
+      setError(
+        getUnexpectedAuthErrorMessage(error, {
+          config: t.authConfigError,
+          network: t.authNetworkError,
+          fallback: t.genericError,
+        }),
+      );
     } finally {
       setLoading(false);
     }
