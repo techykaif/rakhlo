@@ -48,7 +48,12 @@ export function AuthForm({ mode }: AuthFormProps) {
       });
 
       if (oauthError) {
-        setError(t.oauthError);
+        setError(
+          getReturnedAuthErrorMessage(oauthError.message, {
+            network: t.authNetworkError,
+            googleConfig: t.googleConfig,
+          }) || t.oauthError,
+        );
         setLoading(false);
       }
     } catch (error) {
@@ -56,6 +61,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         getUnexpectedAuthErrorMessage(error, {
           config: t.authConfigError,
           network: t.authNetworkError,
+          googleConfig: t.googleConfig,
           fallback: t.oauthError,
         }),
       );
@@ -117,7 +123,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         email: validation.email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/confirm`,
         },
       });
 
@@ -125,6 +131,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         setError(
           getReturnedAuthErrorMessage(signUpError.message, {
             network: t.authNetworkError,
+            googleConfig: t.googleConfig,
           }) || t.genericError,
         );
         return;
@@ -141,6 +148,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         getUnexpectedAuthErrorMessage(error, {
           config: t.authConfigError,
           network: t.authNetworkError,
+          googleConfig: t.googleConfig,
           fallback: t.genericError,
         }),
       );
