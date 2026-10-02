@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const LANGUAGE_STORAGE_KEY = "rakhlo-language";
 
 const copy = {
   en: {
@@ -373,6 +375,21 @@ function ProductPreview({ t }: { t: (typeof copy)[Language] }) {
 
 export default function HomePage() {
   const [language, setLanguage] = useState<Language>("en");
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    if (saved === "en" || saved === "hi") {
+      setLanguage(saved);
+      document.documentElement.lang = saved;
+    }
+  }, []);
+
+  function changeLanguage(next: Language) {
+    setLanguage(next);
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, next);
+    document.documentElement.lang = next;
+  }
+
   const t = copy[language];
 
   return (
@@ -402,7 +419,7 @@ export default function HomePage() {
             <button
               type="button"
               className="landing-language"
-              onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+              onClick={() => changeLanguage(language === "en" ? "hi" : "en")}
               aria-label="Change language"
               title={language === "en" ? "Switch to Hindi" : "Switch to English"}
             >
