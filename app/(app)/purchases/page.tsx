@@ -81,7 +81,7 @@ export default async function PurchasesPage({
     filtered = filtered.filter((purchase) => ids.has(purchase.id));
   }
 
-  const t = copy.purchases;
+  const t = { en: copy.en.purchases, hi: copy.hi.purchases };
 
   return (
     <>
