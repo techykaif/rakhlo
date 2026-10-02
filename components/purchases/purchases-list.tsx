@@ -50,6 +50,10 @@ export function PurchasesList({
   const selectedCategory = categories.find((item) => item.id === category);
 
   useEffect(() => {
+    setCategory(filters.category);
+  }, [filters.category]);
+
+  useEffect(() => {
     if (!categoryOpen) return;
 
     const handlePointerDown = (event: PointerEvent) => {
