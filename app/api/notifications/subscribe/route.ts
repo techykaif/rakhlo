@@ -23,13 +23,11 @@ export async function POST(request: Request) {
 
   const value = body as Record<string, unknown>;
   const endpoint = typeof value.endpoint === "string" ? value.endpoint.trim() : "";
-  const keys = value.keys;
-  const p256dh = keys && typeof keys === "object" && !Array.isArray(keys)
-    ? typeof (keys as Record<string, unknown>).p256dh === "string" ? (keys as Record<string, unknown>).p256dh : ""
-    : "";
-  const auth = keys && typeof keys === "object" && !Array.isArray(keys)
-    ? typeof (keys as Record<string, unknown>).auth === "string" ? (keys as Record<string, unknown>).auth : ""
-    : "";
+  const keys = value.keys && typeof value.keys === "object" && !Array.isArray(value.keys)
+    ? value.keys as Record<string, unknown>
+    : null;
+  const p256dh = typeof keys?.p256dh === "string" ? keys.p256dh : "";
+  const auth = typeof keys?.auth === "string" ? keys.auth : "";
 
   if (!endpoint || endpoint.length > 2000 || !p256dh || !auth) {
     return NextResponse.json({ error: "Invalid subscription." }, { status: 422 });
@@ -74,7 +72,7 @@ export async function DELETE(request: Request) {
   const endpoint =
     body && typeof body === "object" && !Array.isArray(body) &&
     typeof (body as Record<string, unknown>).endpoint === "string"
-      ? (body as Record<string, unknown>).endpoint
+      ? String((body as Record<string, unknown>).endpoint)
       : "";
 
   if (endpoint) {
