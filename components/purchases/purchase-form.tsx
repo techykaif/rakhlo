@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
+import { flushQueuedPurchases, queuePurchase } from "@/lib/offline/purchase-queue";
 
 type Category = { id: string; name: string };
 
@@ -47,6 +48,13 @@ export function PurchaseForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    void flushQueuedPurchases();
+    const handleOnline = () => { void flushQueuedPurchases(); };
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, []);
 
   function translateFieldError(field: string) {
     if (field === "title") return t.productNameError;
@@ -100,7 +108,25 @@ export function PurchaseForm({
         router.refresh();
       }
     } catch {
-      setFormError(t.error);
+      if (!isEditing && typeof navigator !== "undefined" && !navigator.onLine) {
+        queuePurchase({
+          title,
+          purchase_date: purchaseDate,
+          amount,
+          currency: "INR",
+          seller_name: seller,
+          category_id: categoryId || null,
+          quantity,
+          notes,
+          return_start_date: returnStart || null,
+          return_end_date: returnEnd || null,
+          return_source: returnEnd ? "user" : null,
+          return_note: returnNote || null,
+        });
+        setFormError(language === "hi" ? "आप ऑफलाइन हैं। खरीदारी सेव है और कनेक्शन लौटने पर सिंक होगी।" : "You are offline. This purchase is queued and will sync when you reconnect.");
+      } else {
+        setFormError(t.error);
+      }
     } finally {
       setSaving(false);
     }
