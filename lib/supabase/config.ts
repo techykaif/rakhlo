@@ -20,12 +20,12 @@ export class SupabaseConfigError extends Error {
 export function getSupabaseConfig(): SupabaseConfig {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
-  const missing: string[] = [];
 
+  const missing: string[] = [];
   if (!url) missing.push("NEXT_PUBLIC_SUPABASE_URL");
   if (!publishableKey) missing.push("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
 
-  if (missing.length) {
+  if (missing.length || !url || !publishableKey) {
     throw new SupabaseConfigError(missing);
   }
 
