@@ -56,6 +56,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         getUnexpectedAuthErrorMessage(error, {
           config: t.authConfigError,
           network: t.authNetworkError,
+          googleConfig: t.googleConfig,
           fallback: t.oauthError,
         }),
       );
@@ -125,6 +126,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         setError(
           getReturnedAuthErrorMessage(signUpError.message, {
             network: t.authNetworkError,
+            googleConfig: t.googleConfig,
           }) || t.genericError,
         );
         return;
