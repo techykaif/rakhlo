@@ -17,7 +17,30 @@ type PurchaseListItem = {
   categories: { name: string } | null;
 };
 
-export function PurchasesList({ purchases, query }: { purchases: PurchaseListItem[]; query: string }) {
+type Category = { id: string; name: string };
+
+type Filters = {
+  category: string;
+  from: string;
+  to: string;
+  min: string;
+  max: string;
+  receipt: boolean;
+  payment: boolean;
+  warranty: boolean;
+};
+
+export function PurchasesList({
+  purchases,
+  query,
+  filters,
+  categories,
+}: {
+  purchases: PurchaseListItem[];
+  query: string;
+  filters: Filters;
+  categories: Category[];
+}) {
   const { language } = useLanguage();
   const t = copy[language].purchases;
   const locale = language === "hi" ? "hi-IN" : "en-IN";
@@ -38,7 +61,41 @@ export function PurchasesList({ purchases, query }: { purchases: PurchaseListIte
       <form className="purchase-search" method="get">
         <input name="q" defaultValue={query} placeholder={t.searchPlaceholder} aria-label={t.searchPlaceholder} />
         <button type="submit" className="button button-dark">{t.searchButton}</button>
-        {query ? <Link href="/purchases" className="button button-light">{t.clearSearch}</Link> : null}
+        {query || filters.category || filters.from || filters.to || filters.min || filters.max || filters.receipt || filters.payment || filters.warranty ? (
+          <Link href="/purchases" className="button button-light">{t.clearSearch}</Link>
+        ) : null}
+
+        <div className="purchase-search__filters">
+          <label>
+            <span>{t.category}</span>
+            <select name="category" defaultValue={filters.category}>
+              <option value="">{t.categoryPlaceholder}</option>
+              {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>{t.purchaseDate}</span>
+            <input type="date" name="from" defaultValue={filters.from} aria-label={t.purchaseDate} />
+          </label>
+          <label>
+            <span>{t.purchaseDate}</span>
+            <input type="date" name="to" defaultValue={filters.to} aria-label={t.purchaseDate} />
+          </label>
+          <label>
+            <span>{t.amount}</span>
+            <input type="number" name="min" min="0" step="0.01" defaultValue={filters.min} placeholder="Min" />
+          </label>
+          <label>
+            <span>{t.amount}</span>
+            <input type="number" name="max" min="0" step="0.01" defaultValue={filters.max} placeholder="Max" />
+          </label>
+        </div>
+
+        <div className="purchase-search__checks">
+          <label><input type="checkbox" name="receipt" value="1" defaultChecked={filters.receipt} /> {t.receipt}</label>
+          <label><input type="checkbox" name="payment" value="1" defaultChecked={filters.payment} /> {t.paymentProof}</label>
+          <label><input type="checkbox" name="warranty" value="1" defaultChecked={filters.warranty} /> {t.warrantyCard}</label>
+        </div>
       </form>
 
       {purchases.length ? (
