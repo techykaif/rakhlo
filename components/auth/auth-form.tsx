@@ -149,48 +149,76 @@ export function AuthForm({ mode }: AuthFormProps) {
     }
   }
 
+  const googleProvider = oauthProviders.find(({ provider }) => provider === "google");
+
   return (
     <form className="auth-form" onSubmit={handleSubmit} noValidate>
-      <label>
-        <span>{t.emailLabel}</span>
-        <input
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          type="email"
-          autoComplete="email"
-          inputMode="email"
-          placeholder={t.emailPlaceholder}
-          required
-        />
-      </label>
+      {googleProvider ? (
+        <div className="auth-primary-social">
+          <button
+            type="button"
+            className="auth-google-button"
+            onClick={() => handleOAuth(googleProvider.provider)}
+            disabled={loading}
+          >
+            <span className="auth-google-button__icon" aria-hidden="true">
+              <Icon name="google" size={19} strokeWidth={2} />
+            </span>
+            <span className="auth-google-button__copy">
+              <strong>{t.continueWith.replace("{provider}", googleProvider.label)}</strong>
+              <small>{t.googleHint}</small>
+            </span>
+            <span className="auth-google-button__arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      ) : null}
 
-      <label>
-        <span>{t.passwordLabel}</span>
-        <input
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          type="password"
-          autoComplete={mode === "signin" ? "current-password" : "new-password"}
-          placeholder={t.passwordPlaceholder}
-          minLength={6}
-          required
-        />
-      </label>
+      <div className="auth-divider">
+        <span>{t.orContinueWith}</span>
+      </div>
 
-      {mode === "signup" ? (
+      <div className="auth-fields">
         <label>
-          <span>{t.confirmPasswordLabel}</span>
+          <span>{t.emailLabel}</span>
           <input
-            value={confirmation}
-            onChange={(event) => setConfirmation(event.target.value)}
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            placeholder={t.emailPlaceholder}
+            required
+          />
+        </label>
+
+        <label>
+          <span>{t.passwordLabel}</span>
+          <input
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
             type="password"
-            autoComplete="new-password"
-            placeholder={t.confirmPasswordPlaceholder}
+            autoComplete={mode === "signin" ? "current-password" : "new-password"}
+            placeholder={t.passwordPlaceholder}
             minLength={6}
             required
           />
         </label>
-      ) : null}
+
+        {mode === "signup" ? (
+          <label>
+            <span>{t.confirmPasswordLabel}</span>
+            <input
+              value={confirmation}
+              onChange={(event) => setConfirmation(event.target.value)}
+              type="password"
+              autoComplete="new-password"
+              placeholder={t.confirmPasswordPlaceholder}
+              minLength={6}
+              required
+            />
+          </label>
+        ) : null}
+      </div>
 
       {error ? <div className="auth-message auth-message--error" role="alert">{error}</div> : null}
       {message ? <div className="auth-message auth-message--success" role="status">{message}</div> : null}
@@ -198,25 +226,6 @@ export function AuthForm({ mode }: AuthFormProps) {
       <button className="button button-dark auth-submit" type="submit" disabled={loading}>
         {loading ? copy[language].common.loading : mode === "signin" ? t.signInButton : t.signUpButton}
       </button>
-
-      <div className="auth-divider" aria-hidden="true">
-        <span>{t.orContinueWith}</span>
-      </div>
-
-      <div className="auth-oauth">
-        {oauthProviders.map(({ provider, label }) => (
-          <button
-            key={provider}
-            type="button"
-            className="auth-oauth__button"
-            onClick={() => handleOAuth(provider)}
-            disabled={loading}
-          >
-            <Icon name={provider} size={17} strokeWidth={1.9} />
-            <span>{t.continueWith.replace("{provider}", label)}</span>
-          </button>
-        ))}
-      </div>
 
       {mode === "signin" ? (
         <Link className="auth-link auth-link--center" href="/forgot-password">
@@ -232,4 +241,3 @@ export function AuthForm({ mode }: AuthFormProps) {
       </div>
     </form>
   );
-}
