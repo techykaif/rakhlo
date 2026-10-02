@@ -3,6 +3,7 @@ import { SupabaseConfigError } from "@/lib/supabase/config";
 type AuthErrorMessages = {
   config: string;
   network: string;
+  googleConfig: string;
   fallback: string;
 };
 
@@ -10,6 +11,10 @@ export function getUnexpectedAuthErrorMessage(
   error: unknown,
   messages: AuthErrorMessages,
 ) {
+  if (/unsupported provider|provider.*not.*enabled|google.*not.*enabled|google.*not.*configured/i.test(error instanceof Error ? error.message : "")) {
+    return messages.googleConfig;
+  }
+
   if (error instanceof SupabaseConfigError) {
     console.error("[Rakhlo auth] Supabase configuration error:", error.message);
     return messages.config;
