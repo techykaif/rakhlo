@@ -117,7 +117,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         email: validation.email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/auth/confirm`,
         },
       });
 
