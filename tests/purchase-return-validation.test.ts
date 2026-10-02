@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { validatePurchaseInput } from "@/lib/purchases/validation";
+import { validatePurchaseInput } from "../lib/purchases/validation";
 
 describe("purchase return period validation", () => {
   const base = {
