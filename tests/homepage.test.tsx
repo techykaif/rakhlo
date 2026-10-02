@@ -25,7 +25,7 @@ describe("landing page", () => {
       </LanguageProvider>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /change language/i }));
+    fireEvent.click(screen.getByRole("button", { name: "हिंदी" }));
 
     expect(screen.getByText("आपने खरीदा।")).toBeTruthy();
     expect(screen.getByText("Rakhlo याद रखेगा।")).toBeTruthy();
