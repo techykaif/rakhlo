@@ -12,7 +12,7 @@ export function LanguageToggle() {
       type="button"
       className="language-toggle"
       onClick={() => setLanguage(nextLanguage)}
-      aria-label={language === "en" ? "Switch to Hindi" : "Switch to English"}
+      aria-label="Change language"
       title={language === "en" ? "Switch to Hindi" : "Switch to English"}
     >
       <span className={language === "en" ? "is-active" : ""}>EN</span>
