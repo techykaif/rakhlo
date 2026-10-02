@@ -1,6 +1,6 @@
 # Rakhlo authentication
 
-Rakhlo supports password authentication plus Google and GitHub OAuth through Supabase Auth.
+Rakhlo supports password authentication plus Google OAuth through Supabase Auth.
 
 ## Application callback
 
