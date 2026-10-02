@@ -11,16 +11,16 @@ export default async function NewPurchasePage() {
     .select("id,name")
     .order("name");
 
-  const t = copy.en.purchases;
+  const t = { en: copy.en.purchases, hi: copy.hi.purchases };
 
   return (
     <>
       <PageHeader
-        eyebrow={t.newEyebrow}
-        title={t.newTitle}
-        description={t.newSubtitle}
+        eyebrow={{ en: t.en.newEyebrow, hi: t.hi.newEyebrow }}
+        title={{ en: t.en.newTitle, hi: t.hi.newTitle }}
+        description={{ en: t.en.newSubtitle, hi: t.hi.newSubtitle }}
         backHref="/purchases"
-        backLabel={t.backToPurchases}
+        backLabel={{ en: t.en.backToPurchases, hi: t.hi.backToPurchases }}
       />
       <div className="purchase-editor">
         <PurchaseForm categories={categories ?? []} />

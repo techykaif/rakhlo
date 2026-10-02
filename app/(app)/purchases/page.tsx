@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/app/page-header";
 import { copy } from "@/lib/i18n";
@@ -82,19 +81,16 @@ export default async function PurchasesPage({
     filtered = filtered.filter((purchase) => ids.has(purchase.id));
   }
 
-  const t = copy.en.purchases;
+  const t = { en: copy.en.purchases, hi: copy.hi.purchases };
 
   return (
     <>
       <PageHeader
-        eyebrow={t.eyebrow}
-        title={t.title}
-        description={t.subtitle}
-        action={
-          <Link href="/purchases/new" className="button button-dark">
-            + {t.addPurchase}
-          </Link>
-        }
+        eyebrow={{ en: t.en.eyebrow, hi: t.hi.eyebrow }}
+        title={{ en: t.en.title, hi: t.hi.title }}
+        description={{ en: t.en.subtitle, hi: t.hi.subtitle }}
+        actionHref="/purchases/new"
+        actionLabel={{ en: t.en.addPurchase, hi: t.hi.addPurchase }}
       />
       <PurchasesList
         purchases={filtered}

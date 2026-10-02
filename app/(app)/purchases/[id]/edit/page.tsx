@@ -27,16 +27,16 @@ export default async function EditPurchasePage({
     notFound();
   }
 
-  const t = copy.en.purchases;
+  const t = { en: copy.en.purchases, hi: copy.hi.purchases };
 
   return (
     <>
       <PageHeader
-        eyebrow={t.editTitle}
+        eyebrow={{ en: t.en.editTitle, hi: t.hi.editTitle }}
         title={purchase.title}
-        description={t.newSubtitle}
+        description={{ en: t.en.newSubtitle, hi: t.hi.newSubtitle }}
         backHref={`/purchases/${purchase.id}`}
-        backLabel={t.detailsEyebrow}
+        backLabel={{ en: t.en.detailsEyebrow, hi: t.hi.detailsEyebrow }}
       />
       <div className="purchase-editor">
         <PurchaseForm categories={categories ?? []} initialPurchase={purchase} />

@@ -1,14 +1,25 @@
+"use client";
+
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useLanguage } from "@/components/ui/language-provider";
+
+type LocalizedText = { en: string; hi: string };
 
 type PageHeaderProps = {
-  eyebrow: string;
-  title: string;
-  description?: string;
+  eyebrow: string | LocalizedText;
+  title: string | LocalizedText;
+  description?: string | LocalizedText;
   backHref?: string;
-  backLabel?: string;
-  action?: ReactNode;
+  backLabel?: string | LocalizedText;
+  action?: React.ReactNode;
+  actionHref?: string;
+  actionLabel?: string | LocalizedText;
 };
+
+function resolveText(value: string | LocalizedText | undefined, language: "en" | "hi") {
+  if (!value) return "";
+  return typeof value === "string" ? value : value[language];
+}
 
 export function PageHeader({
   eyebrow,
@@ -17,20 +28,32 @@ export function PageHeader({
   backHref,
   backLabel,
   action,
+  actionHref,
+  actionLabel,
 }: PageHeaderProps) {
+  const { language } = useLanguage();
+
   return (
     <header className="app-page-header">
       <div>
         {backHref && backLabel ? (
           <Link className="page-back-link" href={backHref}>
-            ← {backLabel}
+            ← {resolveText(backLabel, language)}
           </Link>
         ) : null}
-        <span className="app-kicker">{eyebrow}</span>
-        <h1>{title}</h1>
-        {description ? <p>{description}</p> : null}
+        <span className="app-kicker">{resolveText(eyebrow, language)}</span>
+        <h1>{resolveText(title, language)}</h1>
+        {description ? <p>{resolveText(description, language)}</p> : null}
       </div>
-      {action ? <div className="app-page-header__action">{action}</div> : null}
+      {actionHref && actionLabel ? (
+        <div className="app-page-header__action">
+          <Link href={actionHref} className="button button-dark">
+            + {resolveText(actionLabel, language)}
+          </Link>
+        </div>
+      ) : action ? (
+        <div className="app-page-header__action">{action}</div>
+      ) : null}
     </header>
   );
 }
