@@ -27,7 +27,7 @@ export default async function EditPurchasePage({
     notFound();
   }
 
-  const t = copy.purchases;
+  const t = { en: copy.en.purchases, hi: copy.hi.purchases };
 
   return (
     <>
