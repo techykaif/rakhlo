@@ -82,7 +82,7 @@ export async function POST(request: Request, context: Context) {
     const { data, error } = await a.supabase.from("payments").insert({
       purchase_id: purchaseId,
       amount: paymentAmount,
-      method,
+      method: String(method),
       paid_at: typeof value.paid_at === "string" ? value.paid_at : null,
       reference: text(value.reference, 200),
       notes: text(value.notes, 5000),
@@ -103,7 +103,7 @@ export async function POST(request: Request, context: Context) {
       start_date: startDate,
       end_date: endDate,
       provider: text(value.provider, 200),
-      source: ["user", "document", "system"].includes(String(value.source)) ? value.source : "user",
+      source: ["user", "document", "system"].includes(String(value.source)) ? String(value.source) : "user",
       notes: text(value.notes, 5000),
     }).select("id,item_id,start_date,end_date,provider,source,notes,created_at,updated_at").single();
     if (error) return NextResponse.json({ error: "Unable to save the warranty." }, { status: 400 });
@@ -143,7 +143,7 @@ export async function PATCH(request: Request, context: Context) {
   if (value.kind === "payment") {
     const { data, error } = await a.supabase.from("payments").update({
       amount: amount(value.amount) ?? undefined,
-      method: value.method,
+      method: String(value.method),
       paid_at: typeof value.paid_at === "string" ? value.paid_at : null,
       reference: text(value.reference, 200),
       notes: text(value.notes, 5000),
@@ -160,7 +160,7 @@ export async function PATCH(request: Request, context: Context) {
       start_date: value.start_date ? date(value.start_date) : null,
       end_date: date(value.end_date) ?? undefined,
       provider: text(value.provider, 200),
-      source: ["user", "document", "system"].includes(String(value.source)) ? value.source : "user",
+      source: ["user", "document", "system"].includes(String(value.source)) ? String(value.source) : "user",
       notes: text(value.notes, 5000),
     }).eq("id", id).eq("purchase_id", purchaseId).select("id,item_id,start_date,end_date,provider,source,notes,created_at,updated_at").maybeSingle();
     if (error) return NextResponse.json({ error: "Unable to update the warranty." }, { status: 400 });
