@@ -3,6 +3,9 @@
   "name": "rakhlo-notification-cron",
   "main": "src/index.js",
   "compatibility_date": "2026-10-02",
+  "vars": {
+    "RAKHLO_PROCESS_URL": "https://rakhlo.xyz/api/notifications/process"
+  },
   "triggers": {
     "crons": ["*/10 * * * *"]
   },
