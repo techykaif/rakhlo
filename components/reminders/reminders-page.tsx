@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { tw } from "@/components/ui/styles";
 import { PageHeader } from "@/components/app/page-header";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -86,11 +87,11 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
         eyebrow={t.eyebrow}
         title={t.pageTitle}
         description={t.subtitle}
-        action={<span className="reminder-header-count">{activeCount} {t.activeLabel}</span>}
+        action={<span className={tw("reminder-header-count")}>{activeCount} {t.activeLabel}</span>}
       />
-      {message ? <div className="reminder-page-message" role="status">{message}</div> : null}
+      {message ? <div className={tw("reminder-page-message")} role="status">{message}</div> : null}
       <NotificationSettings />
-      <div className="reminders-layout">
+      <div className={tw("reminders-layout")}>
         <ReminderList
           reminders={reminders}
           onEdit={setEditing}
