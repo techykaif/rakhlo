@@ -131,7 +131,7 @@ export function PurchaseExtras({
           <Select
             value={payment.method}
             onChange={(value) => setPayment({ ...payment, method: value })}
-            ariaLabel={t.paymentMethod}
+            ariaLabel={t.method}
             options={[
               { value: "upi", label: t.upi },
               { value: "cash", label: t.cash },
