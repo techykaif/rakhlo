@@ -25,7 +25,7 @@ describe("purchase responsive layout", () => {
       </LanguageProvider>,
     );
 
-    const filterGrid = screen.getByText("Category").parentElement;
+    const filterGrid = screen.getByText("Category").parentElement?.parentElement;
     expect(filterGrid?.className).toContain("grid-cols-5");
     expect(filterGrid?.className).toContain("max-[760px]:grid-cols-1");
 
@@ -34,6 +34,6 @@ describe("purchase responsive layout", () => {
     expect(checks?.className).toContain("max-[760px]:grid-cols-1");
 
     const receiptInput = screen.getByRole("checkbox", { name: /receipt/i });
-    expect(receiptInput.className).toContain("w-4");
+    expect(checks?.className).toContain("[&_input[type=checkbox]]:!w-4");
   });
 });
