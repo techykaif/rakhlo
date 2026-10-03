@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { GettingStartedGuide } from "../components/app/getting-started-guide";
 import { LanguageProvider } from "../components/ui/language-provider";
+import { LanguageToggle } from "../components/ui/language-toggle";
 
 describe("getting started guide", () => {
   it("renders in the preferred language and updates when the language changes", () => {
@@ -9,6 +10,7 @@ describe("getting started guide", () => {
 
     render(
       <LanguageProvider>
+        <LanguageToggle />
         <GettingStartedGuide open onClose={onClose} />
       </LanguageProvider>,
     );
