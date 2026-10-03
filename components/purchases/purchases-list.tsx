@@ -46,6 +46,7 @@ export function PurchasesList({
   const { language } = useLanguage();
   const t = copy[language].purchases;
   const [category, setCategory] = useState(filters.category);
+
   useEffect(() => {
     setCategory(filters.category);
   }, [filters.category]);
@@ -66,10 +67,27 @@ export function PurchasesList({
   return (
     <section className="purchases-section">
       <form className="purchase-search" method="get">
-        <input name="q" defaultValue={query} placeholder={t.searchPlaceholder} aria-label={t.searchPlaceholder} />
-        <button type="submit" className="button button-dark">{t.searchButton}</button>
-        {query || filters.category || filters.from || filters.to || filters.min || filters.max || filters.receipt || filters.payment || filters.warranty ? (
-          <Link href="/purchases" className="button button-light">{t.clearSearch}</Link>
+        <input
+          name="q"
+          defaultValue={query}
+          placeholder={t.searchPlaceholder}
+          aria-label={t.searchPlaceholder}
+        />
+        <button type="submit" className="button button-dark">
+          {t.searchButton}
+        </button>
+        {query ||
+        filters.category ||
+        filters.from ||
+        filters.to ||
+        filters.min ||
+        filters.max ||
+        filters.receipt ||
+        filters.payment ||
+        filters.warranty ? (
+          <Link href="/purchases" className="button button-light">
+            {t.clearSearch}
+          </Link>
         ) : null}
 
         <div className="purchase-search__filters">
@@ -83,46 +101,107 @@ export function PurchasesList({
               ariaLabel={t.category}
               options={[
                 { value: "", label: t.categoryPlaceholder },
-                ...categories.map((item) => ({ value: item.id, label: item.name })),
+                ...categories.map((item) => ({
+                  value: item.id,
+                  label: item.name,
+                })),
               ]}
             />
-              ) : null}
-            </div>
           </label>
+
           <label>
             <span>{t.purchaseDateFrom}</span>
-            <input type="date" name="from" defaultValue={filters.from} aria-label={t.purchaseDate} />
+            <input
+              type="date"
+              name="from"
+              defaultValue={filters.from}
+              aria-label={t.purchaseDate}
+            />
           </label>
+
           <label>
             <span>{t.purchaseDateTo}</span>
-            <input type="date" name="to" defaultValue={filters.to} aria-label={t.purchaseDate} />
+            <input
+              type="date"
+              name="to"
+              defaultValue={filters.to}
+              aria-label={t.purchaseDate}
+            />
           </label>
+
           <label>
             <span>{t.amountMin}</span>
-            <input type="number" name="min" min="0" step="0.01" defaultValue={filters.min} placeholder="Min" />
+            <input
+              type="number"
+              name="min"
+              min="0"
+              step="0.01"
+              defaultValue={filters.min}
+              placeholder="Min"
+            />
           </label>
+
           <label>
             <span>{t.amountMax}</span>
-            <input type="number" name="max" min="0" step="0.01" defaultValue={filters.max} placeholder="Max" />
+            <input
+              type="number"
+              name="max"
+              min="0"
+              step="0.01"
+              defaultValue={filters.max}
+              placeholder="Max"
+            />
           </label>
         </div>
 
         <div className="purchase-search__checks">
-          <label><input type="checkbox" name="receipt" value="1" defaultChecked={filters.receipt} /> {t.receipt}</label>
-          <label><input type="checkbox" name="payment" value="1" defaultChecked={filters.payment} /> {t.paymentProof}</label>
-          <label><input type="checkbox" name="warranty" value="1" defaultChecked={filters.warranty} /> {t.warrantyCard}</label>
+          <label>
+            <input
+              type="checkbox"
+              name="receipt"
+              value="1"
+              defaultChecked={filters.receipt}
+            />{" "}
+            {t.receipt}
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="payment"
+              value="1"
+              defaultChecked={filters.payment}
+            />{" "}
+            {t.paymentProof}
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="warranty"
+              value="1"
+              defaultChecked={filters.warranty}
+            />{" "}
+            {t.warrantyCard}
+          </label>
         </div>
       </form>
 
       {purchases.length ? (
         <div className="purchase-results">
           {purchases.map((purchase) => (
-            <Link className="purchase-result" key={purchase.id} href={`/purchases/${purchase.id}`}>
-              <div className="purchase-result__icon">{purchase.title.charAt(0).toUpperCase()}</div>
+            <Link
+              className="purchase-result"
+              key={purchase.id}
+              href={`/purchases/${purchase.id}`}
+            >
+              <div className="purchase-result__icon">
+                {purchase.title.charAt(0).toUpperCase()}
+              </div>
               <div className="purchase-result__body">
                 <strong>{purchase.title}</strong>
                 <span>
-                  {dateFormatter.format(new Date(`${purchase.purchase_date}T00:00:00Z`))}
+                  {dateFormatter.format(
+                    new Date(`${purchase.purchase_date}T00:00:00Z`),
+                  )}
                   {" · "}
                   {purchase.categories?.name ?? t.categoryUnknown}
                   {purchase.seller_name ? ` · ${purchase.seller_name}` : ""}
@@ -131,16 +210,26 @@ export function PurchasesList({
               <strong className="purchase-result__amount">
                 {moneyFormatter.format(Number(purchase.amount))}
               </strong>
-              <Icon name="chevron-right" size={15} className="purchase-result__chevron" />
+              <Icon
+                name="chevron-right"
+                size={15}
+                className="purchase-result__chevron"
+              />
             </Link>
           ))}
         </div>
       ) : (
         <div className="purchase-empty">
-          <div className="empty-icon" aria-hidden="true">+</div>
+          <div className="empty-icon" aria-hidden="true">
+            +
+          </div>
           <h2>{query ? t.noResults : t.noPurchases}</h2>
           <p>{query ? t.noResultsText : t.noPurchasesText}</p>
-          {!query ? <Link href="/purchases/new" className="button button-dark">{t.addPurchase}</Link> : null}
+          {!query ? (
+            <Link href="/purchases/new" className="button button-dark">
+              {t.addPurchase}
+            </Link>
+          ) : null}
         </div>
       )}
     </section>
