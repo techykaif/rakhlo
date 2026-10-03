@@ -25,6 +25,7 @@ export function DashboardContent({
 }: {
   recentPurchases: RecentPurchase[];
   attention: Attention[];
+  userId: string;
 }) {
   const { language } = useLanguage();
   const t = copy[language].dashboard;
