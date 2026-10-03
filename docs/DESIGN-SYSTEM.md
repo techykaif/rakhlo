@@ -74,3 +74,8 @@ The app should prefer:
 ## Quality gate
 
 Visual and interaction work is not merged directly to `main`. It passes the same TypeScript, unit-test, production-build, and Playwright gate as feature work.
+## Brand lockup
+
+Use the shared `Logo` component everywhere a product identity is rendered. Use `compact` for tight chrome, mobile headers, app icons, and other small surfaces where a wordmark would compete with the task. Use the full lockup when horizontal space is available. Do not recreate the mark with CSS, text, or page-specific SVGs.
+
+Brand name, wordmark, domain, description, and palette are centralized in `lib/brand.ts`. The mark artwork lives in `public/brand/` and is consumed by the shared logo component.
