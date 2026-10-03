@@ -29,7 +29,7 @@ describe("purchase responsive layout", () => {
     expect(filterGrid?.className).toContain("grid-cols-5");
     expect(filterGrid?.className).toContain("max-[760px]:grid-cols-1");
 
-    const checks = screen.getByText("Receipt").parentElement?.parentElement;
+    const checks = screen.getByText("Receipt").parentElement;
     expect(checks?.className).toContain("grid-cols-[repeat(3,max-content)]");
     expect(checks?.className).toContain("max-[760px]:grid-cols-1");
 
