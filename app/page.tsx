@@ -9,10 +9,12 @@ import { LanguageToggle } from "@/components/ui/language-toggle";
 import { useLanguage } from "@/components/ui/language-provider";
 import { tw } from "@/components/ui/styles";
 
+type LandingCopy = (typeof copy)[keyof typeof copy]["landing"];
+
 function ProductPreview({
   t,
 }: {
-  t: (typeof copy)["en"]["landing"];
+  t: LandingCopy;
 }) {
   return (
     <div className={tw("landing-product-scene")}>
