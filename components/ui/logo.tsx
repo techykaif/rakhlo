@@ -1,3 +1,5 @@
+import { tw } from "@/components/ui/styles";
+
 type LogoProps = {
   size?: "sm" | "md" | "lg";
   inverted?: boolean;
