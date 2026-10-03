@@ -86,11 +86,7 @@ export function ReminderList({
 
     return (
       <article
-        className={
-          completed
-            ? "reminder-row reminder-row--completed"
-            : "reminder-row"
-        }
+        className={tw(completed ? "reminder-row reminder-row--completed" : "reminder-row")}
         key={reminder.id}
       >
         <div className={tw("reminder-row__mark")} aria-hidden="true">
