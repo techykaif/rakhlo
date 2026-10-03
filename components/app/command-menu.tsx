@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { copy, type Language } from "@/lib/i18n";
 import { Icon, type IconName } from "@/components/ui/icon";
+import { tw } from "@/components/ui/styles";
 
 type CommandItem = {
   id: string;
@@ -106,11 +107,11 @@ export function CommandMenu({ language }: { language: Language }) {
     <>
       <button
         type="button"
-        className="command-trigger"
+        className={tw("command-trigger")}
         onClick={() => setOpen(true)}
         aria-label={t.openCommandMenu}
       >
-        <span className="command-trigger__search">
+        <span className={tw("command-trigger__search")}>
           <Icon name="search" size={15} />
           <span>{t.searchOrJump}</span>
         </span>
@@ -119,14 +120,14 @@ export function CommandMenu({ language }: { language: Language }) {
 
       {open ? (
         <div
-          className="command-overlay"
+          className={tw("command-overlay")}
           role="presentation"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) setOpen(false);
           }}
         >
-          <div className="command-dialog" role="dialog" aria-modal="true" aria-label={t.searchOrJump}>
-            <div className="command-input-wrap">
+          <div className={tw("command-dialog")} role="dialog" aria-modal="true" aria-label={t.searchOrJump}>
+            <div className={tw("command-input-wrap")}>
               <Icon name="search" size={16} />
               <input
                 ref={inputRef}
@@ -138,27 +139,27 @@ export function CommandMenu({ language }: { language: Language }) {
               <kbd>ESC</kbd>
             </div>
 
-            <div className="command-list">
+            <div className={tw("command-list")}>
               {results.length ? (
                 results.map((item, index) => (
                   <button
                     type="button"
-                    className={index === selectedIndex ? "command-item selected" : "command-item"}
+                    className={tw(index === selectedIndex ? "command-item selected" : "command-item")}
                     key={item.id}
                     onMouseEnter={() => setSelectedIndex(index)}
                     onClick={() => navigate(item.href)}
                   >
-                    <span className="command-item__icon"><Icon name={item.icon} size={16} /></span>
-                    <span className="command-item__label">{item.label}</span>
+                    <span className={tw("command-item__icon")}><Icon name={item.icon} size={16} /></span>
+                    <span className={tw("command-item__label")}>{item.label}</span>
                     <Icon name="chevron-right" size={15} />
                   </button>
                 ))
               ) : (
-                <p className="command-empty">{t.noCommandResults}</p>
+                <p className={tw("command-empty")}>{t.noCommandResults}</p>
               )}
             </div>
 
-            <div className="command-footer">
+            <div className={tw("command-footer")}>
               <span><kbd>↑↓</kbd> {language === "hi" ? "चुनें" : "Navigate"}</span>
               <span><kbd>↵</kbd> {language === "hi" ? "खोलें" : "Open"}</span>
               <span><kbd>ESC</kbd> {language === "hi" ? "बंद करें" : "Close"}</span>
