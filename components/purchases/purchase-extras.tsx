@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/components/ui/language-provider";
+import { Select } from "@/components/ui/select";
 
 type Item = { id: string; name: string; quantity: number; unit_price: number | null; serial_number: string | null; imei: string | null; notes: string | null; status: string };
 type Payment = { id: string; amount: number; method: string; paid_at: string | null; reference: string | null; notes: string | null; document_id: string | null };
@@ -128,9 +129,18 @@ export function PurchaseExtras({
         ))}
         <div className="purchase-extras__form">
           <input type="number" min="0" step="0.01" value={payment.amount} onChange={(e) => setPayment({ ...payment, amount: e.target.value })} placeholder={t.paymentAmount} />
-          <select value={payment.method} onChange={(e) => setPayment({ ...payment, method: e.target.value })}>
-            <option value="upi">{t.upi}</option><option value="cash">{t.cash}</option><option value="card">{t.card}</option><option value="bank_transfer">{t.bank_transfer}</option><option value="other">{t.other}</option>
-          </select>
+          <Select
+            value={payment.method}
+            onChange={(value) => setPayment({ ...payment, method: value })}
+            ariaLabel={t.method}
+            options={[
+              { value: "upi", label: t.upi },
+              { value: "cash", label: t.cash },
+              { value: "card", label: t.card },
+              { value: "bank_transfer", label: t.bank_transfer },
+              { value: "other", label: t.other },
+            ]}
+          />
           <input type="datetime-local" value={payment.paid_at} onChange={(e) => setPayment({ ...payment, paid_at: e.target.value })} aria-label={t.paidAt} />
           <input value={payment.reference} onChange={(e) => setPayment({ ...payment, reference: e.target.value })} placeholder={t.reference} />
           <button type="button" className="button button-dark" onClick={() => add("payment")}>{editing?.kind === "payment" ? t.saveChanges : t.addPayment}</button>
@@ -149,7 +159,16 @@ export function PurchaseExtras({
           <input type="date" value={warranty.start_date} onChange={(e) => setWarranty({ ...warranty, start_date: e.target.value })} aria-label={t.start} />
           <input type="date" value={warranty.end_date} onChange={(e) => setWarranty({ ...warranty, end_date: e.target.value })} aria-label={t.end} />
           <input value={warranty.provider} onChange={(e) => setWarranty({ ...warranty, provider: e.target.value })} placeholder={t.provider} />
-          <select value={warranty.source} onChange={(e) => setWarranty({ ...warranty, source: e.target.value })}><option value="user">{t.user}</option><option value="document">{t.document}</option><option value="system">{t.system}</option></select>
+          <Select
+            value={warranty.source}
+            onChange={(value) => setWarranty({ ...warranty, source: value })}
+            ariaLabel={t.source}
+            options={[
+              { value: "user", label: t.user },
+              { value: "document", label: t.document },
+              { value: "system", label: t.system },
+            ]}
+          />
           <button type="button" className="button button-dark" onClick={() => add("warranty")}>{editing?.kind === "warranty" ? t.saveChanges : t.addWarranty}</button>
         </div>
       </div>

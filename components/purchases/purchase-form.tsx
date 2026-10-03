@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
+import { Select } from "@/components/ui/select";
 import { flushQueuedPurchases, queuePurchase } from "@/lib/offline/purchase-queue";
 
 type Category = { id: string; name: string };
@@ -178,10 +179,15 @@ export function PurchaseForm({
 
       <label>
         <span>{t.category} <em>{t.optional}</em></span>
-        <select name="category_id" value={categoryId} onChange={(event) => setCategoryId(event.target.value)} aria-invalid={Boolean(errors.category_id)}>
-          <option value="">{t.categoryPlaceholder}</option>
-          {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
-        </select>
+        <Select
+          name="category_id"
+          value={categoryId}
+          onChange={setCategoryId}
+          placeholder={t.categoryPlaceholder}
+          ariaLabel={t.category}
+          options={categories.map((category) => ({ value: category.id, label: category.name }))}
+          invalid={Boolean(errors.category_id)}
+        />
         {errors.category_id ? <small className="field-error">{errors.category_id}</small> : null}
       </label>
 
@@ -205,12 +211,17 @@ export function PurchaseForm({
 
       <label>
         <span>{language === "hi" ? "स्थिति" : "Status"} <em>{t.optional}</em></span>
-        <select value={status} onChange={(event) => setStatus(event.target.value)}>
-          <option value="active">{language === "hi" ? "सक्रिय" : "Active"}</option>
-          <option value="archived">{language === "hi" ? "संग्रहीत" : "Archived"}</option>
-          <option value="sold">{language === "hi" ? "बेचा गया" : "Sold"}</option>
-          <option value="lost">{language === "hi" ? "खो गया" : "Lost"}</option>
-        </select>
+        <Select
+          value={status}
+          onChange={setStatus}
+          ariaLabel={language === "hi" ? "स्थिति" : "Status"}
+          options={[
+            { value: "active", label: language === "hi" ? "सक्रिय" : "Active" },
+            { value: "archived", label: language === "hi" ? "संग्रहीत" : "Archived" },
+            { value: "sold", label: language === "hi" ? "बेचा गया" : "Sold" },
+            { value: "lost", label: language === "hi" ? "खो गया" : "Lost" },
+          ]}
+        />
       </label>
 
       <label>
