@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { tw } from "@/components/ui/styles";
 import { useRouter } from "next/navigation";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -27,7 +28,7 @@ export function DeletePurchaseButton({ purchaseId }: { purchaseId: string }) {
   }
 
   return (
-    <button type="button" className="button button-danger" onClick={remove} disabled={deleting}>
+    <button type="button" className={tw("button button-danger")} onClick={remove} disabled={deleting}>
       {deleting ? t.deleting : t.deletePurchase}
     </button>
   );
