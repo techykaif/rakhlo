@@ -5,6 +5,7 @@ import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
+import { DashboardOnboarding } from "@/components/app/getting-started-guide";
 
 type Attention = { id: string; title: string; due_at: string; purchase_id: string; purchases: { title: string } | null };
 
@@ -20,6 +21,7 @@ type RecentPurchase = {
 export function DashboardContent({
   recentPurchases,
   attention,
+  userId,
 }: {
   recentPurchases: RecentPurchase[];
   attention: Attention[];
@@ -47,6 +49,7 @@ export function DashboardContent({
 
   return (
     <>
+      {recentPurchases.length === 0 ? <DashboardOnboarding userId={userId} /> : null}
       <header className={tw("app-header dashboard-header")}>
         <div>
           <span className={tw("app-kicker")}>{t.greeting}</span>
