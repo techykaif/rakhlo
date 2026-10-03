@@ -10,6 +10,7 @@ import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
 import { AppNav } from "@/components/app/app-nav";
 import { CommandMenu } from "@/components/app/command-menu";
+import { tw } from "@/components/ui/styles";
 
 type AppShellProps = {
   email: string;
@@ -32,35 +33,35 @@ export function AppShell({ email, children }: AppShellProps) {
   }
 
   return (
-    <div className="app-shell">
-      <aside className="app-sidebar">
+    <div className={tw("app-shell")}>
+      <aside className={tw("app-sidebar")}>
         <Link
           href="/dashboard"
-          className="app-sidebar__brand"
+          className={tw("app-sidebar__brand")}
           aria-label={copy[language].common.brand}
         >
           <Logo size="md" />
         </Link>
 
-        <div className="app-sidebar__workspace">
+        <div className={tw("app-sidebar__workspace")}>
           <span>{t.workspaceLabel}</span>
         </div>
 
         <AppNav language={language} />
 
-        <div className="app-sidebar__bottom">
-          <div className="user-chip">
-            <span className="user-chip__avatar">
+        <div className={tw("app-sidebar__bottom")}>
+          <div className={tw("user-chip")}>
+            <span className={tw("user-chip__avatar")}>
               {(email.charAt(0) || "R").toUpperCase()}
             </span>
-            <span className="user-chip__email" title={email}>
+            <span className={tw("user-chip__email")} title={email}>
               {email}
             </span>
           </div>
 
           <button
             type="button"
-            className="signout-button"
+            className={tw("signout-button")}
             onClick={signOut}
             disabled={signingOut}
           >
@@ -70,13 +71,13 @@ export function AppShell({ email, children }: AppShellProps) {
         </div>
       </aside>
 
-      <section className="app-main">
-        <header className="app-topbar">
+      <section className={tw("app-main")}>
+        <header className={tw("app-topbar")}>
           <CommandMenu language={language} />
           <LanguageToggle />
         </header>
 
-        <div className="app-content">{children}</div>
+        <div className={tw("app-content")}>{children}</div>
 
         <AppNav language={language} mobile />
       </section>
