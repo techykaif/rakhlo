@@ -34,8 +34,8 @@ export function Select({
   className = "",
 }: SelectProps) {
   const generatedId = useId();
-  const triggerId = id ?? \`select-\${generatedId}\`;
-  const listboxId = \`\${triggerId}-options\`;
+  const triggerId = id ?? `select-${generatedId}`;
+  const listboxId = `${triggerId}-options`;
   const rootRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const selectedIndex = options.findIndex((option) => option.value === value);
