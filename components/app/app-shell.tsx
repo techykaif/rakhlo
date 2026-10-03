@@ -9,6 +9,8 @@ import { LanguageToggle } from "@/components/ui/language-toggle";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
 import { AppNav } from "@/components/app/app-nav";
+import { GettingStartedGuide } from "@/components/app/getting-started-guide";
+import { Tooltip } from "@/components/ui/tooltip";
 import { CommandMenu } from "@/components/app/command-menu";
 import { tw } from "@/components/ui/styles";
 
@@ -21,6 +23,7 @@ export function AppShell({ email, children }: AppShellProps) {
   const { language } = useLanguage();
   const t = copy[language].dashboard;
   const [signingOut, setSigningOut] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
 
   async function signOut() {
     setSigningOut(true);
@@ -77,10 +80,25 @@ export function AppShell({ email, children }: AppShellProps) {
             <Logo size="sm" variant="on-light" compact />
           </Link>
           <CommandMenu language={language} />
-          <LanguageToggle />
+          <div className={tw("app-topbar__actions")}>
+            <Tooltip label={t.openGuide}>
+              <button
+                type="button"
+                className={tw("app-help-button")}
+                onClick={() => setGuideOpen(true)}
+                aria-label={t.openGuide}
+              >
+                <Icon name="info" size={16} />
+                <span>{t.help}</span>
+              </button>
+            </Tooltip>
+            <LanguageToggle />
+          </div>
         </header>
 
         <div className={tw("app-content")}>{children}</div>
+
+        <GettingStartedGuide open={guideOpen} onClose={() => setGuideOpen(false)} />
 
         <AppNav language={language} mobile />
       </section>
