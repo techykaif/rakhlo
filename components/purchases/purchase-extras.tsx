@@ -72,7 +72,7 @@ export function PurchaseExtras({
 
   async function load() {
     try {
-      const response = await fetch(\`/api/purchases/\${purchaseId}/extras\`);
+      const response = await fetch(`/api/purchases/${purchaseId}/extras`);
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(typeof data.error === "string" ? data.error : t.error);
       setItems(data.items ?? []);
@@ -146,7 +146,7 @@ export function PurchaseExtras({
 
     try {
       const response = await fetch(
-        \`/api/purchases/\${purchaseId}/extras\${currentEditing ? \`?id=\${currentEditing.id}\` : ""}\`,
+        `/api/purchases/${purchaseId}/extras${currentEditing ? `?id=${currentEditing.id}` : ""}`,
         {
           method: currentEditing ? "PATCH" : "POST",
           headers: { "Content-Type": "application/json" },
@@ -208,7 +208,7 @@ export function PurchaseExtras({
     if (saving) return;
     setSaving(true);
     try {
-      const response = await fetch(\`/api/purchases/\${purchaseId}/extras?kind=\${kind}&id=\${id}\`, { method: "DELETE" });
+      const response = await fetch(`/api/purchases/${purchaseId}/extras?kind=${kind}&id=${id}`, { method: "DELETE" });
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
         setMessageTone("error");
@@ -254,7 +254,7 @@ export function PurchaseExtras({
           <div key={value.id} className={tw("purchase-extra-row")}>
             <div>
               <strong>{value.name}</strong>
-              <span>{value.quantity}{value.serial_number ? \` · \${value.serial_number}\` : ""}{value.imei ? \` · IMEI \${value.imei}\` : ""}</span>
+              <span>{value.quantity}{value.serial_number ? ` · ${value.serial_number}` : ""}{value.imei ? ` · IMEI ${value.imei}` : ""}</span>
             </div>
             <div>
               <button
@@ -375,7 +375,7 @@ export function PurchaseExtras({
       {returnEnd ? (
         <div className={tw("purchase-extras__block")}>
           <h3>{t.returnPeriod}</h3>
-          <p>{returnStart ? \`\${returnStart} → \${returnEnd}\` : returnEnd}</p>
+          <p>{returnStart ? `${returnStart} → ${returnEnd}` : returnEnd}</p>
           {returnSource ? <small>{returnSource === "document" ? t.document : returnSource === "system" ? t.system : t.user}</small> : null}
           {returnNote ? <p>{returnNote}</p> : null}
         </div>
