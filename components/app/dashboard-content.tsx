@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
@@ -46,29 +47,29 @@ export function DashboardContent({
 
   return (
     <>
-      <header className="app-header dashboard-header">
+      <header className={tw("app-header dashboard-header")}>
         <div>
-          <span className="app-kicker">{t.greeting}</span>
+          <span className={tw("app-kicker")}>{t.greeting}</span>
           <h1>{t.home}</h1>
-          <p className="dashboard-header__subtitle">{t.homeSubtitle}</p>
+          <p className={tw("dashboard-header__subtitle")}>{t.homeSubtitle}</p>
         </div>
-        <div className="app-header__actions">
-          <Link href="/purchases/new" className="button button-dark app-add-button">
+        <div className={tw("app-header__actions")}>
+          <Link href="/purchases/new" className={tw("button button-dark app-add-button")}>
             <Icon name="plus" size={15} />
             <span>{t.addPurchase}</span>
           </Link>
         </div>
       </header>
 
-      <section className={latest ? "dashboard-hero" : "dashboard-hero dashboard-hero--empty"}>
-        <div className="dashboard-hero__grain" aria-hidden="true" />
-        <div className="dashboard-hero__copy">
-          <span className="panel-kicker">{latest ? t.latestPurchase : t.firstMemory}</span>
+      <section className={tw(latest ? "dashboard-hero" : "dashboard-hero dashboard-hero--empty")}>
+        <div className={tw("dashboard-hero__grain")} aria-hidden="true" />
+        <div className={tw("dashboard-hero__copy")}>
+          <span className={tw("panel-kicker")}>{latest ? t.latestPurchase : t.firstMemory}</span>
 
           {latest ? (
             <>
               <h2>{latest.title}</h2>
-              <div className="dashboard-hero__meta">
+              <div className={tw("dashboard-hero__meta")}>
                 <span>
                   {dateFormatter.format(
                     new Date(`${latest.purchase_date}T00:00:00Z`),
@@ -77,12 +78,12 @@ export function DashboardContent({
                 <span aria-hidden="true">·</span>
                 <span>{latest.seller_name || p.sellerUnknown}</span>
               </div>
-              <strong className="dashboard-hero__amount">
+              <strong className={tw("dashboard-hero__amount")}>
                 {moneyFormatter.format(Number(latest.amount))}
               </strong>
               <Link
                 href={`/purchases/${latest.id}`}
-                className="dashboard-hero__link"
+                className={tw("dashboard-hero__link")}
               >
                 <span>{t.openPurchase}</span>
                 <Icon name="arrow-right" size={15} />
@@ -92,7 +93,7 @@ export function DashboardContent({
             <>
               <h2>{t.emptyTitle}</h2>
               <p>{t.emptyText}</p>
-              <Link href="/purchases/new" className="button button-lime">
+              <Link href="/purchases/new" className={tw("button button-lime")}>
                 {t.firstPurchase}
                 <Icon name="arrow-right" size={15} />
               </Link>
@@ -100,7 +101,7 @@ export function DashboardContent({
           )}
         </div>
 
-        <div className="dashboard-hero__mark" aria-hidden="true">
+        <div className={tw("dashboard-hero__mark")} aria-hidden="true">
           <span />
           <span />
           <span />
@@ -108,37 +109,37 @@ export function DashboardContent({
       </section>
 
 
-      <section className="recent-panel dashboard-attention-panel">
-        <div className="recent-panel__heading">
+      <section className={tw("recent-panel dashboard-attention-panel")}>
+        <div className={tw("recent-panel__heading")}>
           <div>
-            <span className="panel-kicker">{t.attentionTitle}</span>
+            <span className={tw("panel-kicker")}>{t.attentionTitle}</span>
             <h2>{t.attentionTitle}</h2>
           </div>
         </div>
         {attention.length ? (
-          <div className="dashboard-purchase-list">
+          <div className={tw("dashboard-purchase-list")}>
             {attention.map((reminder) => (
-              <Link className="dashboard-purchase-row" key={reminder.id} href={`/purchases/${reminder.purchase_id}`}>
-                <div className="purchase-icon purchase-blue" aria-hidden="true">!</div>
-                <div className="purchase-meta">
+              <Link className={tw("dashboard-purchase-row")} key={reminder.id} href={`/purchases/${reminder.purchase_id}`}>
+                <div className={tw("purchase-icon purchase-blue")} aria-hidden="true">!</div>
+                <div className={tw("purchase-meta")}>
                   <strong>{reminder.title}</strong>
                   <span>{reminder.purchases?.title ?? ""} · {new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" }).format(new Date(reminder.due_at))}</span>
                 </div>
-                <Icon name="chevron-right" size={15} className="dashboard-row-chevron" />
+                <Icon name="chevron-right" size={15} className={tw("dashboard-row-chevron")} />
               </Link>
             ))}
           </div>
         ) : (
-          <div className="recent-panel__empty">
+          <div className={tw("recent-panel__empty")}>
             <strong>{t.attentionEmpty}</strong>
           </div>
         )}
       </section>
 
-      <section className="recent-panel">
-        <div className="recent-panel__heading">
+      <section className={tw("recent-panel")}>
+        <div className={tw("recent-panel__heading")}>
           <div>
-            <span className="panel-kicker">{t.memorySectionLabel}</span>
+            <span className={tw("panel-kicker")}>{t.memorySectionLabel}</span>
             <h2>{t.recentTitle}</h2>
           </div>
           {recentPurchases.length > 0 ? (
@@ -150,17 +151,17 @@ export function DashboardContent({
         </div>
 
         {olderPurchases.length ? (
-          <div className="dashboard-purchase-list">
+          <div className={tw("dashboard-purchase-list")}>
             {olderPurchases.map((purchase) => (
               <Link
-                className="dashboard-purchase-row"
+                className={tw("dashboard-purchase-row")}
                 key={purchase.id}
                 href={`/purchases/${purchase.id}`}
               >
-                <div className="purchase-icon purchase-blue" aria-hidden="true">
+                <div className={tw("purchase-icon purchase-blue")} aria-hidden="true">
                   {purchase.title.charAt(0).toUpperCase()}
                 </div>
-                <div className="purchase-meta">
+                <div className={tw("purchase-meta")}>
                   <strong>{purchase.title}</strong>
                   <span>
                     {dateFormatter.format(
@@ -169,15 +170,15 @@ export function DashboardContent({
                     {purchase.seller_name ? ` · ${purchase.seller_name}` : ""}
                   </span>
                 </div>
-                <strong className="dashboard-purchase-amount">
+                <strong className={tw("dashboard-purchase-amount")}>
                   {moneyFormatter.format(Number(purchase.amount))}
                 </strong>
-                <Icon name="chevron-right" size={15} className="dashboard-row-chevron" />
+                <Icon name="chevron-right" size={15} className={tw("dashboard-row-chevron")} />
               </Link>
             ))}
           </div>
         ) : latest ? (
-          <div className="dashboard-inline-note">
+          <div className={tw("dashboard-inline-note")}>
             <span>{t.onlyLatest}</span>
             <Link href="/purchases">
               {p.viewAll}
@@ -185,7 +186,7 @@ export function DashboardContent({
             </Link>
           </div>
         ) : (
-          <div className="recent-panel__empty">
+          <div className={tw("recent-panel__empty")}>
             <strong>{t.noPurchases}</strong>
             <span>{t.noPurchasesText}</span>
           </div>
