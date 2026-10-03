@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
+import { Icon } from "@/components/ui/icon";
 
 function base64ToUint8Array(value: string) {
   const padding = "=".repeat((4 - (value.length % 4)) % 4);
@@ -46,6 +47,7 @@ export function NotificationSettings() {
   async function toggle() {
     setBusy(true);
     setMessage("");
+
     try {
       if (!subscribed) {
         const permission = await Notification.requestPermission();
@@ -57,16 +59,19 @@ export function NotificationSettings() {
 
         const registration = await navigator.serviceWorker.ready;
         const existing = await registration.pushManager.getSubscription();
-        const subscription = existing ?? await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: base64ToUint8Array(keyPayload.publicKey),
-        });
+        const subscription =
+          existing ??
+          (await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: base64ToUint8Array(keyPayload.publicKey),
+          }));
 
         const response = await fetch("/api/notifications/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(subscription.toJSON()),
         });
+
         if (!response.ok) throw new Error();
 
         setSubscribed(true);
@@ -74,6 +79,7 @@ export function NotificationSettings() {
       } else {
         const registration = await navigator.serviceWorker.ready;
         const subscription = await registration.pushManager.getSubscription();
+
         if (subscription) {
           await fetch("/api/notifications/subscribe", {
             method: "DELETE",
@@ -88,9 +94,11 @@ export function NotificationSettings() {
             body: JSON.stringify({ enabled: false }),
           });
         }
+
         setSubscribed(false);
         setEnabled(false);
       }
+
       setMessage(t.saved);
     } catch {
       setMessage(t.errors.save);
@@ -103,15 +111,26 @@ export function NotificationSettings() {
 
   return (
     <section className={tw("notification-settings")} aria-labelledby="notification-settings-title">
-      <div>
-        <span className={tw("panel-kicker")}>{t.listKicker}</span>
-        <h2 className="lang(hi):tracking-normal" id="notification-settings-title">{t.pageTitle}</h2>
-        <p>{t.subtitle}</p>
+      <div className={tw("notification-settings__icon")} aria-hidden="true">
+        <Icon name="bell" size={16} />
       </div>
-      <button type="button" className={tw("button button-dark")} onClick={toggle} disabled={busy}>
-        {subscribed && enabled ? t.delete : t.createReminder}
-      </button>
-      {message ? <p className={tw("notification-settings__message")} role="status">{message}</p> : null}
+      <div>
+        <h2 id="notification-settings-title">{t.notificationsTitle}</h2>
+        <p>{t.notificationsText}</p>
+      </div>
+      <div className={tw("notification-settings__action")}>
+        <span className={tw(enabled && subscribed ? "notification-settings__state" : "notification-settings__state notification-settings__state--off")}>
+          {enabled && subscribed ? t.notificationsOn : "Off"}
+        </span>
+        <button type="button" className={tw("button button-dark")} onClick={toggle} disabled={busy}>
+          {enabled && subscribed ? t.disableNotifications : t.enableNotifications}
+        </button>
+      </div>
+      {message ? (
+        <p className={tw("notification-settings__message")} role="status">
+          {message}
+        </p>
+      ) : null}
     </section>
   );
 }
