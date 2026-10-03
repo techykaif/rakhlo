@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { Icon } from "@/components/ui/icon";
 
 export type SelectOption = {
@@ -64,7 +64,7 @@ export function Select({
     setOpen(false);
   }
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
+  function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (disabled) return;
 
     if (event.key === "Enter" || event.key === " ") {
