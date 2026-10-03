@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 
@@ -101,16 +102,16 @@ export function NotificationSettings() {
   if (!supported) return null;
 
   return (
-    <section className="notification-settings" aria-labelledby="notification-settings-title">
+    <section className={tw("notification-settings")} aria-labelledby="notification-settings-title">
       <div>
-        <span className="panel-kicker">{t.listKicker}</span>
+        <span className={tw("panel-kicker")}>{t.listKicker}</span>
         <h2 id="notification-settings-title">{t.pageTitle}</h2>
         <p>{t.subtitle}</p>
       </div>
-      <button type="button" className="button button-dark" onClick={toggle} disabled={busy}>
+      <button type="button" className={tw("button button-dark")} onClick={toggle} disabled={busy}>
         {subscribed && enabled ? t.delete : t.createReminder}
       </button>
-      {message ? <p className="notification-settings__message" role="status">{message}</p> : null}
+      {message ? <p className={tw("notification-settings__message")} role="status">{message}</p> : null}
     </section>
   );
 }
