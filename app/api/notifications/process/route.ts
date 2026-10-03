@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendWebPush } from "@/lib/notifications/web-push";
 
+const DELIVERY_LOOKBACK_MS = 24 * 60 * 60 * 1000;
+const DELIVERY_LOOKAHEAD_MS = 15 * 60 * 1000;
+
 function getAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -16,9 +19,9 @@ function isAuthorized(request: Request) {
   return authorization === `Bearer ${secret}`;
 }
 
-function shouldSendNow(scheduledFor: string, now: Date) {
-  const difference = now.getTime() - new Date(scheduledFor).getTime();
-  return difference >= 0 && difference <= 15 * 60 * 1000;
+export function shouldProcessScheduledTime(scheduledFor: Date, now: Date) {
+  const difference = now.getTime() - scheduledFor.getTime();
+  return difference >= -DELIVERY_LOOKAHEAD_MS && difference <= DELIVERY_LOOKBACK_MS;
 }
 
 export async function GET(request: Request) {
@@ -45,9 +48,13 @@ export async function GET(request: Request) {
 
     for (const reminder of reminders ?? []) {
       const offsets = Array.isArray(reminder.reminder_offsets) ? reminder.reminder_offsets : [];
+
       for (const offset of offsets) {
-        const scheduledFor = new Date(new Date(reminder.due_at).getTime() - Number(offset) * 86400000);
-        if (!shouldSendNow(scheduledFor.toISOString(), now)) continue;
+        const scheduledFor = new Date(
+          new Date(reminder.due_at).getTime() - Number(offset) * 86400000,
+        );
+
+        if (!shouldProcessScheduledTime(scheduledFor, now)) continue;
 
         const { data: delivery, error: deliveryError } = await supabase
           .from("reminder_deliveries")
@@ -88,6 +95,7 @@ export async function GET(request: Request) {
           .maybeSingle();
 
         const body = `${purchase?.title ?? "Purchase"} · ${reminder.title}`;
+        let deliverySucceeded = false;
 
         for (const subscription of subscriptions) {
           try {
@@ -97,21 +105,37 @@ export async function GET(request: Request) {
               url: `/purchases/${reminder.purchase_id}`,
             });
             sent += 1;
+            deliverySucceeded = true;
           } catch (pushError) {
             failed += 1;
-            const statusCode = pushError && typeof pushError === "object" && "statusCode" in pushError
-              ? String((pushError as { statusCode?: unknown }).statusCode)
-              : "";
+            const statusCode =
+              pushError &&
+              typeof pushError === "object" &&
+              "statusCode" in pushError
+                ? String((pushError as { statusCode?: unknown }).statusCode)
+                : "";
+
             if (statusCode === "404" || statusCode === "410") {
-              await supabase.from("notification_subscriptions").delete().eq("id", subscription.id);
+              await supabase
+                .from("notification_subscriptions")
+                .delete()
+                .eq("id", subscription.id);
             }
           }
         }
 
-        await supabase
-          .from("reminder_deliveries")
-          .update({ delivered_at: new Date().toISOString() })
-          .eq("id", delivery.id);
+        if (deliverySucceeded) {
+          const deliveredAt = new Date().toISOString();
+          await supabase
+            .from("reminder_deliveries")
+            .update({ delivered_at: deliveredAt })
+            .eq("id", delivery.id);
+
+          await supabase
+            .from("reminders")
+            .update({ last_notified_at: deliveredAt })
+            .eq("id", reminder.id);
+        }
       }
     }
 
