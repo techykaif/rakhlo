@@ -39,8 +39,8 @@ export function GettingStartedGuide({
   onClose,
   onPrimary,
 }: GettingStartedGuideProps) {
-  const { language } = useLanguage();
-  const t = useLanguage().copy[language].dashboard;
+  const { language, copy } = useLanguage();
+  const t = copy[language].dashboard;
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -103,14 +103,14 @@ export function GettingStartedGuide({
                   <Icon name={step.icon} size={17} />
                 </span>
               </div>
-              <h3>{t[step.titleKey]}</h3>
-              <p>{t[step.textKey]}</p>
+              <h3 className={tw("guide-step__title")}>{t[step.titleKey]}</h3>
+              <p className={tw("guide-step__text")}>{t[step.textKey]}</p>
             </article>
           ))}
         </div>
 
         <footer className={tw("guide-dialog__footer")}>
-          <p>{t.guideAlways}</p>
+          <p className={tw("guide-dialog__footer-copy")}>{t.guideAlways}</p>
           <div className={tw("guide-dialog__actions")}>
             <button type="button" className={tw("button button-light guide-secondary")} onClick={onClose}>
               {t.guideLater}
@@ -141,7 +141,7 @@ export function DashboardOnboarding({ userId }: { userId: string }) {
     } catch {
       setOpen(true);
     }
-  }, [storageKey, language]);
+  }, [storageKey]);
 
   function dismiss() {
     try {
