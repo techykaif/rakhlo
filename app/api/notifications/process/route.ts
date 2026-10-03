@@ -19,7 +19,7 @@ function isAuthorized(request: Request) {
   return authorization === `Bearer ${secret}`;
 }
 
-function shouldProcessScheduledTime(scheduledFor: Date, now: Date) {
+export function shouldProcessScheduledTime(scheduledFor: Date, now: Date) {
   const difference = now.getTime() - scheduledFor.getTime();
   return difference >= -DELIVERY_LOOKAHEAD_MS && difference <= DELIVERY_LOOKBACK_MS;
 }
