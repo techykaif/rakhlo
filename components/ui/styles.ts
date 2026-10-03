@@ -180,7 +180,7 @@ const styles: Record<string, StyleValue> = {
   /* extras */
   "purchase-extras": "mt-5 space-y-4 rounded-2xl border border-[#dfded7] bg-white p-5",
   "purchase-extras__header": "flex items-start justify-between gap-4",
-  "purchase-extras__hint": "m-1.5 0 0 max-w-[760px] text-[10px] leading-5 text-[#8a8b82]",
+  "purchase-extras__hint": "m-0 mt-1.5 max-w-[760px] text-[10px] leading-5 text-[#8a8b82]",
   "purchase-extras__message": "m-0 rounded-lg border px-3 py-2.5 text-[10px] leading-5",
   "purchase-extras__message--success": "border-[#d6e6c8] bg-[#eef7e9] text-[#4e6b3c]",
   "purchase-extras__message--error": "border-[#ead8d8] bg-[#faf1f1] text-[#7d4d4d]",
