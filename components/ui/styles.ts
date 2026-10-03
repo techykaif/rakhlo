@@ -55,6 +55,7 @@ const styles: Record<string, StyleValue> = {
   "user-chip__email": "min-w-0 truncate text-[10px] text-[#6f7068]",
   "signout-button": "inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-xl border border-transparent bg-transparent px-2 text-[11px] font-semibold text-[#6f7068] transition hover:border-[#dfded7] hover:bg-[#f5f5f1] hover:text-[#171713] disabled:cursor-wait disabled:opacity-50",
   "app-main": "min-w-0 flex-1",
+  "app-mobile-brand": "hidden shrink-0 max-[760px]:inline-flex",
   "app-topbar": "sticky top-0 z-40 flex min-h-[68px] items-center justify-between gap-4 border-b border-[#dfded7] bg-[#f7f6f2]/90 px-8 backdrop-blur max-[760px]:min-h-[56px] max-[760px]:gap-2 max-[760px]:px-[12px]",
   "app-content": "mx-auto w-full max-w-[1180px] px-8 py-6 md:px-8 max-[760px]:px-[14px] max-[760px]:py-[18px] max-[760px]:pb-[88px]",
   "app-nav": "flex flex-col gap-1",
