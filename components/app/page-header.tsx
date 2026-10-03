@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/components/ui/language-provider";
+import { tw } from "@/components/ui/styles";
 
 type LocalizedText = { en: string; hi: string };
 
@@ -34,25 +35,25 @@ export function PageHeader({
   const { language } = useLanguage();
 
   return (
-    <header className="app-page-header">
+    <header className={tw("app-page-header")}>
       <div>
         {backHref && backLabel ? (
-          <Link className="page-back-link" href={backHref}>
+          <Link className={tw("page-back-link")} href={backHref}>
             ← {resolveText(backLabel, language)}
           </Link>
         ) : null}
-        <span className="app-kicker">{resolveText(eyebrow, language)}</span>
+        <span className={tw("app-kicker")}>{resolveText(eyebrow, language)}</span>
         <h1>{resolveText(title, language)}</h1>
         {description ? <p>{resolveText(description, language)}</p> : null}
       </div>
       {actionHref && actionLabel ? (
-        <div className="app-page-header__action">
-          <Link href={actionHref} className="button button-dark">
+        <div className={tw("app-page-header__action")}>
+          <Link href={actionHref} className={tw("button button-dark")}>
             + {resolveText(actionLabel, language)}
           </Link>
         </div>
       ) : action ? (
-        <div className="app-page-header__action">{action}</div>
+        <div className={tw("app-page-header__action")}>{action}</div>
       ) : null}
     </header>
   );
