@@ -73,6 +73,7 @@ export function PurchasesList({
           defaultValue={query}
           placeholder={t.searchPlaceholder}
           aria-label={t.searchPlaceholder}
+          className={tw("purchase-search__query")}
         />
         <button type="submit" className={tw("button button-dark")}>
           {t.searchButton}
