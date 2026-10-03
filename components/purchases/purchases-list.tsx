@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
+import { Select } from "@/components/ui/select";
 
 type PurchaseListItem = {
   id: string;
@@ -45,31 +46,10 @@ export function PurchasesList({
   const { language } = useLanguage();
   const t = copy[language].purchases;
   const [category, setCategory] = useState(filters.category);
-  const [categoryOpen, setCategoryOpen] = useState(false);
-  const categoryRef = useRef<HTMLDivElement>(null);
-  const selectedCategory = categories.find((item) => item.id === category);
-
   useEffect(() => {
     setCategory(filters.category);
   }, [filters.category]);
 
-  useEffect(() => {
-    if (!categoryOpen) return;
-
-    const handlePointerDown = (event: PointerEvent) => {
-      if (!categoryRef.current?.contains(event.target as Node)) setCategoryOpen(false);
-    };
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setCategoryOpen(false);
-    };
-
-    document.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [categoryOpen]);
   const locale = language === "hi" ? "hi-IN" : "en-IN";
   const dateFormatter = new Intl.DateTimeFormat(locale, {
     day: "numeric",
@@ -95,56 +75,17 @@ export function PurchasesList({
         <div className="purchase-search__filters">
           <label>
             <span>{t.category}</span>
-            <div className="purchase-filter-select" ref={categoryRef}>
-              <input type="hidden" name="category" value={category} />
-              <button
-                type="button"
-                className="purchase-filter-select__trigger"
-                aria-haspopup="listbox"
-                aria-expanded={categoryOpen}
-                aria-controls="purchase-category-options"
-                onClick={() => setCategoryOpen((open) => !open)}
-              >
-                <span className={selectedCategory ? "" : "is-placeholder"}>
-                  {selectedCategory?.name ?? t.categoryPlaceholder}
-                </span>
-                <span className="purchase-filter-select__chevron" aria-hidden="true" />
-              </button>
-              {categoryOpen ? (
-                <div
-                  id="purchase-category-options"
-                  className="purchase-filter-select__menu"
-                  role="listbox"
-                  aria-label={t.category}
-                >
-                  <button
-                    type="button"
-                    role="option"
-                    aria-selected={!category}
-                    className={`purchase-filter-select__option${!category ? " is-selected" : ""}`}
-                    onClick={() => {
-                      setCategory("");
-                      setCategoryOpen(false);
-                    }}
-                  >
-                    {t.categoryPlaceholder}
-                  </button>
-                  {categories.map((item) => (
-                    <button
-                      type="button"
-                      role="option"
-                      aria-selected={category === item.id}
-                      className={`purchase-filter-select__option${category === item.id ? " is-selected" : ""}`}
-                      key={item.id}
-                      onClick={() => {
-                        setCategory(item.id);
-                        setCategoryOpen(false);
-                      }}
-                    >
-                      {item.name}
-                    </button>
-                  ))}
-                </div>
+            <Select
+              name="category"
+              value={category}
+              onChange={setCategory}
+              placeholder={t.categoryPlaceholder}
+              ariaLabel={t.category}
+              options={[
+                { value: "", label: t.categoryPlaceholder },
+                ...categories.map((item) => ({ value: item.id, label: item.name })),
+              ]}
+            />
               ) : null}
             </div>
           </label>
