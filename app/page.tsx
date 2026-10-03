@@ -37,19 +37,19 @@ function ProductPreview({
               <div className={tw("landing-side-nav")}>
                 <span className={tw("landing-side-item landing-side-item--active")}>
                   <span className={tw("landing-side-item__dot")} />
-                  Home
+                  {t.navHome}
                 </span>
                 <span className={tw("landing-side-item")}>
                   <span className={tw("landing-side-item__dot")} />
-                  Purchases
+                  {t.navPurchases}
                 </span>
                 <span className={tw("landing-side-item")}>
                   <span className={tw("landing-side-item__dot")} />
-                  Reminders
+                  {t.navReminders}
                 </span>
                 <span className={tw("landing-side-item")}>
                   <span className={tw("landing-side-item__dot")} />
-                  Documents
+                  {t.navDocuments}
                 </span>
               </div>
             </aside>
@@ -83,7 +83,7 @@ function ProductPreview({
 
               <div className={tw("landing-mini-section-head")}>
                 <span>{t.recent}</span>
-                <span>View all</span>
+                <span>{t.navViewAll}</span>
               </div>
 
               <div className={tw("landing-mini-purchases")}>
@@ -223,7 +223,7 @@ export default function HomePage() {
       <section className={tw("landing-principles")} id="why">
         <div className={tw("landing-container landing-principles-grid")}>
           <div className={tw("landing-principles-intro")}>
-            <span className={tw("landing-section-label")}>{t.whyEyebrow}</span>
+            <span className={tw("landing-section-label")}>{t.whyEyebrow} {BRAND.name}</span>
             <h2>{t.whyTitle}</h2>
             <p>{t.whyText}</p>
           </div>
