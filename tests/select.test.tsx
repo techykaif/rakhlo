@@ -17,15 +17,22 @@ describe("Select", () => {
   it("renders the selected value and changes it through the option menu", () => {
     render(<Harness />);
 
-    expect(screen.getByRole("combobox")).toHaveTextContent("Active");
+    expect(screen.getByRole("combobox").textContent).toContain("Active");
     fireEvent.click(screen.getByRole("combobox"));
     fireEvent.click(screen.getByRole("option", { name: "Archived" }));
-    expect(screen.getByRole("combobox")).toHaveTextContent("Archived");
+    expect(screen.getByRole("combobox").textContent).toContain("Archived");
   });
 
   it("exposes a hidden form value when a name is supplied", () => {
-    render(<Select value="active" onChange={() => undefined} name="status" options={options} />);
+    render(
+      <Select
+        value="active"
+        onChange={() => undefined}
+        name="status"
+        options={options}
+      />,
+    );
 
-    expect(screen.getByDisplayValue("active")).toHaveAttribute("name", "status");
+    expect(screen.getByDisplayValue("active").getAttribute("name")).toBe("status");
   });
 });
