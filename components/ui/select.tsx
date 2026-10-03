@@ -34,8 +34,8 @@ export function Select({
   className = "",
 }: SelectProps) {
   const generatedId = useId();
-  const triggerId = id ?? `select-${generatedId}`;
-  const listboxId = `${triggerId}-options`;
+  const triggerId = id ?? \`select-\${generatedId}\`;
+  const listboxId = \`\${triggerId}-options\`;
   const rootRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const selectedIndex = options.findIndex((option) => option.value === value);
@@ -146,7 +146,10 @@ export function Select({
                 "hover:bg-[#f4f4ef] focus-visible:bg-[#f4f4ef] focus-visible:outline-none",
                 option.value === value ? "bg-[#eef5e8] font-bold text-[#171713]" : "",
               ].join(" ")}
-              onClick={() => choose(option.value)}
+              onClick={(event) => {
+                event.stopPropagation();
+                choose(option.value);
+              }}
             >
               <span className="truncate">{option.label}</span>
               {option.value === value ? <Icon name="check" size={14} strokeWidth={2} /> : null}
