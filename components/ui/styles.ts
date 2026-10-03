@@ -99,7 +99,8 @@ const styles: Record<string, StyleValue> = {
   "dashboard-inline-note": "flex items-center justify-between gap-4 border-t border-[#e6e5de] px-5 py-4 text-[11px] text-[#77786f] [&_a]:font-bold [&_a]:text-[#171713]",
   /* purchase base */
   "purchases-section": "space-y-4",
-  "purchase-search": "grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2.5 rounded-2xl border border-[#dfded7] bg-white p-4 shadow-[0_8px_22px_rgba(23,23,19,0.035)] max-[760px]:grid-cols-[minmax(0,1fr)_auto] max-[760px]:p-3 [&>input[name=q]]:max-[760px]:col-span-full",
+  "purchase-search": "grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2.5 rounded-2xl border border-[#dfded7] bg-white p-4 shadow-[0_8px_22px_rgba(23,23,19,0.035)] max-[760px]:grid-cols-[minmax(0,1fr)_auto] max-[760px]:p-3",
+  "purchase-search__query": "w-full min-w-0 max-[760px]:col-span-full",
   "purchase-search__filters": "col-span-full grid grid-cols-5 gap-2.5 [&>label]:grid [&>label]:min-w-0 [&>label]:gap-1.5 [&>label>span]:block [&>label>span]:text-[10px] [&>label>span]:font-bold [&_input]:min-h-10 [&_input]:w-full [&_input]:min-w-0 [&_input]:rounded-lg [&_input]:border [&_input]:border-[#d4d3cc] [&_input]:bg-white [&_input]:px-3 [&_input]:text-[11px] [&_input]:text-[#171713] [&_input]:outline-none [&_input]:focus:border-[#a9aaa3] [&_input]:focus:ring-4 [&_input]:focus:ring-[#c8f77a22] max-[760px]:grid-cols-1",
   "purchase-search__checks": "col-span-full flex flex-wrap gap-4 border-t border-[#e6e5de] pt-3 text-[10px] text-[#6f7068] [&_label]:inline-flex [&_label]:items-center [&_label]:gap-1.5 grid grid-cols-[repeat(3,max-content)] items-center gap-x-5 gap-y-2 [&_label]:w-fit [&_input]:m-0 [&_input]:shrink-0 max-[760px]:grid-cols-1 max-[760px]:gap-2.5",
   "purchase-results": "overflow-hidden rounded-2xl border border-[#dfded7] bg-white",
