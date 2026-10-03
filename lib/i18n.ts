@@ -67,7 +67,6 @@ export const copy = {
       stepThree: "Get reminded when it matters",
       stepThreeText: "Set the date once and let it come back when it matters.",
       ctaEyebrow: "Start small.",
-      ctaTitle: "",
       ctaText: "Keep the details you will wish you had later.",
       cta: "Get started",
       footerText: "Purchases, proof and important dates. Together.",
