@@ -3,15 +3,15 @@ import { BRAND } from "@/lib/brand";
 
 type LogoProps = {
   size?: "sm" | "md" | "lg";
-  variant?: "light" | "dark" | "mono";
+  variant?: "on-light" | "on-dark" | "mono";
 };
 
 type MarkProps = {
   size?: "sm" | "md" | "lg";
-  variant?: "light" | "dark" | "mono";
+  variant?: "on-light" | "on-dark" | "mono";
 };
 
-export function RakhloMark({ size = "md", variant = "light" }: MarkProps) {
+export function RakhloMark({ size = "md", variant = "on-light" }: MarkProps) {
   return (
     <span
       className={tw(`brand-mark brand-mark--${size} brand-mark--${variant}`)}
@@ -31,7 +31,7 @@ export function RakhloMark({ size = "md", variant = "light" }: MarkProps) {
   );
 }
 
-export function Logo({ size = "md", variant = "light" }: LogoProps) {
+export function Logo({ size = "md", variant = "on-light" }: LogoProps) {
   return (
     <span className={tw(`brand-logo brand-logo--${size} brand-logo--${variant}`)} aria-label={BRAND.name}>
       <RakhloMark size={size} variant={variant} />
