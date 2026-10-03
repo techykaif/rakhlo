@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { tw } from "@/components/ui/styles";
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/app/page-header";
 import { PurchaseForm } from "@/components/purchases/purchase-form";
@@ -22,9 +23,9 @@ export default async function NewPurchasePage() {
         backHref="/purchases"
         backLabel={{ en: t.en.backToPurchases, hi: t.hi.backToPurchases }}
       />
-      <div className="purchase-editor">
+      <div className={tw("purchase-editor")}>
         <PurchaseForm categories={categories ?? []} />
-        <Link className="purchase-editor-cancel" href="/purchases">
+        <Link className={tw("purchase-editor-cancel")} href="/purchases">
           {copy.en.common.cancel}
         </Link>
       </div>

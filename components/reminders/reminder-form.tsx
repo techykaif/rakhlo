@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Select } from "@/components/ui/select";
@@ -182,21 +183,21 @@ export function ReminderForm({
   }
 
   return (
-    <section className="reminder-form-panel">
-      <div className="reminder-form-panel__heading">
+    <section className={tw("reminder-form-panel")}>
+      <div className={tw("reminder-form-panel__heading")}>
         <div>
-          <span className="panel-kicker">{t.formKicker}</span>
+          <span className={tw("panel-kicker")}>{t.formKicker}</span>
           <h2>{title}</h2>
         </div>
         {isEditing ? (
-          <button type="button" className="button button-light reminder-cancel" onClick={onCancel}>
+          <button type="button" className={tw("button button-light reminder-cancel")} onClick={onCancel}>
             {t.cancel}
           </button>
         ) : null}
       </div>
 
-      <form className="reminder-form" onSubmit={submit} noValidate>
-        {errors.form ? <div className="reminder-message reminder-message--error" role="alert">{errors.form}</div> : null}
+      <form className={tw("reminder-form")} onSubmit={submit} noValidate>
+        {errors.form ? <div className={tw("reminder-message reminder-message--error")} role="alert">{errors.form}</div> : null}
 
         <label>
           <span>{t.purchase}</span>
@@ -208,10 +209,10 @@ export function ReminderForm({
             options={purchases.map((purchase) => ({ value: purchase.id, label: purchase.title }))}
             invalid={Boolean(errors.purchase_id)}
           />
-          {errors.purchase_id ? <small className="reminder-field-error">{errors.purchase_id}</small> : null}
+          {errors.purchase_id ? <small className={tw("reminder-field-error")}>{errors.purchase_id}</small> : null}
         </label>
 
-        <div className="reminder-form-grid">
+        <div className={tw("reminder-form-grid")}>
           <label>
             <span>{t.type}</span>
             <Select
@@ -221,7 +222,7 @@ export function ReminderForm({
               options={typeOptions}
               invalid={Boolean(errors.type)}
             />
-            {errors.type ? <small className="reminder-field-error">{errors.type}</small> : null}
+            {errors.type ? <small className={tw("reminder-field-error")}>{errors.type}</small> : null}
           </label>
 
           <label>
@@ -233,7 +234,7 @@ export function ReminderForm({
               maxLength={200}
               required
             />
-            {errors.title ? <small className="reminder-field-error">{errors.title}</small> : null}
+            {errors.title ? <small className={tw("reminder-field-error")}>{errors.title}</small> : null}
           </label>
         </div>
 
@@ -245,14 +246,14 @@ export function ReminderForm({
             onChange={(event) => update("due_at", event.target.value)}
             required
           />
-          {errors.due_at ? <small className="reminder-field-error">{errors.due_at}</small> : null}
+          {errors.due_at ? <small className={tw("reminder-field-error")}>{errors.due_at}</small> : null}
         </label>
 
         <fieldset>
           <legend>{t.remindMe}</legend>
-          <div className="reminder-offsets">
+          <div className={tw("reminder-offsets")}>
             {OFFSET_OPTIONS.map((offset) => (
-              <label key={offset} className="reminder-offset">
+              <label key={offset} className={tw("reminder-offset")}>
                 <input
                   type="checkbox"
                   checked={form.reminder_offsets.includes(offset)}
@@ -263,7 +264,7 @@ export function ReminderForm({
             ))}
           </div>
           {errors.reminder_offsets ? (
-            <small className="reminder-field-error">{errors.reminder_offsets}</small>
+            <small className={tw("reminder-field-error")}>{errors.reminder_offsets}</small>
           ) : null}
         </fieldset>
 
@@ -276,10 +277,10 @@ export function ReminderForm({
             maxLength={5000}
             rows={4}
           />
-          {errors.notes ? <small className="reminder-field-error">{errors.notes}</small> : null}
+          {errors.notes ? <small className={tw("reminder-field-error")}>{errors.notes}</small> : null}
         </label>
 
-        <label className="reminder-enabled">
+        <label className={tw("reminder-enabled")}>
           <input
             type="checkbox"
             checked={form.enabled}
@@ -288,19 +289,19 @@ export function ReminderForm({
           <span>{t.enabled}</span>
         </label>
 
-        <div className="reminder-form__actions">
+        <div className={tw("reminder-form__actions")}>
           {isEditing ? (
-            <button type="button" className="button button-light" onClick={onCancel}>
+            <button type="button" className={tw("button button-light")} onClick={onCancel}>
               {t.cancel}
             </button>
           ) : null}
-          <button type="submit" className="button button-dark" disabled={loading || purchases.length === 0}>
+          <button type="submit" className={tw("button button-dark")} disabled={loading || purchases.length === 0}>
             {loading ? t.saving : submitLabel}
           </button>
         </div>
 
         {!purchases.length ? (
-          <p className="reminder-form__hint">
+          <p className={tw("reminder-form__hint")}>
             {t.noPurchases}
           </p>
         ) : null}

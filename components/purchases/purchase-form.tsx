@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { tw } from "@/components/ui/styles";
 import { useRouter } from "next/navigation";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -140,32 +141,32 @@ export function PurchaseForm({
   }
 
   return (
-    <form className="purchase-form" onSubmit={submit} noValidate>
-      {formError ? <div className="auth-message auth-message--error" role="alert">{formError}</div> : null}
+    <form className={tw("purchase-form")} onSubmit={submit} noValidate>
+      {formError ? <div className={tw("auth-message auth-message--error")} role="alert">{formError}</div> : null}
 
       <label>
         <span>{t.productName}</span>
         <input name="title" value={title} onChange={(event) => setTitle(event.target.value)} placeholder={t.productPlaceholder} autoComplete="off" required aria-invalid={Boolean(errors.title)} />
-        {errors.title ? <small id="purchase-title-error" className="field-error">{errors.title}</small> : null}
+        {errors.title ? <small id="purchase-title-error" className={tw("field-error")}>{errors.title}</small> : null}
       </label>
 
-      <div className="purchase-form-grid">
+      <div className={tw("purchase-form-grid")}>
         <label>
           <span>{t.purchaseDate}</span>
           <input type="date" name="purchase_date" value={purchaseDate} onChange={(event) => setPurchaseDate(event.target.value)} required aria-invalid={Boolean(errors.purchase_date)} />
-          {errors.purchase_date ? <small className="field-error">{errors.purchase_date}</small> : null}
+          {errors.purchase_date ? <small className={tw("field-error")}>{errors.purchase_date}</small> : null}
         </label>
         <label>
           <span>{t.amount}</span>
-          <div className="money-input">
+          <div className={tw("money-input")}>
             <span aria-hidden="true">₹</span>
             <input type="number" name="amount" value={amount} onChange={(event) => setAmount(event.target.value)} inputMode="decimal" min="0" step="0.01" placeholder="0.00" required aria-invalid={Boolean(errors.amount)} />
           </div>
-          {errors.amount ? <small className="field-error">{errors.amount}</small> : null}
+          {errors.amount ? <small className={tw("field-error")}>{errors.amount}</small> : null}
         </label>
       </div>
 
-      <div className="purchase-form-grid">
+      <div className={tw("purchase-form-grid")}>
         <label>
           <span>{t.seller} <em>{t.optional}</em></span>
           <input name="seller_name" value={seller} onChange={(event) => setSeller(event.target.value)} placeholder={t.sellerPlaceholder} autoComplete="organization" />
@@ -173,7 +174,7 @@ export function PurchaseForm({
         <label>
           <span>{t.quantity} <em>{t.optional}</em></span>
           <input type="number" name="quantity" value={quantity} onChange={(event) => setQuantity(event.target.value)} inputMode="decimal" min="0.001" step="0.001" />
-          {errors.quantity ? <small className="field-error">{errors.quantity}</small> : null}
+          {errors.quantity ? <small className={tw("field-error")}>{errors.quantity}</small> : null}
         </label>
       </div>
 
@@ -188,10 +189,10 @@ export function PurchaseForm({
           options={categories.map((category) => ({ value: category.id, label: category.name }))}
           invalid={Boolean(errors.category_id)}
         />
-        {errors.category_id ? <small className="field-error">{errors.category_id}</small> : null}
+        {errors.category_id ? <small className={tw("field-error")}>{errors.category_id}</small> : null}
       </label>
 
-      <div className="purchase-form-grid">
+      <div className={tw("purchase-form-grid")}>
         <label>
           <span>{returnLabels.start} <em>{t.optional}</em></span>
           <input type="date" value={returnStart} onChange={(event) => setReturnStart(event.target.value)} />
@@ -199,7 +200,7 @@ export function PurchaseForm({
         <label>
           <span>{returnLabels.end} <em>{t.optional}</em></span>
           <input type="date" value={returnEnd} onChange={(event) => setReturnEnd(event.target.value)} />
-          {errors.return_end_date ? <small className="field-error">{errors.return_end_date}</small> : null}
+          {errors.return_end_date ? <small className={tw("field-error")}>{errors.return_end_date}</small> : null}
         </label>
       </div>
 
@@ -227,15 +228,15 @@ export function PurchaseForm({
       <label>
         <span>{t.notes} <em>{t.optional}</em></span>
         <textarea name="notes" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder={t.notesPlaceholder} rows={5} />
-        <small className="field-hint">{t.notesHint}</small>
+        <small className={tw("field-hint")}>{t.notesHint}</small>
       </label>
 
-      <div className="purchase-form-proof-note">
+      <div className={tw("purchase-form-proof-note")}>
         <strong>{language === "hi" ? "रसीद वैकल्पिक है।" : "Receipt is optional."}</strong>
         <span>{language === "hi" ? "अभी सिर्फ ज़रूरी जानकारी सेव करें। प्रमाण बाद में जोड़ा जाएगा।" : "Save the essentials now. Evidence can be attached later."}</span>
       </div>
 
-      <button type="submit" className="button button-dark purchase-submit" disabled={saving}>
+      <button type="submit" className={tw("button button-dark purchase-submit")} disabled={saving}>
         {saving ? t.saving : isEditing ? t.updatePurchase : t.savePurchase}
       </button>
     </form>

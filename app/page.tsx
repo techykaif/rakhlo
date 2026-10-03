@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { tw } from "@/components/ui/styles";
 import { useLanguage } from "@/components/ui/language-provider";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 
@@ -259,7 +260,7 @@ function Icon({
 
 function RakhloMark() {
   return (
-    <span className="rakhlo-wordmark-mark" aria-hidden="true">
+    <span className={tw("rakhlo-wordmark-mark")} aria-hidden="true">
       <span />
       <span />
       <span />
@@ -269,45 +270,45 @@ function RakhloMark() {
 
 function ProductPreview({ t }: { t: (typeof copy)[Language] }) {
   return (
-    <div className="landing-product-scene">
-      <div className="landing-scene-grid" aria-hidden="true" />
-      <div className="landing-product-window">
-        <div className="landing-window-top">
-          <div className="landing-window-brand">
+    <div className={tw("landing-product-scene")}>
+      <div className={tw("landing-scene-grid")} aria-hidden="true" />
+      <div className={tw("landing-product-window")}>
+        <div className={tw("landing-window-top")}>
+          <div className={tw("landing-window-brand")}>
             <RakhloMark />
             <span>rakhlo</span>
           </div>
-          <div className="landing-window-dots" aria-hidden="true">
+          <div className={tw("landing-window-dots")} aria-hidden="true">
             <span />
             <span />
             <span />
           </div>
         </div>
-        <div className="landing-window-body">
-          <aside className="landing-mini-sidebar" aria-hidden="true">
-            <span className="landing-mini-dot active" />
-            <span className="landing-mini-dot" />
-            <span className="landing-mini-dot" />
-            <span className="landing-mini-dot" />
+        <div className={tw("landing-window-body")}>
+          <aside className={tw("landing-mini-sidebar")} aria-hidden="true">
+            <span className={tw("landing-mini-dot active")} />
+            <span className={tw("landing-mini-dot")} />
+            <span className={tw("landing-mini-dot")} />
+            <span className={tw("landing-mini-dot")} />
           </aside>
 
-          <div className="landing-mini-main">
-            <div className="landing-mini-header">
+          <div className={tw("landing-mini-main")}>
+            <div className={tw("landing-mini-header")}>
               <div>
-                <span className="landing-mini-kicker">{t.previewGreeting}</span>
+                <span className={tw("landing-mini-kicker")}>{t.previewGreeting}</span>
                 <strong>Your memory</strong>
               </div>
-              <div className="landing-mini-avatar">K</div>
+              <div className={tw("landing-mini-avatar")}>K</div>
             </div>
 
-            <div className="landing-mini-search">
+            <div className={tw("landing-mini-search")}>
               <Icon name="search" />
               <span>{t.previewSearch}</span>
               <kbd>⌘ K</kbd>
             </div>
 
-            <div className="landing-memory-alert">
-              <div className="landing-memory-alert-icon">
+            <div className={tw("landing-memory-alert")}>
+              <div className={tw("landing-memory-alert-icon")}>
                 <Icon name="shield" />
               </div>
               <div>
@@ -318,30 +319,30 @@ function ProductPreview({ t }: { t: (typeof copy)[Language] }) {
               <Icon name="arrow" />
             </div>
 
-            <div className="landing-mini-section-head">
+            <div className={tw("landing-mini-section-head")}>
               <span>{t.recent}</span>
               <span>{t.viewAll}</span>
             </div>
 
-            <div className="landing-mini-purchases">
-              <div className="landing-mini-purchase">
-                <div className="landing-purchase-art">S</div>
+            <div className={tw("landing-mini-purchases")}>
+              <div className={tw("landing-mini-purchase")}>
+                <div className={tw("landing-purchase-art")}>S</div>
                 <div>
                   <strong>Samsung Refrigerator</strong>
                   <span>₹35,000 · Sharma Electronics</span>
                 </div>
                 <b>{t.receipt}</b>
               </div>
-              <div className="landing-mini-purchase">
-                <div className="landing-purchase-art">A</div>
+              <div className={tw("landing-mini-purchase")}>
+                <div className={tw("landing-purchase-art")}>A</div>
                 <div>
                   <strong>AirPods Pro</strong>
                   <span>₹24,900 · Apple</span>
                 </div>
                 <b>{t.proof}</b>
               </div>
-              <div className="landing-mini-purchase">
-                <div className="landing-purchase-art">K</div>
+              <div className={tw("landing-mini-purchase")}>
+                <div className={tw("landing-purchase-art")}>K</div>
                 <div>
                   <strong>Keyboard</strong>
                   <span>₹8,499 · Keychron</span>
@@ -353,16 +354,16 @@ function ProductPreview({ t }: { t: (typeof copy)[Language] }) {
         </div>
       </div>
 
-      <div className="landing-float-card landing-float-proof">
-        <span className="landing-float-icon"><Icon name="file" /></span>
+      <div className={tw("landing-float-card landing-float-proof")}>
+        <span className={tw("landing-float-icon")}><Icon name="file" /></span>
         <span>
           <strong>{t.noReceipt}</strong>
           <small>{t.noReceiptText}</small>
         </span>
       </div>
 
-      <div className="landing-float-card landing-float-reminder">
-        <span className="landing-float-icon is-green"><Icon name="calendar" /></span>
+      <div className={tw("landing-float-card landing-float-reminder")}>
+        <span className={tw("landing-float-icon is-green")}><Icon name="calendar" /></span>
         <span>
           <strong>{t.reminder}</strong>
           <small>{t.reminderText}</small>
@@ -377,25 +378,25 @@ export default function HomePage() {
   const t = copy[language];
 
   return (
-    <main className="landing-shell" lang={language}>
-      <header className="landing-nav-wrap">
-        <nav className="landing-nav" aria-label="Primary navigation">
-          <a className="landing-brand" href="#top" aria-label="Rakhlo home">
+    <main className={tw("landing-shell")} lang={language}>
+      <header className={tw("landing-nav-wrap")}>
+        <nav className={tw("landing-nav")} aria-label="Primary navigation">
+          <a className={tw("landing-brand")} href="#top" aria-label="Rakhlo home">
             <RakhloMark />
             <span>rakhlo</span>
           </a>
 
-          <div className="landing-nav-links">
+          <div className={tw("landing-nav-links")}>
             <a href="#why">{t.navWhy}</a>
             <a href="#how">{t.navHow}</a>
             <a href="#features">{t.navFeatures}</a>
           </div>
 
-          <div className="landing-nav-actions">
-            <Link href="/login" className="landing-login">
+          <div className={tw("landing-nav-actions")}>
+            <Link href="/login" className={tw("landing-login")}>
               {t.login}
             </Link>
-            <Link href="/signup" className="landing-nav-cta">
+            <Link href="/signup" className={tw("landing-nav-cta")}>
               {t.start}
               <Icon name="arrow" />
             </Link>
@@ -404,11 +405,11 @@ export default function HomePage() {
         </nav>
       </header>
 
-      <section className="landing-hero" id="top">
-        <div className="landing-hero-inner">
-          <div className="landing-hero-copy">
-            <div className="landing-eyebrow">
-              <span className="landing-eyebrow-pulse" />
+      <section className={tw("landing-hero")} id="top">
+        <div className={tw("landing-hero-inner")}>
+          <div className={tw("landing-hero-copy")}>
+            <div className={tw("landing-eyebrow")}>
+              <span className={tw("landing-eyebrow-pulse")} />
               {t.eyebrow}
             </div>
             <h1>
@@ -417,29 +418,29 @@ export default function HomePage() {
             </h1>
             <p>{t.heroText}</p>
 
-            <div className="landing-hero-actions">
-              <Link href="/signup" className="landing-button landing-button-dark">
+            <div className={tw("landing-hero-actions")}>
+              <Link href="/signup" className={tw("landing-button landing-button-dark")}>
                 {t.heroPrimary}
                 <Icon name="arrow" />
               </Link>
-              <a href="#why" className="landing-button landing-button-light">
+              <a href="#why" className={tw("landing-button landing-button-light")}>
                 {t.heroSecondary}
               </a>
             </div>
 
-            <div className="landing-hero-note">
+            <div className={tw("landing-hero-note")}>
               <Icon name="check" />
               <span>{t.heroNote}</span>
             </div>
           </div>
 
-          <div className="landing-hero-visual">
+          <div className={tw("landing-hero-visual")}>
             <ProductPreview t={t} />
           </div>
         </div>
       </section>
 
-      <div className="landing-proof-strip" aria-label="Product principles">
+      <div className={tw("landing-proof-strip")} aria-label="Product principles">
         <div>
           <span>01</span>
           <strong>Purchase memory</strong>
@@ -458,46 +459,46 @@ export default function HomePage() {
         </div>
       </div>
 
-      <section className="landing-editorial" id="why">
-        <div className="landing-container landing-editorial-grid">
+      <section className={tw("landing-editorial")} id="why">
+        <div className={tw("landing-container landing-editorial-grid")}>
           <div>
-            <span className="landing-section-label">{t.introEyebrow}</span>
+            <span className={tw("landing-section-label")}>{t.introEyebrow}</span>
             <h2>{t.introTitle}</h2>
           </div>
           <p>{t.introText}</p>
         </div>
       </section>
 
-      <section className="landing-memory-section">
-        <div className="landing-container">
-          <div className="landing-memory-heading">
+      <section className={tw("landing-memory-section")}>
+        <div className={tw("landing-container")}>
+          <div className={tw("landing-memory-heading")}>
             <div>
-              <span className="landing-section-label">{t.memoryLabel}</span>
+              <span className={tw("landing-section-label")}>{t.memoryLabel}</span>
               <h2>{t.timelineTitle}</h2>
             </div>
             <p>{t.timelineText}</p>
           </div>
 
-          <div className="landing-timeline">
-            <article className="landing-timeline-card is-first">
-              <div className="landing-timeline-index">01</div>
-              <div className="landing-timeline-icon"><Icon name="spark" /></div>
+          <div className={tw("landing-timeline")}>
+            <article className={tw("landing-timeline-card is-first")}>
+              <div className={tw("landing-timeline-index")}>01</div>
+              <div className={tw("landing-timeline-icon")}><Icon name="spark" /></div>
               <h3>{t.timeline1}</h3>
               <p>{t.timeline1Text}</p>
-              <span className="landing-timeline-line" />
+              <span className={tw("landing-timeline-line")} />
             </article>
 
-            <article className="landing-timeline-card">
-              <div className="landing-timeline-index">02</div>
-              <div className="landing-timeline-icon"><Icon name="file" /></div>
+            <article className={tw("landing-timeline-card")}>
+              <div className={tw("landing-timeline-index")}>02</div>
+              <div className={tw("landing-timeline-icon")}><Icon name="file" /></div>
               <h3>{t.timeline2}</h3>
               <p>{t.timeline2Text}</p>
-              <span className="landing-timeline-line" />
+              <span className={tw("landing-timeline-line")} />
             </article>
 
-            <article className="landing-timeline-card">
-              <div className="landing-timeline-index">03</div>
-              <div className="landing-timeline-icon"><Icon name="calendar" /></div>
+            <article className={tw("landing-timeline-card")}>
+              <div className={tw("landing-timeline-index")}>03</div>
+              <div className={tw("landing-timeline-icon")}><Icon name="calendar" /></div>
               <h3>{t.timeline3}</h3>
               <p>{t.timeline3Text}</p>
             </article>
@@ -505,16 +506,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="landing-features" id="features">
-        <div className="landing-container">
-          <div className="landing-section-heading">
-            <span className="landing-section-label">{t.featuresEyebrow}</span>
-            <h2 className="landing-features-title">{t.featuresTitle}</h2>
+      <section className={tw("landing-features")} id="features">
+        <div className={tw("landing-container")}>
+          <div className={tw("landing-section-heading")}>
+            <span className={tw("landing-section-label")}>{t.featuresEyebrow}</span>
+            <h2 className={tw("landing-features-title")}>{t.featuresTitle}</h2>
           </div>
 
-          <div className="landing-feature-table">
+          <div className={tw("landing-feature-table")}>
             <article>
-              <span className="landing-feature-number">01</span>
+              <span className={tw("landing-feature-number")}>01</span>
               <div>
                 <h3>{t.feature1}</h3>
                 <p>{t.feature1Text}</p>
@@ -522,7 +523,7 @@ export default function HomePage() {
               <Icon name="arrow" />
             </article>
             <article>
-              <span className="landing-feature-number">02</span>
+              <span className={tw("landing-feature-number")}>02</span>
               <div>
                 <h3>{t.feature2}</h3>
                 <p>{t.feature2Text}</p>
@@ -530,7 +531,7 @@ export default function HomePage() {
               <Icon name="calendar" />
             </article>
             <article>
-              <span className="landing-feature-number">03</span>
+              <span className={tw("landing-feature-number")}>03</span>
               <div>
                 <h3>{t.feature3}</h3>
                 <p>{t.feature3Text}</p>
@@ -538,7 +539,7 @@ export default function HomePage() {
               <Icon name="file" />
             </article>
             <article>
-              <span className="landing-feature-number">04</span>
+              <span className={tw("landing-feature-number")}>04</span>
               <div>
                 <h3>{t.feature4}</h3>
                 <p>{t.feature4Text}</p>
@@ -546,7 +547,7 @@ export default function HomePage() {
               <Icon name="spark" />
             </article>
             <article>
-              <span className="landing-feature-number">05</span>
+              <span className={tw("landing-feature-number")}>05</span>
               <div>
                 <h3>{t.feature5}</h3>
                 <p>{t.feature5Text}</p>
@@ -554,7 +555,7 @@ export default function HomePage() {
               <Icon name="arrow" />
             </article>
             <article>
-              <span className="landing-feature-number">06</span>
+              <span className={tw("landing-feature-number")}>06</span>
               <div>
                 <h3>{t.feature6}</h3>
                 <p>{t.feature6Text}</p>
@@ -565,14 +566,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="landing-how" id="how">
-        <div className="landing-container">
-          <div className="landing-section-heading">
-            <span className="landing-section-label">{t.howEyebrow}</span>
+      <section className={tw("landing-how")} id="how">
+        <div className={tw("landing-container")}>
+          <div className={tw("landing-section-heading")}>
+            <span className={tw("landing-section-label")}>{t.howEyebrow}</span>
             <h2>{t.howTitle}</h2>
           </div>
 
-          <div className="landing-how-grid">
+          <div className={tw("landing-how-grid")}>
             <article>
               <span>1</span>
               <h3>{t.step1}</h3>
@@ -592,15 +593,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="landing-cta">
-        <div className="landing-container">
-          <div className="landing-cta-card">
+      <section className={tw("landing-cta")}>
+        <div className={tw("landing-container")}>
+          <div className={tw("landing-cta-card")}>
             <div>
-              <span className="landing-section-label">{t.ctaEyebrow}</span>
+              <span className={tw("landing-section-label")}>{t.ctaEyebrow}</span>
               <h2>{t.ctaTitle}</h2>
               <p>{t.ctaText}</p>
             </div>
-            <Link href="/signup" className="landing-button landing-button-lime">
+            <Link href="/signup" className={tw("landing-button landing-button-lime")}>
               {t.cta}
               <Icon name="arrow" />
             </Link>
@@ -608,22 +609,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="landing-footer">
-        <div className="landing-container landing-footer-top">
-          <div className="landing-footer-brand">
-            <a className="landing-brand" href="#top">
+      <footer className={tw("landing-footer")}>
+        <div className={tw("landing-container landing-footer-top")}>
+          <div className={tw("landing-footer-brand")}>
+            <a className={tw("landing-brand")} href="#top">
               <RakhloMark />
               <span>rakhlo</span>
             </a>
             <p>{t.footerText}</p>
           </div>
-          <div className="landing-footer-links">
+          <div className={tw("landing-footer-links")}>
             <Link href="/login">{t.login}</Link>
             <Link href="/signup">{t.start}</Link>
             <a href="#why">{t.navWhy}</a>
           </div>
         </div>
-        <div className="landing-container landing-footer-bottom">
+        <div className={tw("landing-container landing-footer-bottom")}>
           <span>© 2026 Rakhlo</span>
           <span>{t.footerMade}</span>
         </div>

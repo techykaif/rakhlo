@@ -5,6 +5,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
 import { validateAuthInput } from "@/lib/validation/auth";
+import { tw } from "@/components/ui/styles";
 import {
   asSupabaseProvider,
   createOAuthRedirectUrl,
@@ -160,32 +161,32 @@ export function AuthForm({ mode }: AuthFormProps) {
   const googleProvider = oauthProviders.find(({ provider }) => provider === "google");
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} noValidate>
+    <form className={tw("auth-form")} onSubmit={handleSubmit} noValidate>
       {googleProvider ? (
-        <div className="auth-primary-social">
+        <div className={tw("auth-primary-social")}>
           <button
             type="button"
-            className="auth-google-button"
+            className={tw("auth-google-button")}
             onClick={() => handleOAuth(googleProvider.provider)}
             disabled={loading}
           >
-            <span className="auth-google-button__icon" aria-hidden="true">
+            <span className={tw("auth-google-button__icon")} aria-hidden="true">
               <Icon name="google" size={19} strokeWidth={2} />
             </span>
-            <span className="auth-google-button__copy">
+            <span className={tw("auth-google-button__copy")}>
               <strong>{t.continueWith.replace("{provider}", googleProvider.label)}</strong>
               <small>{t.googleHint}</small>
             </span>
-            <span className="auth-google-button__arrow" aria-hidden="true">→</span>
+            <span className={tw("auth-google-button__arrow")} aria-hidden="true">→</span>
           </button>
         </div>
       ) : null}
 
-      <div className="auth-divider">
+      <div className={tw("auth-divider")}>
         <span>{t.orContinueWith}</span>
       </div>
 
-      <div className="auth-fields">
+      <div className={tw("auth-fields")}>
         <label>
           <span>{t.emailLabel}</span>
           <input
@@ -228,20 +229,20 @@ export function AuthForm({ mode }: AuthFormProps) {
         ) : null}
       </div>
 
-      {error ? <div className="auth-message auth-message--error" role="alert">{error}</div> : null}
-      {message ? <div className="auth-message auth-message--success" role="status">{message}</div> : null}
+      {error ? <div className={tw("auth-message auth-message--error")} role="alert">{error}</div> : null}
+      {message ? <div className={tw("auth-message auth-message--success")} role="status">{message}</div> : null}
 
-      <button className="button button-dark auth-submit" type="submit" disabled={loading}>
+      <button className={tw("button button-dark auth-submit")} type="submit" disabled={loading}>
         {loading ? copy[language].common.loading : mode === "signin" ? t.signInButton : t.signUpButton}
       </button>
 
       {mode === "signin" ? (
-        <Link className="auth-link auth-link--center" href="/forgot-password">
+        <Link className={tw("auth-link auth-link--center")} href="/forgot-password">
           {t.forgotPassword}
         </Link>
       ) : null}
 
-      <div className="auth-switch">
+      <div className={tw("auth-switch")}>
         <span>{mode === "signin" ? t.noAccount : t.haveAccount}</span>
         <Link href={mode === "signin" ? "/signup" : "/login"}>
           {mode === "signin" ? t.createAccount : t.signIn}

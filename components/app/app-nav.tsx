@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { copy, type Language } from "@/lib/i18n";
 import { Icon, type IconName } from "@/components/ui/icon";
+import { tw } from "@/components/ui/styles";
 
 const navItems: Array<{
   key: "home" | "purchases" | "reminders" | "addPurchase";
@@ -22,7 +23,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
   const t = copy[language].dashboard;
 
   return (
-    <nav className={mobile ? "app-nav app-nav--mobile" : "app-nav"} aria-label={t.navigation}>
+    <nav className={tw(mobile ? "app-nav app-nav--mobile" : "app-nav")} aria-label={t.navigation}>
       {navItems.filter((item) => !item.mobileOnly || mobile).map((item) => {
         const active =
           item.key === "home"
@@ -37,7 +38,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
           <Link
             key={item.key}
             href={item.href}
-            className={active ? "app-nav__item active" : "app-nav__item"}
+            className={tw(active ? "app-nav__item active" : "app-nav__item")}
             aria-current={active ? "page" : undefined}
           >
             <Icon name={item.icon} size={17} />

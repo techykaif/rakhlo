@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
@@ -92,30 +93,30 @@ export function ReminderList({
         }
         key={reminder.id}
       >
-        <div className="reminder-row__mark" aria-hidden="true">
+        <div className={tw("reminder-row__mark")} aria-hidden="true">
           <Icon name={completed ? "check" : "bell"} size={16} />
         </div>
 
-        <div className="reminder-row__body">
-          <div className="reminder-row__title">
+        <div className={tw("reminder-row__body")}>
+          <div className={tw("reminder-row__title")}>
             <strong>{reminder.title}</strong>
-            <span className="reminder-type">{t.types[reminder.type as keyof typeof t.types]}</span>
+            <span className={tw("reminder-type")}>{t.types[reminder.type as keyof typeof t.types]}</span>
           </div>
-          <span className="reminder-row__meta">
+          <span className={tw("reminder-row__meta")}>
             {reminder.purchases?.title ?? t.purchaseMissing}
             {" · "}
             {formatDate(reminder.due_at, locale)}
           </span>
-          <span className="reminder-row__due">{dueLabel}</span>
+          <span className={tw("reminder-row__due")}>{dueLabel}</span>
         </div>
 
-        <div className="reminder-row__actions">
-          <button type="button" className="reminder-icon-button" onClick={() => onEdit(reminder)} aria-label={t.edit}>
+        <div className={tw("reminder-row__actions")}>
+          <button type="button" className={tw("reminder-icon-button")} onClick={() => onEdit(reminder)} aria-label={t.edit}>
             <Icon name="settings" size={15} />
           </button>
           <button
             type="button"
-            className="reminder-icon-button"
+            className={tw("reminder-icon-button")}
             onClick={() => onCompleted(reminder)}
             aria-label={completed ? t.reopen : t.complete}
           >
@@ -123,7 +124,7 @@ export function ReminderList({
           </button>
           <button
             type="button"
-            className="reminder-icon-button reminder-icon-button--danger"
+            className={tw("reminder-icon-button reminder-icon-button--danger")}
             onClick={() => onDeleted(reminder)}
             aria-label={t.delete}
           >
@@ -135,39 +136,39 @@ export function ReminderList({
   };
 
   return (
-    <section className="reminder-list-panel" aria-labelledby="reminders-list-title">
-      <div className="reminder-list-panel__heading">
+    <section className={tw("reminder-list-panel")} aria-labelledby="reminders-list-title">
+      <div className={tw("reminder-list-panel__heading")}>
         <div>
-          <span className="panel-kicker">{t.listKicker}</span>
-          <h2 id="reminders-list-title">{t.title}</h2>
+          <span className={tw("panel-kicker")}>{t.listKicker}</span>
+          <h2 className="lang(hi):tracking-normal" id="reminders-list-title">{t.title}</h2>
         </div>
-        <span className="reminder-count">{reminders.length}</span>
+        <span className={tw("reminder-count")}>{reminders.length}</span>
       </div>
 
       {groups.overdue.length ? (
-        <div className="reminder-group">
+        <div className={tw("reminder-group")}>
           <h3>{t.overdueTitle}</h3>
-          <div className="reminder-rows">{groups.overdue.map(renderRow)}</div>
+          <div className={tw("reminder-rows")}>{groups.overdue.map(renderRow)}</div>
         </div>
       ) : null}
 
       {groups.upcoming.length ? (
-        <div className="reminder-group">
+        <div className={tw("reminder-group")}>
           <h3>{t.upcomingTitle}</h3>
-          <div className="reminder-rows">{groups.upcoming.map(renderRow)}</div>
+          <div className={tw("reminder-rows")}>{groups.upcoming.map(renderRow)}</div>
         </div>
       ) : null}
 
       {groups.completed.length ? (
-        <div className="reminder-group">
+        <div className={tw("reminder-group")}>
           <h3>{t.completedTitle}</h3>
-          <div className="reminder-rows">{groups.completed.map(renderRow)}</div>
+          <div className={tw("reminder-rows")}>{groups.completed.map(renderRow)}</div>
         </div>
       ) : null}
 
       {!groups.overdue.length && !groups.upcoming.length && !groups.completed.length ? (
-        <div className="reminder-empty">
-          <div className="reminder-empty__icon"><Icon name="bell" size={18} /></div>
+        <div className={tw("reminder-empty")}>
+          <div className={tw("reminder-empty__icon")}><Icon name="bell" size={18} /></div>
           <strong>{t.emptyTitle}</strong>
           <span>{t.emptyText}</span>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { tw } from "@/components/ui/styles";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -65,7 +66,7 @@ export function ResetPasswordForm() {
   }
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} noValidate>
+    <form className={tw("auth-form")} onSubmit={handleSubmit} noValidate>
       <label>
         <span>{t.newPasswordLabel}</span>
         <input
@@ -92,10 +93,10 @@ export function ResetPasswordForm() {
         />
       </label>
 
-      {error ? <div className="auth-message auth-message--error">{error}</div> : null}
-      {message ? <div className="auth-message auth-message--success">{message}</div> : null}
+      {error ? <div className={tw("auth-message auth-message--error")}>{error}</div> : null}
+      {message ? <div className={tw("auth-message auth-message--success")}>{message}</div> : null}
 
-      <button className="button button-dark auth-submit" type="submit" disabled={loading}>
+      <button className={tw("button button-dark auth-submit")} type="submit" disabled={loading}>
         {loading ? copy[language].common.loading : t.updatePassword}
       </button>
     </form>

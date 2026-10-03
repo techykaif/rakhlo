@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { tw } from "@/components/ui/styles";
 import { createClient } from "@/lib/supabase/server";
 import { PageHeader } from "@/components/app/page-header";
 import { PurchaseForm } from "@/components/purchases/purchase-form";
@@ -38,7 +39,7 @@ export default async function EditPurchasePage({
         backHref={`/purchases/${purchase.id}`}
         backLabel={{ en: t.en.detailsEyebrow, hi: t.hi.detailsEyebrow }}
       />
-      <div className="purchase-editor">
+      <div className={tw("purchase-editor")}>
         <PurchaseForm categories={categories ?? []} initialPurchase={purchase} />
       </div>
     </>

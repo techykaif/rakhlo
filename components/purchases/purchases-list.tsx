@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { tw } from "@/components/ui/styles";
 import { useEffect, useState } from "react";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -65,15 +66,15 @@ export function PurchasesList({
   });
 
   return (
-    <section className="purchases-section">
-      <form className="purchase-search" method="get">
+    <section className={tw("purchases-section")}>
+      <form className={tw("purchase-search")} method="get">
         <input
           name="q"
           defaultValue={query}
           placeholder={t.searchPlaceholder}
           aria-label={t.searchPlaceholder}
         />
-        <button type="submit" className="button button-dark">
+        <button type="submit" className={tw("button button-dark")}>
           {t.searchButton}
         </button>
         {query ||
@@ -85,12 +86,12 @@ export function PurchasesList({
         filters.receipt ||
         filters.payment ||
         filters.warranty ? (
-          <Link href="/purchases" className="button button-light">
+          <Link href="/purchases" className={tw("button button-light")}>
             {t.clearSearch}
           </Link>
         ) : null}
 
-        <div className="purchase-search__filters">
+        <div className={tw("purchase-search__filters")}>
           <label>
             <span>{t.category}</span>
             <Select
@@ -154,7 +155,7 @@ export function PurchasesList({
           </label>
         </div>
 
-        <div className="purchase-search__checks">
+        <div className={tw("purchase-search__checks")}>
           <label>
             <input
               type="checkbox"
@@ -186,17 +187,17 @@ export function PurchasesList({
       </form>
 
       {purchases.length ? (
-        <div className="purchase-results">
+        <div className={tw("purchase-results")}>
           {purchases.map((purchase) => (
             <Link
-              className="purchase-result"
+              className={tw("purchase-result")}
               key={purchase.id}
               href={`/purchases/${purchase.id}`}
             >
-              <div className="purchase-result__icon">
+              <div className={tw("purchase-result__icon")}>
                 {purchase.title.charAt(0).toUpperCase()}
               </div>
-              <div className="purchase-result__body">
+              <div className={tw("purchase-result__body")}>
                 <strong>{purchase.title}</strong>
                 <span>
                   {dateFormatter.format(
@@ -207,26 +208,26 @@ export function PurchasesList({
                   {purchase.seller_name ? ` · ${purchase.seller_name}` : ""}
                 </span>
               </div>
-              <strong className="purchase-result__amount">
+              <strong className={tw("purchase-result__amount")}>
                 {moneyFormatter.format(Number(purchase.amount))}
               </strong>
               <Icon
                 name="chevron-right"
                 size={15}
-                className="purchase-result__chevron"
+                className={tw("purchase-result__chevron")}
               />
             </Link>
           ))}
         </div>
       ) : (
-        <div className="purchase-empty">
-          <div className="empty-icon" aria-hidden="true">
+        <div className={tw("purchase-empty")}>
+          <div className={tw("empty-icon")} aria-hidden="true">
             +
           </div>
           <h2>{query ? t.noResults : t.noPurchases}</h2>
           <p>{query ? t.noResultsText : t.noPurchasesText}</p>
           {!query ? (
-            <Link href="/purchases/new" className="button button-dark">
+            <Link href="/purchases/new" className={tw("button button-dark")}>
               {t.addPurchase}
             </Link>
           ) : null}

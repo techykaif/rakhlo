@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "./app-ui.css";
-import "./reminders-ui.css";
 import { RegisterServiceWorker } from "@/components/pwa/register-sw";
 import { LanguageProvider } from "@/components/ui/language-provider";
 
@@ -40,8 +38,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <body className="min-h-screen bg-[#f7f6f2] font-sans text-[#171713] antialiased">
         <LanguageProvider>
           {children}
           <RegisterServiceWorker />
