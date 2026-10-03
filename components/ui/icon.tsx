@@ -17,7 +17,8 @@ export type IconName =
   | "google"
   | "github"
   | "chevron-right"
-  | "chevron-down";
+  | "chevron-down"
+  | "info";
 
 const paths: Record<IconName, ReactNode> = {
   home: <path d="M3.5 10.7 12 3.5l8.5 7.2v8a1.8 1.8 0 0 1-1.8 1.8H5.3a1.8 1.8 0 0 1-1.8-1.8z" />,
@@ -81,6 +82,12 @@ const paths: Record<IconName, ReactNode> = {
   ),
   "chevron-right": <path d="m9 6 6 6-6 6" />,
   "chevron-down": <path d="m6 9 6 6 6-6" />,
+  info: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 10.5v5M12 7.5h.01" />
+    </>
+  ),
 };
 
 export function Icon({
