@@ -5,7 +5,8 @@ import { DashboardContent } from "@/components/app/dashboard-content";
 export default async function DashboardPage() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
-  if (!data?.claims?.sub) redirect("/login");
+  const claims = data?.claims;
+  if (!claims?.sub) redirect("/login");
 
   const [{ data: recentPurchases }, { data: attention }] = await Promise.all([
     supabase
