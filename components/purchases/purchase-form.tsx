@@ -178,9 +178,12 @@ export function PurchaseForm({
         </label>
       </div>
 
-      <label>
-        <span>{t.category} <em>{t.optional}</em></span>
+      <div className="grid min-w-0 gap-1.5">
+        <label htmlFor="purchase-category">
+          <span>{t.category} <em>{t.optional}</em></span>
+        </label>
         <Select
+          id="purchase-category"
           name="category_id"
           value={categoryId}
           onChange={setCategoryId}
@@ -190,7 +193,7 @@ export function PurchaseForm({
           invalid={Boolean(errors.category_id)}
         />
         {errors.category_id ? <small className={tw("field-error")}>{errors.category_id}</small> : null}
-      </label>
+      </div>
 
       <div className={tw("purchase-form-grid")}>
         <label>
