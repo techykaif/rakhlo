@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/components/ui/language-provider";
+import { Select } from "@/components/ui/select";
 
 type Item = { id: string; name: string; quantity: number; unit_price: number | null; serial_number: string | null; imei: string | null; notes: string | null; status: string };
 type Payment = { id: string; amount: number; method: string; paid_at: string | null; reference: string | null; notes: string | null; document_id: string | null };
