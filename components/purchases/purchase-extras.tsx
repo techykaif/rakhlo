@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { tw } from "@/components/ui/styles";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Select } from "@/components/ui/select";
 
@@ -97,37 +98,37 @@ export function PurchaseExtras({
   }
 
   return (
-    <section className="purchase-extras">
-      <span className="panel-kicker">{t.details}</span>
+    <section className={tw("purchase-extras")}>
+      <span className={tw("panel-kicker")}>{t.details}</span>
       {message ? <p role="status">{message}</p> : null}
 
-      <div className="purchase-extras__block">
+      <div className={tw("purchase-extras__block")}>
         <h3>{t.items}</h3>
         {items.map((value) => (
-          <div key={value.id} className="purchase-extra-row">
+          <div key={value.id} className={tw("purchase-extra-row")}>
             <div><strong>{value.name}</strong><span>{value.quantity}{value.serial_number ? ` · ${value.serial_number}` : ""}{value.imei ? ` · IMEI ${value.imei}` : ""}</span></div>
-            <div><button type="button" className="button button-light" onClick={() => { setEditing({ kind: "item", id: value.id }); setItem({ name: value.name, quantity: String(value.quantity), unit_price: value.unit_price == null ? "" : String(value.unit_price), serial_number: value.serial_number ?? "", imei: value.imei ?? "" }); }}>{t.edit}</button> <button type="button" className="button button-light" onClick={() => remove("item", value.id)}>{t.remove}</button></div>
+            <div><button type="button" className={tw("button button-light")} onClick={() => { setEditing({ kind: "item", id: value.id }); setItem({ name: value.name, quantity: String(value.quantity), unit_price: value.unit_price == null ? "" : String(value.unit_price), serial_number: value.serial_number ?? "", imei: value.imei ?? "" }); }}>{t.edit}</button> <button type="button" className={tw("button button-light")} onClick={() => remove("item", value.id)}>{t.remove}</button></div>
           </div>
         ))}
-        <div className="purchase-extras__form">
+        <div className={tw("purchase-extras__form")}>
           <input value={item.name} onChange={(e) => setItem({ ...item, name: e.target.value })} placeholder={t.itemName} />
           <input type="number" min="0.001" step="0.001" value={item.quantity} onChange={(e) => setItem({ ...item, quantity: e.target.value })} placeholder={t.quantity} />
           <input type="number" min="0" step="0.01" value={item.unit_price} onChange={(e) => setItem({ ...item, unit_price: e.target.value })} placeholder={t.unitPrice} />
           <input value={item.serial_number} onChange={(e) => setItem({ ...item, serial_number: e.target.value })} placeholder={t.serial} />
           <input value={item.imei} onChange={(e) => setItem({ ...item, imei: e.target.value })} placeholder={t.imei} />
-          <button type="button" className="button button-dark" onClick={() => add("item")}>{editing?.kind === "item" ? t.saveChanges : t.addItem}</button>
+          <button type="button" className={tw("button button-dark")} onClick={() => add("item")}>{editing?.kind === "item" ? t.saveChanges : t.addItem}</button>
         </div>
       </div>
 
-      <div className="purchase-extras__block">
+      <div className={tw("purchase-extras__block")}>
         <h3>{t.payments}</h3>
         {payments.map((value) => (
-          <div key={value.id} className="purchase-extra-row">
+          <div key={value.id} className={tw("purchase-extra-row")}>
             <div><strong>₹{Number(value.amount).toFixed(2)} · {value.method === "bank_transfer" ? t.bank_transfer : value.method === "cash" ? t.cash : value.method === "upi" ? t.upi : value.method === "card" ? t.card : t.other}</strong><span>{value.reference ?? ""}</span></div>
-            <div><button type="button" className="button button-light" onClick={() => { setEditing({ kind: "payment", id: value.id }); setPayment({ amount: String(value.amount), method: value.method, paid_at: value.paid_at ? value.paid_at.slice(0, 16) : "", reference: value.reference ?? "" }); }}>{t.edit}</button> <button type="button" className="button button-light" onClick={() => remove("payment", value.id)}>{t.remove}</button></div>
+            <div><button type="button" className={tw("button button-light")} onClick={() => { setEditing({ kind: "payment", id: value.id }); setPayment({ amount: String(value.amount), method: value.method, paid_at: value.paid_at ? value.paid_at.slice(0, 16) : "", reference: value.reference ?? "" }); }}>{t.edit}</button> <button type="button" className={tw("button button-light")} onClick={() => remove("payment", value.id)}>{t.remove}</button></div>
           </div>
         ))}
-        <div className="purchase-extras__form">
+        <div className={tw("purchase-extras__form")}>
           <input type="number" min="0" step="0.01" value={payment.amount} onChange={(e) => setPayment({ ...payment, amount: e.target.value })} placeholder={t.paymentAmount} />
           <Select
             value={payment.method}
@@ -143,19 +144,19 @@ export function PurchaseExtras({
           />
           <input type="datetime-local" value={payment.paid_at} onChange={(e) => setPayment({ ...payment, paid_at: e.target.value })} aria-label={t.paidAt} />
           <input value={payment.reference} onChange={(e) => setPayment({ ...payment, reference: e.target.value })} placeholder={t.reference} />
-          <button type="button" className="button button-dark" onClick={() => add("payment")}>{editing?.kind === "payment" ? t.saveChanges : t.addPayment}</button>
+          <button type="button" className={tw("button button-dark")} onClick={() => add("payment")}>{editing?.kind === "payment" ? t.saveChanges : t.addPayment}</button>
         </div>
       </div>
 
-      <div className="purchase-extras__block">
+      <div className={tw("purchase-extras__block")}>
         <h3>{t.warranty}</h3>
         {warranties.map((value) => (
-          <div key={value.id} className="purchase-extra-row">
+          <div key={value.id} className={tw("purchase-extra-row")}>
             <div><strong>{value.end_date}</strong><span>{value.provider ?? ""} · {value.source === "document" ? t.document : value.source === "system" ? t.system : t.user}</span></div>
-            <div><button type="button" className="button button-light" onClick={() => { setEditing({ kind: "warranty", id: value.id }); setWarranty({ start_date: value.start_date ?? "", end_date: value.end_date, provider: value.provider ?? "", source: value.source }); }}>{t.edit}</button> <button type="button" className="button button-light" onClick={() => remove("warranty", value.id)}>{t.remove}</button></div>
+            <div><button type="button" className={tw("button button-light")} onClick={() => { setEditing({ kind: "warranty", id: value.id }); setWarranty({ start_date: value.start_date ?? "", end_date: value.end_date, provider: value.provider ?? "", source: value.source }); }}>{t.edit}</button> <button type="button" className={tw("button button-light")} onClick={() => remove("warranty", value.id)}>{t.remove}</button></div>
           </div>
         ))}
-        <div className="purchase-extras__form">
+        <div className={tw("purchase-extras__form")}>
           <input type="date" value={warranty.start_date} onChange={(e) => setWarranty({ ...warranty, start_date: e.target.value })} aria-label={t.start} />
           <input type="date" value={warranty.end_date} onChange={(e) => setWarranty({ ...warranty, end_date: e.target.value })} aria-label={t.end} />
           <input value={warranty.provider} onChange={(e) => setWarranty({ ...warranty, provider: e.target.value })} placeholder={t.provider} />
@@ -169,12 +170,12 @@ export function PurchaseExtras({
               { value: "system", label: t.system },
             ]}
           />
-          <button type="button" className="button button-dark" onClick={() => add("warranty")}>{editing?.kind === "warranty" ? t.saveChanges : t.addWarranty}</button>
+          <button type="button" className={tw("button button-dark")} onClick={() => add("warranty")}>{editing?.kind === "warranty" ? t.saveChanges : t.addWarranty}</button>
         </div>
       </div>
 
       {returnEnd ? (
-        <div className="purchase-extras__block">
+        <div className={tw("purchase-extras__block")}>
           <h3>{t.returnPeriod}</h3>
           <p>{returnStart ? `${returnStart} → ${returnEnd}` : returnEnd}</p>
           {returnSource ? <small>{returnSource === "document" ? t.document : returnSource === "system" ? t.system : t.user}</small> : null}
