@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { tw } from "@/components/ui/styles";
 import { createClient } from "@/lib/supabase/client";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -192,16 +193,16 @@ export function PurchaseDocuments({
   }
 
   return (
-    <section className="purchase-documents">
-      <div className="purchase-documents__header">
+    <section className={tw("purchase-documents")}>
+      <div className={tw("purchase-documents__header")}>
         <div>
-          <span className="panel-kicker">{t.documentsTitle}</span>
+          <span className={tw("panel-kicker")}>{t.documentsTitle}</span>
           <p>{t.documentsText}</p>
         </div>
       </div>
 
-      <div className="purchase-documents__uploader">
-        <div className="purchase-documents__controls">
+      <div className={tw("purchase-documents__uploader")}>
+        <div className={tw("purchase-documents__controls")}>
           <label>
             <span>{t.documentType}</span>
             <select
@@ -227,13 +228,13 @@ export function PurchaseDocuments({
           </label>
         </div>
 
-        <div className="purchase-documents__upload-row">
+        <div className={tw("purchase-documents__upload-row")}>
           <span>
             {selectedFile ? selectedFile.name + " · " + formatSize(selectedFile.size) : t.supportedFiles}
           </span>
           <button
             type="button"
-            className="button button-dark"
+            className={tw("button button-dark")}
             onClick={upload}
             disabled={uploading || !selectedFile}
           >
@@ -241,28 +242,28 @@ export function PurchaseDocuments({
           </button>
         </div>
 
-        {status ? <p className="document-status" role="status">{status}</p> : null}
-        {error ? <p className="document-error" role="alert">{error}</p> : null}
+        {status ? <p className={tw("document-status")} role="status">{status}</p> : null}
+        {error ? <p className={tw("document-error")} role="alert">{error}</p> : null}
       </div>
 
       {documents.length ? (
-        <div className="purchase-document-list">
+        <div className={tw("purchase-document-list")}>
           {documents.map((document) => (
-            <div className="purchase-document-row" key={document.id}>
-              <div className="purchase-document-row__icon" aria-hidden="true">
+            <div className={tw("purchase-document-row")} key={document.id}>
+              <div className={tw("purchase-document-row__icon")} aria-hidden="true">
                 {document.type === "product_photo" ? "IMG" : "DOC"}
               </div>
-              <div className="purchase-document-row__body">
+              <div className={tw("purchase-document-row__body")}>
                 <strong title={document.filename}>{document.filename}</strong>
                 <span>{typeLabel(document.type, t)} · {formatSize(document.size_bytes)}</span>
               </div>
-              <div className="purchase-document-row__actions">
-                <a className="button button-light" href={"/api/documents/" + document.id + "/download"}>
+              <div className={tw("purchase-document-row__actions")}>
+                <a className={tw("button button-light")} href={"/api/documents/" + document.id + "/download"}>
                   {t.download}
                 </a>
                 <button
                   type="button"
-                  className="button button-danger"
+                  className={tw("button button-danger")}
                   onClick={() => remove(document.id)}
                   disabled={removingId === document.id}
                 >
@@ -273,7 +274,7 @@ export function PurchaseDocuments({
           ))}
         </div>
       ) : (
-        <p className="purchase-documents__empty">{t.noDocuments}</p>
+        <p className={tw("purchase-documents__empty")}>{t.noDocuments}</p>
       )}
     </section>
   );
