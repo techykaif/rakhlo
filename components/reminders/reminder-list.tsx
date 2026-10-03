@@ -140,7 +140,7 @@ export function ReminderList({
       <div className={tw("reminder-list-panel__heading")}>
         <div>
           <span className={tw("panel-kicker")}>{t.listKicker}</span>
-          <h2 id="reminders-list-title">{t.title}</h2>
+          <h2 className="lang(hi):tracking-normal" id="reminders-list-title">{t.title}</h2>
         </div>
         <span className={tw("reminder-count")}>{reminders.length}</span>
       </div>
