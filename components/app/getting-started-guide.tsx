@@ -131,7 +131,6 @@ export function GettingStartedGuide({
 }
 
 export function DashboardOnboarding({ userId }: { userId: string }) {
-  const { language } = useLanguage();
   const [open, setOpen] = useState(false);
   const storageKey = `rakhlo-onboarding-complete:${userId}`;
 
