@@ -87,11 +87,15 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
         eyebrow={t.eyebrow}
         title={t.pageTitle}
         description={t.subtitle}
-        action={<span className={tw("reminder-header-count")}>{activeCount} {t.activeLabel}</span>}
+        action={
+          <a href="#reminder-form" className={tw("button button-dark reminder-header-action")}>
+            {t.createReminder}
+          </a>
+        }
       />
       {message ? <div className={tw("reminder-page-message")} role="status">{message}</div> : null}
       <NotificationSettings />
-      <div className={tw("reminders-layout")}>
+      <div className={tw("reminders-layout")} id="reminder-form">
         <ReminderList
           reminders={reminders}
           onEdit={setEditing}
