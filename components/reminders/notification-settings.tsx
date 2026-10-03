@@ -105,7 +105,7 @@ export function NotificationSettings() {
     <section className={tw("notification-settings")} aria-labelledby="notification-settings-title">
       <div>
         <span className={tw("panel-kicker")}>{t.listKicker}</span>
-        <h2 id="notification-settings-title">{t.pageTitle}</h2>
+        <h2 className="lang(hi):tracking-normal" id="notification-settings-title">{t.pageTitle}</h2>
         <p>{t.subtitle}</p>
       </div>
       <button type="button" className={tw("button button-dark")} onClick={toggle} disabled={busy}>
