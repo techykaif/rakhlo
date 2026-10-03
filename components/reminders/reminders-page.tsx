@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { tw } from "@/components/ui/styles";
 import { PageHeader } from "@/components/app/page-header";
 import { copy } from "@/lib/i18n";
@@ -34,11 +34,6 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
   const [reminders, setReminders] = useState(initialReminders);
   const [editing, setEditing] = useState<ReminderWithPurchase | null>(null);
   const [message, setMessage] = useState("");
-
-  const activeCount = useMemo(
-    () => reminders.filter((reminder) => !reminder.completed_at).length,
-    [reminders],
-  );
 
   function handleSaved(reminder: ReminderWithPurchase) {
     setReminders((current) => {
@@ -87,11 +82,15 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
         eyebrow={t.eyebrow}
         title={t.pageTitle}
         description={t.subtitle}
-        action={<span className={tw("reminder-header-count")}>{activeCount} {t.activeLabel}</span>}
+        action={
+          <a href="#reminder-form" className={tw("button button-dark reminder-header-action")}>
+            {t.createReminder}
+          </a>
+        }
       />
       {message ? <div className={tw("reminder-page-message")} role="status">{message}</div> : null}
       <NotificationSettings />
-      <div className={tw("reminders-layout")}>
+      <div className={tw("reminders-layout")} id="reminder-form">
         <ReminderList
           reminders={reminders}
           onEdit={setEditing}

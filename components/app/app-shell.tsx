@@ -73,6 +73,9 @@ export function AppShell({ email, children }: AppShellProps) {
 
       <section className={tw("app-main")}>
         <header className={tw("app-topbar")}>
+          <Link href="/dashboard" className={tw("app-mobile-brand")} aria-label={copy[language].common.brand}>
+            <Logo size="sm" variant="on-light" compact />
+          </Link>
           <CommandMenu language={language} />
           <LanguageToggle />
         </header>

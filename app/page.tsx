@@ -222,9 +222,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className={tw("landing-principles")} id="features">
+      <section className={tw("landing-principles")} id="why">
         <div className={tw("landing-container landing-principles-grid")}>
-          <div className={tw("landing-principles-intro")} id="why">
+          <div className={tw("landing-principles-intro")}>
             <span className={tw("landing-section-label")}>{t.whyEyebrow} {BRAND.name}</span>
             <h2>{t.whyTitle}</h2>
             <p>{t.whyText}</p>
@@ -304,7 +304,7 @@ export default function HomePage() {
         <div className={tw("landing-container")}>
           <div className={tw("landing-cta-card")}>
             <div className={tw("landing-cta-glow")} aria-hidden="true" />
-            <div>
+            <div className={tw("landing-cta-copy")}>
               <span className={tw("landing-section-label")}>{t.ctaEyebrow}</span>
               <h2>
                 {language === "en"
@@ -312,11 +312,14 @@ export default function HomePage() {
                   : <>अगली बार कुछ खरीदें, बस {BRAND.name}.</>}
               </h2>
               <p>{t.ctaText}</p>
+              <Link href="/signup" className={tw("landing-button landing-button-lime")}>
+                {t.cta}
+                <Icon name="arrow-right" size={16} />
+              </Link>
             </div>
-            <Link href="/signup" className={tw("landing-button landing-button-lime")}>
-              {t.cta}
-              <Icon name="arrow-right" size={16} />
-            </Link>
+            <div className={tw("landing-cta-mark")} aria-hidden="true">
+              <Logo size="xl" variant="on-dark" compact />
+            </div>
           </div>
         </div>
       </section>
