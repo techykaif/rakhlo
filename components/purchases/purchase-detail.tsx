@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { DeletePurchaseButton } from "@/components/purchases/delete-purchase-button";
@@ -60,43 +61,43 @@ export function PurchaseDetail({
 
   return (
     <>
-      <div className="purchase-detail">
-        <div className="purchase-detail__hero">
-          <div className="purchase-result__icon purchase-result__icon--large">
+      <div className={tw("purchase-detail")}>
+        <div className={tw("purchase-detail__hero")}>
+          <div className={tw("purchase-result__icon purchase-result__icon--large")}>
             {purchase.title.charAt(0).toUpperCase()}
           </div>
           <div>
-            <span className="app-kicker">{t.detailsEyebrow}</span>
+            <span className={tw("app-kicker")}>{t.detailsEyebrow}</span>
             <h2>{purchase.title}</h2>
             <strong>{money}</strong>
           </div>
         </div>
 
-        <div className="purchase-detail__grid">
-          <div className="detail-cell">
+        <div className={tw("purchase-detail__grid")}>
+          <div className={tw("detail-cell")}>
             <span>{t.purchaseDate}</span>
             <strong>{date}</strong>
           </div>
-          <div className="detail-cell">
+          <div className={tw("detail-cell")}>
             <span>{t.seller}</span>
             <strong>{purchase.seller_name || t.sellerUnknown}</strong>
           </div>
-          <div className="detail-cell">
+          <div className={tw("detail-cell")}>
             <span>{t.category}</span>
             <strong>{purchase.categories?.name || t.categoryUnknown}</strong>
           </div>
-          <div className="detail-cell">
+          <div className={tw("detail-cell")}>
             <span>{t.quantity}</span>
             <strong>{purchase.quantity}</strong>
           </div>
         </div>
 
-        <section className="purchase-detail__section">
-          <span className="panel-kicker">{t.notes}</span>
+        <section className={tw("purchase-detail__section")}>
+          <span className={tw("panel-kicker")}>{t.notes}</span>
           {purchase.notes ? (
-            <p className="purchase-note">{purchase.notes}</p>
+            <p className={tw("purchase-note")}>{purchase.notes}</p>
           ) : (
-            <p className="purchase-note purchase-note--empty">{t.notesPlaceholder}</p>
+            <p className={tw("purchase-note purchase-note--empty")}>{t.notesPlaceholder}</p>
           )}
           {purchase.notes ? <small>{t.notesHint}</small> : null}
         </section>
@@ -112,8 +113,8 @@ export function PurchaseDetail({
         returnNote={purchase.return_note}
       />
 
-      <div className="purchase-detail__actions">
-        <Link href={"/purchases/" + purchase.id + "/edit"} className="button button-light">
+      <div className={tw("purchase-detail__actions")}>
+        <Link href={"/purchases/" + purchase.id + "/edit"} className={tw("button button-light")}>
           {t.editPurchase}
         </Link>
         <DeletePurchaseButton purchaseId={purchase.id} />
