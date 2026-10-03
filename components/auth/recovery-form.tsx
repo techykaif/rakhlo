@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { tw } from "@/components/ui/styles";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -63,12 +64,12 @@ export function RecoveryForm() {
 
   if (status === "sent") {
     return (
-      <div className="auth-form">
-        <div className="auth-message auth-message--success" role="status">
+      <div className={tw("auth-form")}>
+        <div className={tw("auth-message auth-message--success")} role="status">
           <strong>{t.resetSentTitle}</strong>
           <p>{t.resetSentText}</p>
         </div>
-        <Link className="button button-light auth-submit" href="/login">
+        <Link className={tw("button button-light auth-submit")} href="/login">
           {t.goToSignIn}
         </Link>
       </div>
@@ -76,7 +77,7 @@ export function RecoveryForm() {
   }
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} noValidate>
+    <form className={tw("auth-form")} onSubmit={handleSubmit} noValidate>
       <label>
         <span>{t.emailLabel}</span>
         <input
@@ -90,13 +91,13 @@ export function RecoveryForm() {
         />
       </label>
 
-      {error ? <div className="auth-message auth-message--error" role="alert">{error}</div> : null}
+      {error ? <div className={tw("auth-message auth-message--error")} role="alert">{error}</div> : null}
 
-      <button className="button button-dark auth-submit" type="submit" disabled={loading}>
+      <button className={tw("button button-dark auth-submit")} type="submit" disabled={loading}>
         {loading ? copy[language].common.loading : t.sendResetLink}
       </button>
 
-      <Link className="auth-link auth-link--center" href="/login">
+      <Link className={tw("auth-link auth-link--center")} href="/login">
         {t.goToSignIn}
       </Link>
     </form>
