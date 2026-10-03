@@ -93,7 +93,7 @@ export function PurchaseExtras({
       if (!item.name.trim()) return t.itemNameRequired;
       const quantity = Number(item.quantity);
       if (!Number.isFinite(quantity) || quantity <= 0) return t.itemQuantityInvalid;
-      if (item.unit_price !== "" && (!/^\\d{1,12}(?:\\.\\d{1,2})?$/.test(item.unit_price.trim()) || Number(item.unit_price) < 0)) {
+      if (item.unit_price !== "" && (!/^\d{1,12}(?:\.\d{1,2})?$/.test(item.unit_price.trim()) || Number(item.unit_price) < 0)) {
         return t.itemPriceInvalid;
       }
       return "";
@@ -101,7 +101,7 @@ export function PurchaseExtras({
 
     if (kind === "payment") {
       if (!payment.amount.trim()) return t.paymentAmountRequired;
-      if (!/^\\d{1,12}(?:\\.\\d{1,2})?$/.test(payment.amount.trim()) || Number(payment.amount) < 0) {
+      if (!/^\d{1,12}(?:\.\d{1,2})?$/.test(payment.amount.trim()) || Number(payment.amount) < 0) {
         return t.paymentAmountInvalid;
       }
       return "";
