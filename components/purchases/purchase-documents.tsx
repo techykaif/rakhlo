@@ -5,6 +5,7 @@ import { tw } from "@/components/ui/styles";
 import { createClient } from "@/lib/supabase/client";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
+import { Select } from "@/components/ui/select";
 import {
   DOCUMENT_MAX_BYTES,
   DOCUMENT_TYPES,
@@ -205,15 +206,16 @@ export function PurchaseDocuments({
         <div className={tw("purchase-documents__controls")}>
           <label>
             <span>{t.documentType}</span>
-            <select
+            <Select
               value={documentType}
-              onChange={(event) => setDocumentType(event.target.value as DocumentType)}
+              onChange={(value) => setDocumentType(value as DocumentType)}
+              ariaLabel={t.documentType}
               disabled={uploading}
-            >
-              {DOCUMENT_TYPES.map((type) => (
-                <option key={type} value={type}>{typeLabel(type, t)}</option>
-              ))}
-            </select>
+              options={DOCUMENT_TYPES.map((type) => ({
+                value: type,
+                label: typeLabel(type, t),
+              }))}
+            />
           </label>
 
           <label>
