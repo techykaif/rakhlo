@@ -120,7 +120,7 @@ export function NotificationSettings() {
       </div>
       <div className={tw("notification-settings__action")}>
         <span className={tw(enabled && subscribed ? "notification-settings__state" : "notification-settings__state notification-settings__state--off")}>
-          {enabled && subscribed ? t.notificationsOn : "Off"}
+          {enabled && subscribed ? t.notificationsOn : t.notificationsOff}
         </span>
         <button type="button" className={tw("button button-dark")} onClick={toggle} disabled={busy}>
           {enabled && subscribed ? t.disableNotifications : t.enableNotifications}
