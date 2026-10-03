@@ -23,5 +23,11 @@ export default async function DashboardPage() {
       .limit(5),
   ]);
 
-  return <DashboardContent recentPurchases={recentPurchases ?? []} attention={attention ?? []} />;
+  return (
+    <DashboardContent
+      recentPurchases={recentPurchases ?? []}
+      attention={attention ?? []}
+      userId={claims.sub}
+    />
+  );
 }
