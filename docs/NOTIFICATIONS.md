@@ -37,7 +37,7 @@ Configure these values as Cloudflare Worker secrets/variables:
 
 The Cloudflare Worker does not need the Supabase service-role key or VAPID private key. Those remain server-side in Vercel.
 
-Cloudflare Cron Triggers execute on UTC time. The free Workers plan currently includes 100,000 requests per day and supports Cron Triggers, so a 20-minute schedule is well within the request allowance.
+Cloudflare Cron Triggers execute on UTC time. The free Workers plan currently includes 100,000 requests per day and supports Cron Triggers, so a 10-minute schedule is well within the request allowance.
 
 ## Delivery flow
 
@@ -45,7 +45,7 @@ Cloudflare Cron Triggers execute on UTC time. The free Workers plan currently in
 2. The browser registers the Rakhlo service worker and creates a PushSubscription.
 3. Rakhlo stores only the subscription endpoint and public subscription keys, scoped to the authenticated user.
 4. A reminder stores its target date and configured offsets.
-5. Cloudflare invokes the notification endpoint every twenty minutes.
+5. Cloudflare invokes the notification endpoint every ten minutes.
 6. The worker creates a unique delivery record for each reminder/offset/date combination.
 7. A delivery is sent only when its scheduled time falls within the worker's processing window.
 8. Successful deliveries are marked as delivered, preventing duplicate sends.
