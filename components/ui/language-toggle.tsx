@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/components/ui/language-provider";
+import { tw } from "@/components/ui/styles";
 
 export function LanguageToggle() {
   const { language, setLanguage } = useLanguage();
@@ -10,13 +11,13 @@ export function LanguageToggle() {
   return (
     <button
       type="button"
-      className="language-toggle"
+      className={tw("language-toggle")}
       onClick={() => setLanguage(nextLanguage)}
       aria-label={nextLanguage === "hi" ? "हिंदी" : "English"}
       title={language === "en" ? "Switch to Hindi" : "Switch to English"}
     >
-      <span className={language === "en" ? "is-active" : ""}>EN</span>
-      <span className={language === "hi" ? "is-active" : ""}>हिंदी</span>
+      <span className={tw(language === "en" ? "is-active" : "")}>EN</span>
+      <span className={tw(language === "hi" ? "is-active" : "")}>हिंदी</span>
     </button>
   );
 }
