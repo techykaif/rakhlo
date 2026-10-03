@@ -101,7 +101,7 @@ const styles: Record<string, StyleValue> = {
   "guide-step__topline": "flex items-center justify-between gap-3",
   "guide-step__number": "text-[9px] font-extrabold tracking-[0.12em] text-[#a0a19a]",
   "guide-step__icon": "grid h-9 w-9 place-items-center rounded-xl bg-[#eef6e8] text-[#171713]",
-  "guide-step h3": "",
+  "guide-step__title": "mt-4 text-[13px] font-extrabold tracking-[-0.01em]",
   "guide-step__text": "mt-2 text-[11px] leading-5 text-[#77786f]",
   "guide-dialog__footer": "flex items-center justify-between gap-4 border-t border-[#e3e2da] bg-[#f4f4ef] px-5 py-4 max-[700px]:flex-col max-[700px]:items-stretch",
   "guide-dialog__footer-copy": "m-0 max-w-[420px] text-[10px] leading-5 text-[#77786f]",
