@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
+import { Select } from "@/components/ui/select";
 import type { ReminderInput, ReminderType } from "@/lib/reminders/validation";
 import type { ReminderWithPurchase } from "@/lib/reminders/service";
 
@@ -199,34 +200,27 @@ export function ReminderForm({
 
         <label>
           <span>{t.purchase}</span>
-          <select
+          <Select
             value={form.purchase_id}
-            onChange={(event) => update("purchase_id", event.target.value)}
-            required
-          >
-            <option value="">{t.purchasePlaceholder}</option>
-            {purchases.map((purchase) => (
-              <option key={purchase.id} value={purchase.id}>
-                {purchase.title}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => update("purchase_id", value)}
+            placeholder={t.purchasePlaceholder}
+            ariaLabel={t.purchase}
+            options={purchases.map((purchase) => ({ value: purchase.id, label: purchase.title }))}
+            invalid={Boolean(errors.purchase_id)}
+          />
           {errors.purchase_id ? <small className="reminder-field-error">{errors.purchase_id}</small> : null}
         </label>
 
         <div className="reminder-form-grid">
           <label>
             <span>{t.type}</span>
-            <select
+            <Select
               value={form.type}
-              onChange={(event) => update("type", event.target.value as ReminderType)}
-            >
-              {typeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => update("type", value as ReminderType)}
+              ariaLabel={t.type}
+              options={typeOptions}
+              invalid={Boolean(errors.type)}
+            />
             {errors.type ? <small className="reminder-field-error">{errors.type}</small> : null}
           </label>
 
