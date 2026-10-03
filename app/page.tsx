@@ -22,7 +22,7 @@ function ProductPreview({
         <div className={tw("landing-product-window")}>
           <div className={tw("landing-window-top")}>
             <div className={tw("landing-window-brand")}>
-              <Logo size="sm" variant="light" />
+              <Logo size="sm" variant="on-light" />
             </div>
             <div className={tw("landing-window-dots")} aria-hidden="true">
               <span className={tw("landing-window-dots__dot")} />
@@ -151,7 +151,7 @@ export default function HomePage() {
       <header className={tw("landing-nav-wrap")}>
         <nav className={tw("landing-nav")} aria-label="Primary navigation">
           <a className={tw("landing-brand")} href="#top" aria-label={BRAND.name}>
-            <Logo size="md" variant="dark" />
+            <Logo size="md" variant="on-dark" />
           </a>
 
           <div className={tw("landing-nav-links")}>
@@ -323,7 +323,7 @@ export default function HomePage() {
         <div className={tw("landing-container landing-footer-top")}>
           <div className={tw("landing-footer-brand")}>
             <a className={tw("landing-brand")} href="#top">
-              <Logo size="md" variant="light" />
+              <Logo size="md" variant="on-light" />
             </a>
             <p>{t.footerText}</p>
           </div>
