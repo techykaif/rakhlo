@@ -3,7 +3,7 @@ import { tw } from "@/components/ui/styles";
 import { BRAND } from "@/lib/brand";
 
 type LogoProps = {
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   variant?: "on-light" | "on-dark" | "mono";
   compact?: boolean;
 };
@@ -17,6 +17,7 @@ const markSources = {
 function markPixels(size: LogoProps["size"]) {
   if (size === "sm") return 28;
   if (size === "lg") return 40;
+  if (size === "xl") return 160;
   return 32;
 }
 
