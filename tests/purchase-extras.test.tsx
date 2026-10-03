@@ -137,6 +137,6 @@ describe("PurchaseExtras", () => {
       );
     });
 
-    expect(screen.getByRole("status")).toHaveTextContent("Saved");
+    expect(screen.getByRole("status").textContent).toContain("Saved");
   });
 });
