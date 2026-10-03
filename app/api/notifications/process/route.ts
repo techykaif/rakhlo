@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendWebPush } from "@/lib/notifications/web-push";
 
+import { BRAND } from "@/lib/brand";
 const DELIVERY_LOOKBACK_MS = 24 * 60 * 60 * 1000;
 const DELIVERY_LOOKAHEAD_MS = 15 * 60 * 1000;
 
@@ -100,7 +101,7 @@ export async function GET(request: Request) {
         for (const subscription of subscriptions) {
           try {
             await sendWebPush(subscription, {
-              title: "Rakhlo reminder",
+              title: `${BRAND.name} reminder`,
               body,
               url: `/purchases/${reminder.purchase_id}`,
             });

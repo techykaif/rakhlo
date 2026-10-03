@@ -1,4 +1,5 @@
 "use client";
+import { BRAND } from "@/lib/brand";
 
 import type { ReactNode } from "react";
 import { Logo } from "@/components/ui/logo";
@@ -38,7 +39,7 @@ export function AuthCard({ eyebrow, title, subtitle, children }: AuthCardProps) 
       </section>
 
       <p className={tw("auth-footer")}>
-        <a href="/">rakhlo.xyz</a>
+        <a href={"/"}>{BRAND.domain}</a>
       </p>
     </main>
   );

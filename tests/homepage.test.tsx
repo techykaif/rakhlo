@@ -14,7 +14,7 @@ describe("landing page", () => {
     expect(screen.getByText("You bought it.")).toBeTruthy();
     expect(screen.getByText("Rakhlo remembers.")).toBeTruthy();
     expect(screen.getByText("No receipt?")).toBeTruthy();
-    expect(screen.getByText("Save the purchase anyway.")).toBeTruthy();
+    expect(screen.getByText("Save it anyway.")).toBeTruthy();
     expect(screen.getByRole("link", { name: /create your memory/i })).toBeTruthy();
   });
 

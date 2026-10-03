@@ -1,15 +1,15 @@
 import type { MetadataRoute } from "next";
+import { BRAND } from "@/lib/brand";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Rakhlo",
-    short_name: "Rakhlo",
-    description:
-      "Remember what you bought, where you bought it, and the dates that matter.",
+    name: BRAND.name,
+    short_name: BRAND.name,
+    description: BRAND.description,
     start_url: "/",
     display: "standalone",
-    background_color: "#f7f6f2",
-    theme_color: "#171713",
+    background_color: BRAND.colors.surface,
+    theme_color: BRAND.colors.ink,
     orientation: "portrait",
     icons: [
       {
