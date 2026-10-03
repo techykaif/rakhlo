@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { tw } from "@/components/ui/styles";
 import { PageHeader } from "@/components/app/page-header";
 import { copy } from "@/lib/i18n";
@@ -34,11 +34,6 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
   const [reminders, setReminders] = useState(initialReminders);
   const [editing, setEditing] = useState<ReminderWithPurchase | null>(null);
   const [message, setMessage] = useState("");
-
-  const activeCount = useMemo(
-    () => reminders.filter((reminder) => !reminder.completed_at).length,
-    [reminders],
-  );
 
   function handleSaved(reminder: ReminderWithPurchase) {
     setReminders((current) => {
