@@ -25,3 +25,6 @@ alter table public.reminder_deliveries
 
 create index if not exists reminder_deliveries_user_id_idx
   on public.reminder_deliveries (user_id);
+
+create index if not exists reminder_deliveries_reminder_user_idx
+  on public.reminder_deliveries (reminder_id, user_id);
