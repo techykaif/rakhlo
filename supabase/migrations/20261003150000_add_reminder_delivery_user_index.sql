@@ -1,5 +1,19 @@
 -- Harden reminder delivery ownership and cover owner-scoped lookups.
 
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conrelid = 'public.reminders'::regclass
+      and conname = 'reminders_id_user_id_key'
+  ) then
+    alter table public.reminders
+      add constraint reminders_id_user_id_key unique (id, user_id);
+  end if;
+end
+$$;
+
 alter table public.reminder_deliveries
   drop constraint if exists reminder_deliveries_reminder_id_fkey;
 
