@@ -149,19 +149,19 @@ export function PurchasesList({
             </div>
           </label>
           <label>
-            <span>{t.purchaseDate}</span>
+            <span>{t.purchaseDateFrom}</span>
             <input type="date" name="from" defaultValue={filters.from} aria-label={t.purchaseDate} />
           </label>
           <label>
-            <span>{t.purchaseDate}</span>
+            <span>{t.purchaseDateTo}</span>
             <input type="date" name="to" defaultValue={filters.to} aria-label={t.purchaseDate} />
           </label>
           <label>
-            <span>{t.amount}</span>
+            <span>{t.amountMin}</span>
             <input type="number" name="min" min="0" step="0.01" defaultValue={filters.min} placeholder="Min" />
           </label>
           <label>
-            <span>{t.amount}</span>
+            <span>{t.amountMax}</span>
             <input type="number" name="max" min="0" step="0.01" defaultValue={filters.max} placeholder="Max" />
           </label>
         </div>
