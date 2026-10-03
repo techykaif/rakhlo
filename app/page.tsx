@@ -220,9 +220,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className={tw("landing-principles")} id="why">
+      <section className={tw("landing-principles")} id="features">
         <div className={tw("landing-container landing-principles-grid")}>
-          <div className={tw("landing-principles-intro")}>
+          <div className={tw("landing-principles-intro")} id="why">
             <span className={tw("landing-section-label")}>{t.whyEyebrow} {BRAND.name}</span>
             <h2>{t.whyTitle}</h2>
             <p>{t.whyText}</p>
