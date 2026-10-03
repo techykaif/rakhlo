@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { copy } from "@/lib/i18n";
-import { Logo, RakhloMark } from "@/components/ui/logo";
+import { Logo } from "@/components/ui/logo";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
@@ -74,7 +74,7 @@ export function AppShell({ email, children }: AppShellProps) {
       <section className={tw("app-main")}>
         <header className={tw("app-topbar")}>
           <Link href="/dashboard" className={tw("app-mobile-brand")} aria-label={copy[language].common.brand}>
-            <RakhloMark size="sm" variant="on-light" />
+            <Logo size="sm" variant="on-light" compact />
           </Link>
           <CommandMenu language={language} />
           <LanguageToggle />
