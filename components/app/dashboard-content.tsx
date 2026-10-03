@@ -136,7 +136,7 @@ export function DashboardContent({
         )}
       </section>
 
-      <section className={tw("recent-panel")}>
+      <section className={tw("recent-panel recent-panel--spaced")}>
         <div className={tw("recent-panel__heading")}>
           <div>
             <span className={tw("panel-kicker")}>{t.memorySectionLabel}</span>
