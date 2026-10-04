@@ -34,7 +34,7 @@ export function getUnexpectedAuthErrorMessage(
 
 export function getReturnedAuthErrorMessage(
   message: string | undefined,
-  messages: Pick<AuthErrorMessages, "network" | "googleConfig">,
+  messages: Pick<AuthErrorMessages, "network" | "googleConfig" | "fallback">,
 ) {
   if (!message) return undefined;
   if (/unsupported provider|provider.*not.*enabled|google.*not.*enabled|google.*not.*configured/i.test(message)) {
@@ -43,5 +43,5 @@ export function getReturnedAuthErrorMessage(
   if (/failed to fetch|fetch failed|network error|load failed/i.test(message)) {
     return messages.network;
   }
-  return message;
+  return messages.fallback;
 }
