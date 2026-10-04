@@ -20,12 +20,12 @@ function formatDate(value: string, language: "en" | "hi") {
 export function AccountManagement({
   email,
   hasOAuthIdentity,
-  hasEmailIdentity,
+  canChangePassword,
   deletion,
 }: {
   email: string;
   hasOAuthIdentity: boolean;
-  hasEmailIdentity: boolean;
+  canChangePassword: boolean;
   deletion: Deletion | null;
 }) {
   const { language } = useLanguage();
