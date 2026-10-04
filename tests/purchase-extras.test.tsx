@@ -170,7 +170,7 @@ describe("PurchaseExtras", () => {
 
     expect((itemName as HTMLInputElement).value).toBe("Samsung Refrigerator");
     expect(screen.getByText("Item name", { selector: "span" }).className).toContain(
-      "purchase-floating-field__label--floating",
+      "top-0",
     );
   });
 
