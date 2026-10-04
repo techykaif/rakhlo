@@ -10,7 +10,6 @@ import { Icon } from "@/components/ui/icon";
 import {
   DOCUMENT_MAX_BYTES,
   DOCUMENT_MAX_COUNT,
-  DOCUMENT_MAX_TOTAL_BYTES,
   DOCUMENT_TYPES,
   type DocumentType,
 } from "@/lib/documents/validation";
