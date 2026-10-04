@@ -17,6 +17,12 @@ describe("guest route protection", () => {
     expect(redirect).toHaveBeenCalledWith("/dashboard");
   });
 
+  it("allows the guest page to render when local auth is not configured", async () => {
+    createClient.mockRejectedValue(new Error("Missing Supabase configuration"));
+    await expect(redirectIfAuthenticated()).resolves.toBeUndefined();
+    expect(redirect).not.toHaveBeenCalled();
+  });
+
   it("does not redirect anonymous users", async () => {
     createClient.mockResolvedValue({ auth: { getClaims: vi.fn().mockResolvedValue({ data: { claims: null } }) } });
     await expect(redirectIfAuthenticated()).resolves.toBeUndefined();
