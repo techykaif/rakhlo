@@ -380,6 +380,7 @@ export const copy = {
       uploadError: "Unable to upload this document. Please try again.",
       deleteDocumentConfirm: "Remove this document?",
       documentUploaded: "Document uploaded.",
+      printPurchase: "Print / save PDF",
     },
   },
   hi: {
@@ -761,6 +762,7 @@ export const copy = {
       uploadError: "दस्तावेज़ अपलोड नहीं हो सका। कृपया फिर से कोशिश करें।",
       deleteDocumentConfirm: "यह दस्तावेज़ हटाएँ?",
       documentUploaded: "दस्तावेज़ अपलोड हो गया।",
+      printPurchase: "प्रिंट / PDF सेव करें",
     },
   },
 } as const;
