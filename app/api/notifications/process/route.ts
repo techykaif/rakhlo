@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
 import { sendWebPush } from "@/lib/notifications/web-push";
 
 import { BRAND } from "@/lib/brand";
@@ -10,7 +11,9 @@ const DELIVERY_CLAIM_STALE_MS = 15 * 60 * 1000;
 const DELETION_CLAIM_STALE_MS = 30 * 60 * 1000;
 const PURCHASE_DOCUMENTS_BUCKET = "purchase-documents";
 
-function getAdminClient() {
+type AdminClient = SupabaseClient<Database>;
+
+function getAdminClient(): AdminClient {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) throw new Error("Notification worker is not configured.");
@@ -29,7 +32,7 @@ export function shouldProcessScheduledTime(scheduledFor: Date, now: Date) {
   return difference >= -DELIVERY_LOOKAHEAD_MS && difference <= DELIVERY_LOOKBACK_MS;
 }
 
-async function deleteUserStorage(supabase: ReturnType<typeof createClient>, userId: string) {
+async function deleteUserStorage(supabase: AdminClient, userId: string) {
   const paths: string[] = [];
 
   async function collect(prefix: string, depth: number) {
@@ -62,7 +65,7 @@ async function deleteUserStorage(supabase: ReturnType<typeof createClient>, user
 }
 
 async function processAccountDeletions(
-  supabase: ReturnType<typeof createClient>,
+  supabase: AdminClient,
   now: Date,
 ) {
   const nowIso = now.toISOString();
