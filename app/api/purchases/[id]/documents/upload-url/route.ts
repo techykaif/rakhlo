@@ -5,6 +5,10 @@ import {
   createDocumentStoragePath,
   PURCHASE_DOCUMENTS_BUCKET,
 } from "@/lib/documents/storage";
+import {
+  DOCUMENT_MAX_COUNT,
+  DOCUMENT_MAX_TOTAL_BYTES,
+} from "@/lib/documents/validation";
 
 type Context = { params: Promise<{ id: string }> };
 
@@ -56,6 +60,36 @@ export async function POST(request: Request, context: Context) {
 
   if (!purchase) {
     return NextResponse.json({ error: "Purchase not found." }, { status: 404 });
+  }
+
+  const { data: existingDocuments, error: documentsError } = await supabase
+    .from("documents")
+    .select("size_bytes")
+    .eq("purchase_id", purchaseId)
+    .eq("user_id", userId);
+
+  if (documentsError) {
+    return NextResponse.json({ error: "Unable to verify attachment limits." }, { status: 500 });
+  }
+
+  const documentCount = existingDocuments?.length ?? 0;
+  const documentBytes = (existingDocuments ?? []).reduce(
+    (total, document) => total + Number(document.size_bytes || 0),
+    0,
+  );
+
+  if (documentCount >= DOCUMENT_MAX_COUNT) {
+    return NextResponse.json(
+      { error: "A purchase can have at most 5 attachments." },
+      { status: 409 },
+    );
+  }
+
+  if (documentBytes + validation.data.size_bytes > DOCUMENT_MAX_TOTAL_BYTES) {
+    return NextResponse.json(
+      { error: "The total attachment size for a purchase cannot exceed 50 MB." },
+      { status: 409 },
+    );
   }
 
   const path = createDocumentStoragePath(
