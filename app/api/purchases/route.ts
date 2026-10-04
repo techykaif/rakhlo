@@ -30,7 +30,8 @@ export async function GET(request: Request) {
     )
     .order("purchase_date", { ascending: false })
     .order("created_at", { ascending: false })
-    .eq("user_id", userId!)\n    .limit(50);
+    .eq("user_id", userId!)
+    .limit(50);
 
   if (search) {
     const safeSearch = search.replace(/[,*()%_]/g, " ").trim();
