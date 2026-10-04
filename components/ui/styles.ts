@@ -304,7 +304,7 @@ const styles: Record<string, StyleValue> = {
   "landing-nav-actions": "flex items-center gap-2",
   "landing-login": "hidden px-3 py-2 text-[12px] font-semibold text-[#A5A59D] transition-colors hover:text-[#F7F6F1] sm:inline-flex",
   "landing-nav-cta": "inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#F7F6F1] px-4 text-[11px] font-extrabold text-[#141512] shadow-[0_10px_26px_rgba(0,0,0,0.16)] transition hover:bg-white hover:shadow-[0_14px_32px_rgba(0,0,0,0.2)]",
-  "landing-hero": "border-b border-white/10 bg-[#141512] pt-[106px]",
+  "landing-hero": "border-b border-white/10 bg-[#141512] pt-[34px] max-[900px]:pt-[22px]",
   "landing-hero-inner": "mx-auto grid min-h-[690px] w-[min(1160px,calc(100%-32px))] grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] items-center gap-12 pb-16 lg:gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-8 max-[900px]:pb-10",
   "landing-hero-copy": "relative z-10 max-w-[650px] [&_h1]:m-0 [&_h1]:mt-4 [&_h1]:max-w-[680px] [&_h1]:text-[clamp(48px,6.2vw,84px)] [&_h1]:font-extrabold [&_h1]:leading-[0.95] [&_h1]:tracking-[-0.045em] [&_h1]:text-[#F7F6F1] [&_h1_em]:not-italic [&_h1_em]:text-[#C8F76A] [&_p]:mt-6 [&_p]:max-w-[560px] [&_p]:text-[15px] [&_p]:leading-7 [&_p]:text-[#A2A29A] max-[900px]:max-w-none max-[900px]:[&_h1]:max-w-[720px]",
   "landing-eyebrow": "inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#AAA9A1]",
