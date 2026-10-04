@@ -92,3 +92,7 @@ after insert or update of start_date, end_date, purchase_id, user_id
 on public.warranties
 for each row
 execute function public.sync_warranty_reminders();
+
+-- Seed the automation for warranties that already exist when this migration lands.
+update public.warranties
+set end_date = end_date;
