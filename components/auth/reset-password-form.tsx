@@ -45,6 +45,7 @@ export function ResetPasswordForm() {
         setError(
           getReturnedAuthErrorMessage(updateError.message, {
             network: t.authNetworkError,
+            fallback: t.genericError,
           }) || t.genericError,
         );
         return;
