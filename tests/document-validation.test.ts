@@ -47,6 +47,22 @@ describe("document upload validation", () => {
     expect(result.success).toBe(false);
   });
 
+  it("rejects generic image/file categories", () => {
+    expect(validateDocumentUpload({
+      filename: "photo.jpg",
+      mime_type: "image/jpeg",
+      size_bytes: 100,
+      type: "product_photo",
+    }).success).toBe(false);
+
+    expect(validateDocumentUpload({
+      filename: "file.pdf",
+      mime_type: "application/pdf",
+      size_bytes: 100,
+      type: "other",
+    }).success).toBe(false);
+  });
+
   it("rejects invalid types and extensions", () => {
     expect(
       validateDocumentUpload({
