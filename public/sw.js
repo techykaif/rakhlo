@@ -1,6 +1,13 @@
-const CACHE = "rakhlo-static-v5";
+const CACHE = "rakhlo-static-v6";
+const OFFLINE_URL = "/offline.html";
+const PRECACHE = [OFFLINE_URL, "/icon", "/icon1", "/apple-icon"];
 
-self.addEventListener("install", () => {
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE).then((cache) =>
+      Promise.all(PRECACHE.map((url) => cache.add(url).catch(() => undefined))),
+    ),
+  );
   self.skipWaiting();
 });
 
@@ -11,7 +18,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== CACHE)
+            .filter((key) => key.startsWith("rakhlo-") && key !== CACHE)
             .map((key) => caches.delete(key)),
         ),
       ),
@@ -36,8 +43,8 @@ self.addEventListener("push", (event) => {
   const title = payload.title || "Rakhlo reminder";
   const options = {
     body: payload.body || "You have something to remember.",
-    icon: "/icon.svg",
-    badge: "/icon.svg",
+    icon: "/icon",
+    badge: "/icon1",
     tag: "rakhlo-reminder",
     data: { url: payload.url || "/reminders" },
     renotify: true,
@@ -69,11 +76,16 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  if (
-    request.destination === "document" ||
-    url.pathname.startsWith("/api/") ||
-    url.pathname.startsWith("/auth/")
-  ) {
+  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/")) {
+    return;
+  }
+
+  if (request.destination === "document") {
+    event.respondWith(
+      fetch(request).catch(() =>
+        caches.match(OFFLINE_URL).then((offline) => offline || Response.error()),
+      ),
+    );
     return;
   }
 
@@ -85,19 +97,40 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  const immutable = url.pathname.startsWith("/_next/static/");
+
+  if (immutable) {
+    event.respondWith(
+      caches.match(request).then((cached) => {
+        if (cached) return cached;
+
+        return fetch(request)
+          .then((response) => {
+            if (!response.ok) return response;
+            event.waitUntil(
+              caches.open(CACHE).then((cache) => cache.put(request, response.clone())),
+            );
+            return response;
+          })
+          .catch(() => Response.error());
+      }),
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(request).then((cached) => {
-      if (cached) return cached;
-
-      return fetch(request)
+      const update = fetch(request)
         .then((response) => {
           if (!response.ok) return response;
-
-          const clone = response.clone();
-          caches.open(CACHE).then((cache) => cache.put(request, clone));
+          event.waitUntil(
+            caches.open(CACHE).then((cache) => cache.put(request, response.clone())),
+          );
           return response;
         })
-        .catch(() => Response.error());
+        .catch(() => cached || Response.error());
+
+      return cached || update;
     }),
   );
 });
