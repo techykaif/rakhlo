@@ -223,14 +223,6 @@ export function PurchaseExtras({
     year: "numeric",
     timeZone: "UTC",
   });
-  const dateTimeFormatter = new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "Asia/Kolkata",
-  });
   const moneyFormatter = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "INR",
