@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { addOneCalendarYear } from "@/lib/purchases/warranty";
 
 type Context = { params: Promise<{ id: string }> };
 
@@ -93,10 +94,14 @@ export async function POST(request: Request, context: Context) {
   }
 
   if (kind === "warranty") {
-    const endDate = date(value.end_date);
-    if (!endDate) return NextResponse.json({ error: "Warranty end date is required." }, { status: 422 });
     const startDate = value.start_date ? date(value.start_date) : null;
     if (value.start_date && !startDate) return NextResponse.json({ error: "Warranty start date is invalid." }, { status: 422 });
+
+    const suppliedEndDate = date(value.end_date);
+    const endDate = suppliedEndDate ?? (startDate ? addOneCalendarYear(startDate) : null);
+
+    if (!endDate) return NextResponse.json({ error: "Warranty end date is required." }, { status: 422 });
+
     const { data, error } = await a.supabase.from("warranties").insert({
       purchase_id: purchaseId,
       item_id: typeof value.item_id === "string" ? value.item_id : null,
@@ -155,10 +160,18 @@ export async function PATCH(request: Request, context: Context) {
   }
 
   if (value.kind === "warranty") {
+    const startDate = value.start_date ? date(value.start_date) : null;
+    if (value.start_date && !startDate) {
+      return NextResponse.json({ error: "Warranty start date is invalid." }, { status: 422 });
+    }
+
+    const suppliedEndDate = date(value.end_date);
+    const endDate = suppliedEndDate ?? (startDate ? addOneCalendarYear(startDate) : null);
+
     const { data, error } = await a.supabase.from("warranties").update({
       item_id: typeof value.item_id === "string" ? value.item_id : null,
-      start_date: value.start_date ? date(value.start_date) : null,
-      end_date: date(value.end_date) ?? undefined,
+      start_date: startDate,
+      end_date: endDate ?? undefined,
       provider: text(value.provider, 200),
       source: ["user", "document", "system"].includes(String(value.source)) ? String(value.source) : "user",
       notes: text(value.notes, 5000),
