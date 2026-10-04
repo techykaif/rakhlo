@@ -168,8 +168,8 @@ describe("PurchaseExtras", () => {
     const itemName = screen.getByRole("textbox", { name: "Item name" });
     fireEvent.change(itemName, { target: { value: "Samsung Refrigerator" } });
 
-    expect(itemName).toHaveValue("Samsung Refrigerator");
-    expect(screen.getByText("Item name", { selector: "span" })).toHaveClass(
+    expect((itemName as HTMLInputElement).value).toBe("Samsung Refrigerator");
+    expect(screen.getByText("Item name", { selector: "span" }).className).toContain(
       "purchase-floating-field__label--floating",
     );
   });
