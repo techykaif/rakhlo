@@ -9,22 +9,22 @@ export default function GuidelinesPage() {
     >
       <div className="grid gap-4 text-[12px] leading-7 text-[#5f6059]">
         <section className="rounded-[24px] border border-[#deddd6] bg-white p-6">
-          <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#8b8c84]">01 · Your data</span>
+          <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#6f7068]">01 · Your data</span>
           <h2 className="mt-2 text-[19px] font-extrabold text-[#171713]">Store only what you are allowed to keep</h2>
           <p className="mt-2">Upload only purchase-related proof such as receipts, invoices, warranty cards and payment proofs that you have the right to store. Rakhlo is not a general-purpose photo or file hosting service. Keep unnecessary sensitive information out of documents whenever possible.</p>
         </section>
         <section className="rounded-[24px] border border-[#deddd6] bg-white p-6">
-          <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#8b8c84]">02 · Account safety</span>
+          <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#6f7068]">02 · Account safety</span>
           <h2 className="mt-2 text-[19px] font-extrabold text-[#171713]">Protect your account and sessions</h2>
           <p className="mt-2">Use a password you do not reuse elsewhere, keep access to your email secure, and sign out of shared devices. Never share a password, one-time code, recovery code or session token with another person.</p>
         </section>
         <section className="rounded-[24px] border border-[#deddd6] bg-white p-6">
-          <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#8b8c84]">03 · Support</span>
+          <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#6f7068]">03 · Support</span>
           <h2 className="mt-2 text-[19px] font-extrabold text-[#171713]">Keep support messages safe to review</h2>
           <p className="mt-2">Describe the page, action and result. Include only the minimum information needed to reproduce the problem. Never include passwords, OTPs, full payment-card numbers, private keys or other secrets.</p>
         </section>
         <section className="rounded-[24px] border border-[#deddd6] bg-white p-6">
-          <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#8b8c84]">04 · Fair use</span>
+          <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#6f7068]">04 · Fair use</span>
           <h2 className="mt-2 text-[19px] font-extrabold text-[#171713]">Do not abuse or bypass the service</h2>
           <p className="mt-2">Do not attempt to access another user’s records, bypass authentication or storage controls, probe private endpoints, upload malicious or sexually explicit content, submit spam, use Rakhlo as general-purpose file hosting, or intentionally generate harmful traffic.</p>
         </section>
