@@ -66,6 +66,7 @@ describe("PurchaseExtras", () => {
     expect(screen.getByRole("button", { name: "Add item" })).toBeTruthy();
 
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add payment" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Amount" }), {
       target: { value: "20000" },
     });
