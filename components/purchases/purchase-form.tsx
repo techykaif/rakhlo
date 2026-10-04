@@ -222,8 +222,8 @@ export function PurchaseForm({
       <div className={tw("purchase-form__floating-with-error")}>
         <FloatingField
           label={returnLabels.note}
-        value={returnNote}
-        onChange={setReturnNote}
+          value={returnNote}
+          onChange={setReturnNote}
           maxLength={5000}
         />
       </div>
