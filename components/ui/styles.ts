@@ -295,7 +295,7 @@ const styles: Record<string, StyleValue> = {
   "notification-settings__message": "col-span-full m-0 rounded-lg border border-[#e4e1d7] bg-[#fafaf7] px-2.5 py-2 text-[9px] leading-4 text-[#6f7068]",
   "notification-settings__message--success": "border-[#d6e6c8] bg-[#eef7e9] text-[#4e6b3c]",
   /* landing */
-  "landing-shell": "overflow-hidden bg-[#141512] font-sans text-[#F7F6F1]",
+  "landing-shell": "flex min-h-screen flex-col overflow-hidden bg-[#141512] font-sans text-[#F7F6F1]",
   "landing-container": "mx-auto w-[min(1160px,calc(100%-32px))]",
   "landing-nav-wrap": "absolute inset-x-0 top-0 z-30",
   "landing-nav": "mx-auto flex min-h-[76px] w-[min(1160px,calc(100%-32px))] items-center justify-between gap-5 border-b border-white/10",
@@ -373,7 +373,7 @@ const styles: Record<string, StyleValue> = {
   "landing-cta-glow": "pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#C8F76A]/10 blur-3xl",
   "landing-cta-copy": "relative z-10 max-w-[760px] [&_h2]:m-0 [&_h2]:mt-3 [&_h2]:text-[clamp(40px,5.2vw,70px)] [&_h2]:font-extrabold [&_h2]:leading-[0.96] [&_h2]:tracking-[-0.045em] [&_p]:mt-4 [&_p]:max-w-[540px] [&_p]:text-[13px] [&_p]:leading-6 [&_p]:text-[#A0A19A]",
   "landing-cta-mark": "relative z-10 mb-0 mr-1 self-end opacity-95 max-[760px]:absolute max-[760px]:right-5 max-[760px]:top-5 max-[760px]:opacity-15",
-  "landing-footer": "border-t border-[#DAD8D0] bg-[#EEEDE7] text-[#141512]",
+  "landing-footer": "mt-auto border-t border-[#DAD8D0] bg-[#EEEDE7] text-[#141512]",
   "landing-footer-top": "flex items-start justify-between gap-12 py-12 max-[760px]:flex-col max-[760px]:gap-8",
   "landing-footer-brand": "max-w-[420px] [&_p]:mt-3 [&_p]:text-[11px] [&_p]:leading-6 [&_p]:text-[#6F716A]",
   "landing-footer-links": "grid grid-cols-2 gap-x-10 gap-y-3 pt-1 [&_a]:text-[11px] [&_a]:font-bold [&_a]:text-[#5F6059] [&_a]:transition-colors [&_a]:hover:text-[#141512]",
