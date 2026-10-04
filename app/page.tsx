@@ -5,7 +5,7 @@ import { BRAND } from "@/lib/brand";
 import { copy } from "@/lib/i18n";
 import { Icon } from "@/components/ui/icon";
 import { Logo } from "@/components/ui/logo";
-import { LanguageToggle } from "@/components/ui/language-toggle";
+import { PublicHeader } from "@/components/public/public-header";
 import { useLandingAuth } from "@/components/landing/landing-auth";
 import { useLanguage } from "@/components/ui/language-provider";
 import { tw } from "@/components/ui/styles";
@@ -153,35 +153,9 @@ export default function HomePage() {
 
   return (
     <main className={tw("landing-shell")} lang={language}>
-      <header className={tw("landing-nav-wrap")}>
-        <nav className={tw("landing-nav")} aria-label="Primary navigation">
-          <a className={tw("landing-brand")} href="#top" aria-label={BRAND.name}>
-            <Logo size="md" variant="on-dark" />
-          </a>
-
-          <div className={tw("landing-nav-links")}>
-            <a href="#why">{t.navWhy}{language === "en" ? " " : " "}{BRAND.name}</a>
-            <a href="#how">{t.navHow}</a>
-            <a href="#features">{t.navFeatures}</a>
-            <Link href="/status">Status</Link>
-            <Link href="/support">Support</Link>
-          </div>
-
-          <div className={tw("landing-nav-actions")}>
-            {authStatus === "authenticated" ? (
-              <Link href="/dashboard" className={tw("landing-nav-dashboard")}>
-                {t.openDashboard}<Icon name="arrow-right" size={16} />
-              </Link>
-            ) : authStatus === "anonymous" ? (
-              <>
-                <Link href="/login" className={tw("landing-login")}>{t.login}</Link>
-                <Link href="/signup" className={tw("landing-nav-cta")}>{t.start}<Icon name="arrow-right" size={16} /></Link>
-              </>
-            ) : <span className={tw("landing-nav-auth-placeholder")} aria-hidden="true" />}
-            <LanguageToggle />
-          </div>
-        </nav>
-      </header>
+      <div className="relative z-30">
+        <PublicHeader />
+      </div>
 
       <section className={tw("landing-hero")} id="top">
         <div className={tw("landing-hero-inner")}>
@@ -307,7 +281,50 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className={tw("landing-cta")} id="features">
+      <section className="bg-[#f7f6f1] py-20 text-[#141512] max-[760px]:py-16" id="features">
+        <div className={tw("landing-container")}>
+          <div className="max-w-[700px]">
+            <span className={tw("landing-section-label")}>{t.featuresEyebrow}</span>
+            <h2 className="mt-3 text-[clamp(40px,5vw,68px)] font-extrabold leading-[0.98] tracking-[-0.045em]">{t.featuresTitle}</h2>
+            <p className="mt-4 max-w-[640px] text-[13px] leading-6 text-[#77786f]">{t.featuresText}</p>
+          </div>
+
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <article className="rounded-[24px] border border-[#e1dfd7] bg-white p-6 shadow-[0_12px_30px_rgba(20,21,18,0.035)]">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#eff7e7]"><Icon name="purchase" size={18} /></div>
+              <h3 className="mt-8 text-[15px] font-extrabold">{t.featurePurchaseTitle}</h3>
+              <p className="mt-2 text-[11px] leading-5 text-[#77786f]">{t.featurePurchaseText}</p>
+            </article>
+            <article className="rounded-[24px] border border-[#e1dfd7] bg-white p-6 shadow-[0_12px_30px_rgba(20,21,18,0.035)]">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#eff7e7]"><Icon name="file" size={18} /></div>
+              <h3 className="mt-8 text-[15px] font-extrabold">{t.featureProofTitle}</h3>
+              <p className="mt-2 text-[11px] leading-5 text-[#77786f]">{t.featureProofText}</p>
+            </article>
+            <article className="rounded-[24px] border border-[#e1dfd7] bg-white p-6 shadow-[0_12px_30px_rgba(20,21,18,0.035)]">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#eff7e7]"><Icon name="bell" size={18} /></div>
+              <h3 className="mt-8 text-[15px] font-extrabold">{t.featureRemindersTitle}</h3>
+              <p className="mt-2 text-[11px] leading-5 text-[#77786f]">{t.featureRemindersText}</p>
+            </article>
+            <article className="rounded-[24px] border border-[#e1dfd7] bg-white p-6 shadow-[0_12px_30px_rgba(20,21,18,0.035)]">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#eff7e7]"><Icon name="search" size={18} /></div>
+              <h3 className="mt-8 text-[15px] font-extrabold">{t.featureSearchTitle}</h3>
+              <p className="mt-2 text-[11px] leading-5 text-[#77786f]">{t.featureSearchText}</p>
+            </article>
+            <article className="rounded-[24px] border border-[#e1dfd7] bg-white p-6 shadow-[0_12px_30px_rgba(20,21,18,0.035)]">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#eff7e7]"><Icon name="calendar" size={18} /></div>
+              <h3 className="mt-8 text-[15px] font-extrabold">{t.featureOfflineTitle}</h3>
+              <p className="mt-2 text-[11px] leading-5 text-[#77786f]">{t.featureOfflineText}</p>
+            </article>
+            <article className="rounded-[24px] border border-[#e1dfd7] bg-white p-6 shadow-[0_12px_30px_rgba(20,21,18,0.035)]">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#eff7e7]"><Icon name="check" size={18} /></div>
+              <h3 className="mt-8 text-[15px] font-extrabold">{t.featurePrivacyTitle}</h3>
+              <p className="mt-2 text-[11px] leading-5 text-[#77786f]">{t.featurePrivacyText}</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className={tw("landing-cta")} id="cta">
         <div className={tw("landing-container")}>
           <div className={tw("landing-cta-card")}>
             <div className={tw("landing-cta-glow")} aria-hidden="true" />
