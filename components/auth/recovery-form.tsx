@@ -41,6 +41,7 @@ export function RecoveryForm() {
         setError(
           getReturnedAuthErrorMessage(resetError.message, {
             network: t.authNetworkError,
+            fallback: t.genericError,
           }) || t.genericError,
         );
         setStatus("error");
