@@ -383,6 +383,15 @@ const styles: Record<string, StyleValue> = {
   "landing-mobile-nav": "hidden",
   "landing-language-option": "",
 
+  "account-page": "grid gap-5",
+  "account-card": "flex gap-4 rounded-[24px] border border-[#deddd6] bg-white p-5 shadow-[0_12px_30px_rgba(20,21,18,0.035)] md:p-6",
+  "account-card--danger": "border-[#ead8d8] bg-[#fffafa]",
+  "account-card__icon": "grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#f0f8e9] text-[#4d633d]",
+  "account-card__body": "min-w-0 flex-1 [&_h2]:m-0 [&_h2]:mt-2 [&_h2]:text-[18px] [&_h2]:font-extrabold [&_p]:mt-2 [&_p]:max-w-[720px] [&_p]:text-[11px] [&_p]:leading-6 [&_p]:text-[#6f7068]",
+  "account-form": "mt-4 grid max-w-[620px] gap-2.5 sm:grid-cols-2",
+  "account-form input": "min-h-11 rounded-xl border border-[#c9c8c0] bg-[#faf9f4] px-3 text-[12px] outline-none transition focus:border-[#96978f] focus:ring-4 focus:ring-[#c8f76a22]",
+  "account-message": "mt-3 text-[10px] font-semibold text-[#59624e]",
+
 };
 
 export function tw(value: string): string {
