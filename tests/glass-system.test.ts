@@ -8,7 +8,7 @@ describe("glass visual system", () => {
     expect(css).toContain("--glass-light-bg");
     expect(css).toContain("--glass-dark-bg");
     expect(css).toContain("backdrop-filter: blur(var(--glass-blur))");
-    expect(css).toContain("@supports not ((backdrop-filter: blur(1px)))");
+    expect(css).toContain("@supports not (backdrop-filter: blur(1px))");
     expect(css).toContain("prefers-reduced-transparency");
     expect(css).toContain("focus-visible");
   });
