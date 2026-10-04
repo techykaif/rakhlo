@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Select } from "@/components/ui/select";
+import { FloatingField } from "@/components/ui/floating-field";
 import { flushQueuedPurchases, queuePurchase } from "@/lib/offline/purchase-queue";
 
 type Category = { id: string; name: string };
@@ -144,11 +145,17 @@ export function PurchaseForm({
     <form className={tw("purchase-form")} onSubmit={submit} noValidate>
       {formError ? <div className={tw("auth-message auth-message--error")} role="alert">{formError}</div> : null}
 
-      <label>
-        <span>{t.productName}</span>
-        <input name="title" value={title} onChange={(event) => setTitle(event.target.value)} placeholder={t.productPlaceholder} autoComplete="off" required aria-invalid={Boolean(errors.title)} />
+      <div className={tw("purchase-form__floating-with-error")}>
+        <FloatingField
+          name="title"
+          label={t.productName}
+          value={title}
+          onChange={setTitle}
+          autoComplete="off"
+          required
+        />
         {errors.title ? <small id="purchase-title-error" className={tw("field-error")}>{errors.title}</small> : null}
-      </label>
+      </div>
 
       <div className={tw("purchase-form-grid")}>
         <label>
@@ -167,10 +174,13 @@ export function PurchaseForm({
       </div>
 
       <div className={tw("purchase-form-grid")}>
-        <label>
-          <span>{t.seller} <em>{t.optional}</em></span>
-          <input name="seller_name" value={seller} onChange={(event) => setSeller(event.target.value)} placeholder={t.sellerPlaceholder} autoComplete="organization" />
-        </label>
+        <FloatingField
+          name="seller_name"
+          label={t.seller}
+          value={seller}
+          onChange={setSeller}
+          autoComplete="organization"
+        />
         <label>
           <span>{t.quantity} <em>{t.optional}</em></span>
           <input type="number" name="quantity" value={quantity} onChange={(event) => setQuantity(event.target.value)} inputMode="decimal" min="0.001" step="0.001" />
@@ -207,10 +217,12 @@ export function PurchaseForm({
         </label>
       </div>
 
-      <label>
-        <span>{returnLabels.note} <em>{t.optional}</em></span>
-        <input value={returnNote} onChange={(event) => setReturnNote(event.target.value)} placeholder={returnLabels.placeholder} maxLength={5000} />
-      </label>
+      <FloatingField
+        label={returnLabels.note}
+        value={returnNote}
+        onChange={setReturnNote}
+        maxLength={5000}
+      />
 
 
       <label>
