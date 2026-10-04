@@ -16,14 +16,20 @@ export default async function AccountPage() {
     .maybeSingle();
 
   const identities = userData.user.identities ?? [];
+  const primaryProvider =
+    typeof userData.user.app_metadata?.provider === "string"
+      ? userData.user.app_metadata.provider
+      : null;
   const hasOAuthIdentity = identities.some((identity) => identity.provider !== "email" && identity.provider !== "phone");
-  const hasEmailIdentity = identities.some((identity) => identity.provider === "email");
+  const canChangePassword =
+    primaryProvider === "email" ||
+    (primaryProvider === null && identities.some((identity) => identity.provider === "email"));
 
   return (
     <AccountManagement
       email={userData.user.email ?? ""}
       hasOAuthIdentity={hasOAuthIdentity}
-      hasEmailIdentity={hasEmailIdentity}
+      canChangePassword={canChangePassword}
       deletion={
         deletion
           ? { requestedAt: deletion.requested_at, scheduledFor: deletion.scheduled_for }

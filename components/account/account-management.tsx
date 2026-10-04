@@ -20,16 +20,17 @@ function formatDate(value: string, language: "en" | "hi") {
 export function AccountManagement({
   email,
   hasOAuthIdentity,
-  hasEmailIdentity,
+  canChangePassword,
   deletion,
 }: {
   email: string;
   hasOAuthIdentity: boolean;
-  hasEmailIdentity: boolean;
+  canChangePassword: boolean;
   deletion: Deletion | null;
 }) {
   const { language } = useLanguage();
   const t = copy[language].account;
+  const dashboardCopy = copy[language].dashboard;
   const router = useRouter();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -39,6 +40,17 @@ export function AccountManagement({
   const [deletionBusy, setDeletionBusy] = useState(false);
   const [exportBusy, setExportBusy] = useState(false);
   const [exportMessage, setExportMessage] = useState("");
+  const [signingOut, setSigningOut] = useState(false);
+
+  async function signOut() {
+    if (signingOut) return;
+    setSigningOut(true);
+    try {
+      await createClient().auth.signOut();
+    } finally {
+      window.location.assign("/login");
+    }
+  }
 
   async function changePassword() {
     setPasswordMessage("");
@@ -187,6 +199,15 @@ export function AccountManagement({
           <span className={tw("panel-kicker")}>{t.accountSection}</span>
           <h2>{email}</h2>
           <p>{hasOAuthIdentity ? t.oauthNote : t.emailNote}</p>
+          <button
+            type="button"
+            className={tw("button button-light account-signout")}
+            onClick={signOut}
+            disabled={signingOut}
+          >
+            <Icon name="logout" size={15} />
+            {signingOut ? copy[language].common.loading : dashboardCopy.signOut}
+          </button>
         </div>
       </section>
 
@@ -203,7 +224,7 @@ export function AccountManagement({
         </div>
       </section>
 
-      {hasEmailIdentity || !hasOAuthIdentity ? (
+      {canChangePassword ? (
         <section className={tw("account-card")}>
           <div className={tw("account-card__body")}>
             <span className={tw("panel-kicker")}>{t.passwordEyebrow}</span>
