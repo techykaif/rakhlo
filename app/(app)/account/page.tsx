@@ -22,8 +22,9 @@ export default async function AccountPage() {
       : null;
   const hasOAuthIdentity = identities.some((identity) => identity.provider !== "email" && identity.provider !== "phone");
   const canChangePassword =
-    primaryProvider === "email" ||
-    (primaryProvider === null && identities.some((identity) => identity.provider === "email"));
+    !hasOAuthIdentity &&
+    (primaryProvider === "email" ||
+      (primaryProvider === null && identities.some((identity) => identity.provider === "email")));
 
   return (
     <AccountManagement
