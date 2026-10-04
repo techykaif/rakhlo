@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -32,7 +33,16 @@ export function DashboardContent({
   const t = copy[language].dashboard;
   const p = copy[language].purchases;
   const locale = language === "hi" ? "hi-IN" : "en-IN";
-  const greetingKey = getDashboardGreeting(new Date().getHours());
+  const [localHour, setLocalHour] = useState(() => new Date().getHours());
+
+  useEffect(() => {
+    const updateHour = () => setLocalHour(new Date().getHours());
+    updateHour();
+    const intervalId = window.setInterval(updateHour, 60_000);
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  const greetingKey = getDashboardGreeting(localHour);
   const greeting = {
     morning: t.greetingMorning,
     afternoon: t.greetingAfternoon,
@@ -61,7 +71,7 @@ export function DashboardContent({
       {recentPurchases.length === 0 ? <DashboardOnboarding userId={userId} /> : null}
       <header className={tw("app-header dashboard-header")}>
         <div>
-          <span className={tw("app-kicker")}>{greeting}</span>
+          <span className={tw("app-kicker")} suppressHydrationWarning>{greeting}</span>
           <h1>{t.home}</h1>
           <p className={tw("dashboard-header__subtitle")}>{t.homeSubtitle}</p>
         </div>
