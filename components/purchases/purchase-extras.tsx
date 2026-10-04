@@ -574,9 +574,7 @@ export function PurchaseExtras({
             <strong>{t.noDetails}</strong>
             <p>{t.noDetailsText}</p>
           </div>
-          <button type="button" className={tw("button button-dark")} onClick={openManager}>
-            {t.addDetails}
-          </button>
+
         </div>
       ) : null}
 
