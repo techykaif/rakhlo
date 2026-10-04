@@ -12,12 +12,14 @@ export async function GET(_request: Request, context: Context) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
+  const userId = claims.claims.sub;
   const { id } = await context.params;
 
   const { data: document, error } = await supabase
     .from("documents")
     .select("id,storage_path")
     .eq("id", id)
+    .eq("user_id", userId)
     .maybeSingle();
 
   if (error) {
