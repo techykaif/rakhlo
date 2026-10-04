@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_deletion_requests: {
+        Row: {
+          created_at: string
+          processing_at: string | null
+          requested_at: string
+          scheduled_for: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          processing_at?: string | null
+          requested_at?: string
+          scheduled_for: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          processing_at?: string | null
+          requested_at?: string
+          scheduled_for?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -81,6 +108,63 @@ export type Database = {
             referencedColumns: ["id", "user_id"]
           },
         ]
+      }
+      notification_preferences: {
+        Row: {
+          enabled: boolean
+          quiet_end: string | null
+          quiet_start: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          enabled?: boolean
+          quiet_end?: string | null
+          quiet_start?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          enabled?: boolean
+          quiet_end?: string | null
+          quiet_start?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notification_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          last_used_at: string | null
+          p256dh: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          last_used_at?: string | null
+          p256dh: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          last_used_at?: string | null
+          p256dh?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       payments: {
         Row: {
@@ -192,24 +276,6 @@ export type Database = {
           },
         ]
       }
-      notification_preferences: {
-        Row: { enabled: boolean; quiet_end: string | null; quiet_start: string | null; updated_at: string; user_id: string };
-        Insert: { enabled?: boolean; quiet_end?: string | null; quiet_start?: string | null; updated_at?: string; user_id: string };
-        Update: { enabled?: boolean; quiet_end?: string | null; quiet_start?: string | null; updated_at?: string; user_id?: string };
-        Relationships: [];
-      }
-      notification_subscriptions: {
-        Row: { auth: string; created_at: string; endpoint: string; id: string; last_used_at: string | null; p256dh: string; user_agent: string | null; user_id: string };
-        Insert: { auth: string; created_at?: string; endpoint: string; id?: string; last_used_at?: string | null; p256dh: string; user_agent?: string | null; user_id?: string };
-        Update: { auth?: string; created_at?: string; endpoint?: string; id?: string; last_used_at?: string | null; p256dh?: string; user_agent?: string | null; user_id?: string };
-        Relationships: [];
-      }
-      reminder_deliveries: {
-        Row: { created_at: string; delivered_at: string | null; due_at: string; failed_at: string | null; failure_reason: string | null; id: string; offset_days: number; reminder_id: string; scheduled_for: string; user_id: string };
-        Insert: { created_at?: string; delivered_at?: string | null; due_at: string; failed_at?: string | null; failure_reason?: string | null; id?: string; offset_days: number; reminder_id: string; scheduled_for: string; user_id: string };
-        Update: { created_at?: string; delivered_at?: string | null; due_at?: string; failed_at?: string | null; failure_reason?: string | null; id?: string; offset_days?: number; reminder_id?: string; scheduled_for?: string; user_id?: string };
-        Relationships: [];
-      }
       purchases: {
         Row: {
           amount: number
@@ -218,12 +284,12 @@ export type Database = {
           currency: string
           id: string
           notes: string | null
+          purchase_date: string
+          quantity: number
           return_end_date: string | null
           return_note: string | null
           return_source: string | null
           return_start_date: string | null
-          purchase_date: string
-          quantity: number
           seller_name: string | null
           status: string
           title: string
@@ -237,12 +303,12 @@ export type Database = {
           currency?: string
           id?: string
           notes?: string | null
+          purchase_date: string
+          quantity?: number
           return_end_date?: string | null
           return_note?: string | null
           return_source?: string | null
           return_start_date?: string | null
-          purchase_date: string
-          quantity?: number
           seller_name?: string | null
           status?: string
           title: string
@@ -256,12 +322,12 @@ export type Database = {
           currency?: string
           id?: string
           notes?: string | null
+          purchase_date?: string
+          quantity?: number
           return_end_date?: string | null
           return_note?: string | null
           return_source?: string | null
           return_start_date?: string | null
-          purchase_date?: string
-          quantity?: number
           seller_name?: string | null
           status?: string
           title?: string
@@ -275,6 +341,56 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "categories"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminder_deliveries: {
+        Row: {
+          claimed_at: string | null
+          created_at: string
+          delivered_at: string | null
+          due_at: string
+          failed_at: string | null
+          failure_reason: string | null
+          id: string
+          offset_days: number
+          reminder_id: string
+          scheduled_for: string
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          due_at: string
+          failed_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          offset_days: number
+          reminder_id: string
+          scheduled_for: string
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          due_at?: string
+          failed_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          offset_days?: number
+          reminder_id?: string
+          scheduled_for?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_deliveries_reminder_owner_fkey"
+            columns: ["reminder_id", "user_id"]
+            isOneToOne: false
+            referencedRelation: "reminders"
+            referencedColumns: ["id", "user_id"]
           },
         ]
       }
@@ -339,7 +455,7 @@ export type Database = {
             referencedColumns: ["id", "user_id"]
           },
           {
-            foreignKeyName: "reminders_warranty_id_user_id_fkey"
+            foreignKeyName: "reminders_warranty_id_user_fkey"
             columns: ["warranty_id", "user_id"]
             isOneToOne: false
             referencedRelation: "warranties"
