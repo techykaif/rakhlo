@@ -21,7 +21,7 @@ describe("landing page", () => {
   it("switches the public page language", () => {
     render(
       <LanguageProvider>
-        <HomePage />
+        <LandingPage authenticated={false} />
       </LanguageProvider>,
     );
 
