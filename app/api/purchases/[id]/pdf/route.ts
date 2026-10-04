@@ -1,7 +1,8 @@
 import { createRequire } from "node:module";
 import { readFile } from "node:fs/promises";
 import { NextResponse } from "next/server";
-import { PDFDocument, PDFFont, PDFPage, rgb } from "pdf-lib";
+import { PDFDocument, rgb } from "pdf-lib";
+import type { PDFFont, PDFPage } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { createClient } from "@/lib/supabase/server";
 import {
