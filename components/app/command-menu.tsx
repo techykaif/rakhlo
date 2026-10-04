@@ -185,16 +185,22 @@ export function CommandMenu({ language }: { language: Language }) {
 
       {open ? (
         <>
-          <div
+          <button
+            type="button"
             className={tw("command-dismiss")}
-            aria-hidden="true"
-            onPointerDown={() => setOpen(false)}
+            aria-label={language === "hi" ? "खोज बंद करें" : "Close search"}
+            onPointerDown={(event) => {
+              event.preventDefault();
+              setOpen(false);
+            }}
+            onClick={() => setOpen(false)}
           />
           <div
             className={tw("command-dialog")}
             role="dialog"
             aria-modal="true"
             aria-label={t.searchOrJump}
+            onPointerDown={(event) => event.stopPropagation()}
           >
             <div className={tw("command-input-wrap")}>
               <Icon name="search" size={16} />
