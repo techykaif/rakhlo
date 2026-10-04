@@ -40,39 +40,76 @@ export function CommandMenu({ language }: { language: Language }) {
       setSearchingPurchases(false);
       return;
     }
+
     const controller = new AbortController();
     const timeout = window.setTimeout(async () => {
       setSearchingPurchases(true);
       try {
-        const response = await fetch("/api/purchases?q=" + encodeURIComponent(normalized.slice(0, 80)), {
-          signal: controller.signal, headers: { Accept: "application/json" }, cache: "no-store",
-        });
+        const response = await fetch(
+          "/api/purchases?q=" + encodeURIComponent(normalized.slice(0, 80)),
+          { signal: controller.signal, headers: { Accept: "application/json" }, cache: "no-store" },
+        );
         if (!response.ok) throw new Error("search_failed");
-        const payload = (await response.json()) as { purchases?: Array<{ id: string; title: string; purchase_date: string; seller_name: string | null }> };
-        const formatter = new Intl.DateTimeFormat(language === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
-        setPurchaseResults((payload.purchases ?? []).slice(0, 6).map((purchase) => ({
-          id: "purchase:" + purchase.id, label: purchase.title, href: "/purchases/" + purchase.id, icon: "purchase" as const,
-          meta: [formatter.format(new Date(purchase.purchase_date + "T00:00:00Z")), purchase.seller_name].filter(Boolean).join(" · "),
-        })));
+
+        const payload = (await response.json()) as {
+          purchases?: Array<{
+            id: string;
+            title: string;
+            purchase_date: string;
+            seller_name: string | null;
+          }>;
+        };
+
+        const formatter = new Intl.DateTimeFormat(
+          language === "hi" ? "hi-IN" : "en-IN",
+          { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" },
+        );
+
+        setPurchaseResults(
+          (payload.purchases ?? []).slice(0, 6).map((purchase) => ({
+            id: "purchase:" + purchase.id,
+            label: purchase.title,
+            href: "/purchases/" + purchase.id,
+            icon: "purchase" as const,
+            meta: [
+              formatter.format(new Date(purchase.purchase_date + "T00:00:00Z")),
+              purchase.seller_name,
+            ].filter(Boolean).join(" · "),
+          })),
+        );
       } catch (error) {
-        if (!(error instanceof DOMException && error.name === "AbortError")) setPurchaseResults([]);
+        if (!(error instanceof DOMException && error.name === "AbortError")) {
+          setPurchaseResults([]);
+        }
       } finally {
         if (!controller.signal.aborted) setSearchingPurchases(false);
       }
     }, 160);
-    return () => { controller.abort(); window.clearTimeout(timeout); };
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(timeout);
+    };
   }, [language, query]);
 
   const results = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
-    const actions = normalized ? items.filter((item) => item.label.toLocaleLowerCase().includes(normalized)) : items;
+    const actions = normalized
+      ? items.filter((item) => item.label.toLocaleLowerCase().includes(normalized))
+      : items;
+
     if (!normalized) return actions;
+
     return [
       ...purchaseResults,
       {
         id: "search:" + normalized,
-        label: language === "hi" ? `“${query.trim()}” में सभी खरीदारी खोजें` : `Search all purchases for “${query.trim()}”`,
-        href: "/purchases?q=" + encodeURIComponent(query.trim()), icon: "search" as const,
+        label:
+          language === "hi"
+            ? "“" + query.trim() + "” में सभी खरीदारी खोजें"
+            : "Search all purchases for “" + query.trim() + "”",
+        href: "/purchases?q=" + encodeURIComponent(query.trim()),
+        icon: "search" as const,
       },
       ...actions,
     ];
@@ -90,7 +127,7 @@ export function CommandMenu({ language }: { language: Language }) {
 
       if (event.key === "ArrowDown") {
         event.preventDefault();
-        setSelectedIndex((current) => Math.min(current + 1, results.length - 1));
+        setSelectedIndex((current) => Math.min(current + 1, Math.max(results.length - 1, 0)));
       }
 
       if (event.key === "ArrowUp") {
@@ -110,7 +147,7 @@ export function CommandMenu({ language }: { language: Language }) {
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open, results, selectedIndex]);
+  }, [open, results, searchingPurchases, selectedIndex]);
 
   useEffect(() => {
     if (open) {
@@ -132,7 +169,7 @@ export function CommandMenu({ language }: { language: Language }) {
   }
 
   return (
-    <>
+    <div className={tw("command-root")}>
       <button
         type="button"
         className={tw("command-trigger")}
@@ -147,14 +184,18 @@ export function CommandMenu({ language }: { language: Language }) {
       </button>
 
       {open ? (
-        <div
-          className={tw("command-overlay")}
-          role="presentation"
-          onPointerDown={(event) => {
-            if (event.target === event.currentTarget) setOpen(false);
-          }}
-        >
-          <div className={tw("command-dialog")} role="dialog" aria-modal="true" aria-label={t.searchOrJump}>
+        <>
+          <div
+            className={tw("command-dismiss")}
+            aria-hidden="true"
+            onPointerDown={() => setOpen(false)}
+          />
+          <div
+            className={tw("command-dialog")}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.searchOrJump}
+          >
             <div className={tw("command-input-wrap")}>
               <Icon name="search" size={16} />
               <input
@@ -182,7 +223,9 @@ export function CommandMenu({ language }: { language: Language }) {
                     onMouseEnter={() => setSelectedIndex(index)}
                     onClick={() => navigate(item.href)}
                   >
-                    <span className={tw("command-item__icon")}><Icon name={item.icon} size={16} /></span>
+                    <span className={tw("command-item__icon")}>
+                      <Icon name={item.icon} size={16} />
+                    </span>
                     <span className={tw("command-item__content")}>
                       <span className={tw("command-item__label")}>{item.label}</span>
                       {item.meta ? <span className={tw("command-item__meta")}>{item.meta}</span> : null}
@@ -201,8 +244,8 @@ export function CommandMenu({ language }: { language: Language }) {
               <span><kbd>ESC</kbd> {language === "hi" ? "बंद करें" : "Close"}</span>
             </div>
           </div>
-        </div>
+        </>
       ) : null}
-    </>
+    </div>
   );
 }

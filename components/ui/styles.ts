@@ -77,11 +77,16 @@ const styles: Record<string, StyleValue> = {
   "landing-nav-auth-placeholder": "block h-10 w-[190px] shrink-0 rounded-xl opacity-0 max-[760px]:w-[105px]",
   "landing-nav-dashboard": "inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#F7F6F1] px-4 text-[11px] font-extrabold text-[#141512] shadow-[0_10px_26px_rgba(0,0,0,0.16)] transition hover:-translate-y-px hover:bg-white hover:shadow-[0_14px_32px_rgba(0,0,0,0.2)] focus-visible:outline-2 focus-visible:outline-[#C8F76A] focus-visible:outline-offset-2",
   "purchase-detail__hero-copy": "min-w-0 flex-1",
-  "command-trigger": "inline-flex h-10 w-full max-w-[320px] min-w-0 items-center justify-between gap-3 rounded-full border border-[#d7d6cf] bg-white/85 px-3.5 text-[11px] font-semibold text-[#6f7068] shadow-[0_4px_14px_rgba(24,24,20,0.045)] backdrop-blur-sm transition-[border-color,box-shadow,background-color,transform] duration-200 ease-out hover:border-[#bbb9b1] hover:bg-white hover:shadow-[0_8px_22px_rgba(24,24,20,0.08)] hover:-translate-y-px focus-visible:border-[#a9aaa3] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8F76A22] max-[760px]:max-w-[190px] max-[420px]:max-w-[170px]",
+  "command-root": "relative w-full max-w-[320px] min-w-0 max-[760px]:max-w-[190px] max-[420px]:max-w-[170px]",
+  "command-trigger": "inline-flex h-10 w-full min-w-0 items-center justify-between gap-3 rounded-full border border-[#d7d6cf] bg-white/85 px-3.5 text-[11px] font-semibold text-[#6f7068] shadow-[0_4px_14px_rgba(24,24,20,0.045)] backdrop-blur-sm transition-[border-color,box-shadow,background-color,transform] duration-200 ease-out hover:border-[#bbb9b1] hover:bg-white hover:shadow-[0_8px_22px_rgba(24,24,20,0.08)] hover:-translate-y-px focus-visible:border-[#a9aaa3] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#C8F76A22]",
+
   "command-trigger__search": "inline-flex min-w-0 items-center gap-2 truncate [&>span]:truncate",
   "command-trigger__label": "",
-  "command-overlay": "fixed inset-0 z-[100] grid place-items-start bg-black/30 px-4 pt-[14vh] backdrop-blur-[2px] animate-[command-overlay-in_180ms_ease-out]",
-  "command-dialog": "w-full max-w-[620px] overflow-hidden rounded-[22px] border border-[#d9d8d1] bg-white shadow-[0_30px_80px_rgba(23,23,19,0.2)] animate-[command-dialog-in_220ms_cubic-bezier(.22,1,.36,1)]",
+  "command-dismiss": "fixed inset-0 z-[100] cursor-default bg-transparent",
+  "command-overlay": "",
+
+  "command-dialog": "absolute left-0 top-[calc(100%+10px)] z-[110] w-[min(620px,calc(100vw-28px))] overflow-hidden rounded-[22px] border border-[#d9d8d1] bg-white shadow-[0_30px_80px_rgba(23,23,19,0.2)] animate-[command-dialog-in_220ms_cubic-bezier(.22,1,.36,1)] max-[520px]:rounded-[18px]",
+
   "command-input-wrap": "flex min-h-14 items-center gap-3 border-b border-[#e6e5de] bg-white px-4 [&_input]:min-w-0 [&_input]:flex-1 [&_input]:border-0 [&_input]:bg-transparent [&_input]:text-sm [&_input]:outline-none [&_input]:ring-0 [&_input]:placeholder:text-[#a0a19a] [&_kbd]:rounded-md [&_kbd]:bg-[#f4f4ef] [&_kbd]:px-1.5 [&_kbd]:py-1 [&_kbd]:text-[9px] [&_kbd]:text-[#8a8b82] max-[520px]:px-3",
   "command-list": "max-h-[380px] overflow-y-auto p-1.5 overscroll-contain max-[520px]:max-h-[58vh] max-[520px]:p-1",
   "command-item": "flex w-full min-w-0 items-center gap-3 rounded-xl border-0 bg-transparent px-3 py-2.5 text-left transition-[background-color,transform] hover:bg-[#f4f4ef] focus-visible:bg-[#f4f4ef] [&.selected]:bg-[#eef5e8] [&.selected]:translate-x-px max-[520px]:gap-2.5 max-[520px]:px-2.5 max-[520px]:py-2.5",
@@ -299,7 +304,7 @@ const styles: Record<string, StyleValue> = {
   "landing-nav-actions": "flex items-center gap-2",
   "landing-login": "hidden px-3 py-2 text-[12px] font-semibold text-[#A5A59D] transition-colors hover:text-[#F7F6F1] sm:inline-flex",
   "landing-nav-cta": "inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#F7F6F1] px-4 text-[11px] font-extrabold text-[#141512] shadow-[0_10px_26px_rgba(0,0,0,0.16)] transition hover:bg-white hover:shadow-[0_14px_32px_rgba(0,0,0,0.2)]",
-  "landing-hero": "border-b border-white/10 bg-[#141512] pt-[106px]",
+  "landing-hero": "border-b border-white/10 bg-[#141512] pt-[34px] max-[900px]:pt-[22px]",
   "landing-hero-inner": "mx-auto grid min-h-[690px] w-[min(1160px,calc(100%-32px))] grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] items-center gap-12 pb-16 lg:gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-8 max-[900px]:pb-10",
   "landing-hero-copy": "relative z-10 max-w-[650px] [&_h1]:m-0 [&_h1]:mt-4 [&_h1]:max-w-[680px] [&_h1]:text-[clamp(48px,6.2vw,84px)] [&_h1]:font-extrabold [&_h1]:leading-[0.95] [&_h1]:tracking-[-0.045em] [&_h1]:text-[#F7F6F1] [&_h1_em]:not-italic [&_h1_em]:text-[#C8F76A] [&_p]:mt-6 [&_p]:max-w-[560px] [&_p]:text-[15px] [&_p]:leading-7 [&_p]:text-[#A2A29A] max-[900px]:max-w-none max-[900px]:[&_h1]:max-w-[720px]",
   "landing-eyebrow": "inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#AAA9A1]",

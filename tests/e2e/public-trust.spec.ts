@@ -1,6 +1,25 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("public trust and support routes", () => {
+
+  test("public pages share the same header and language toggle", async ({ page }) => {
+    await page.goto("/status");
+    const header = page.locator("header").first();
+    await expect(header.getByRole("link", { name: /Why Rakhlo/i })).toBeVisible();
+    await expect(header.getByRole("link", { name: /How it works/i })).toBeVisible();
+    await expect(header.getByRole("link", { name: /Features/i })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Status" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Support" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Open Rakhlo" })).toBeVisible();
+
+    await header.getByRole("button", { name: "हिंदी" }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "hi");
+    await expect(header.getByRole("link", { name: /कैसे काम करता है/i })).toBeVisible();
+
+    await header.getByRole("button", { name: "English" }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  });
+
   test("landing footer exposes product links", async ({ page }) => {
     await page.goto("/");
     const footer = page.locator("footer");
