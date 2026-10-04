@@ -34,7 +34,7 @@ export async function GET(_request: Request, context: Context) {
   const { data: documents, error } = await supabase
     .from("documents")
     .select("id,purchase_id,type,storage_path,filename,mime_type,size_bytes,created_at")
-    .eq("purchase_id", purchaseId)
+    .eq("purchase_id", purchaseId)\n    .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
   if (error) {
