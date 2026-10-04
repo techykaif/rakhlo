@@ -53,6 +53,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           getReturnedAuthErrorMessage(oauthError.message, {
             network: t.authNetworkError,
             googleConfig: t.googleConfig,
+            fallback: t.oauthError,
           }) || t.oauthError,
         );
         setLoading(false);
@@ -105,6 +106,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         if (signInError) {
           const message = getReturnedAuthErrorMessage(signInError.message, {
             network: t.authNetworkError,
+            fallback: t.invalidCredentials,
           });
 
           if (message === t.authNetworkError) {
@@ -133,6 +135,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           getReturnedAuthErrorMessage(signUpError.message, {
             network: t.authNetworkError,
             googleConfig: t.googleConfig,
+            fallback: t.genericError,
           }) || t.genericError,
         );
         return;
