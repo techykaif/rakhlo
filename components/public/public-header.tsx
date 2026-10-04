@@ -71,7 +71,7 @@ export function PublicHeader({ authenticated, isHome = false }: { authenticated:
               </Link>
             </>
           )}
-          <LanguageToggle />
+          <LanguageToggle variant="dark" />
         </div>
       </div>
     </header>
