@@ -22,7 +22,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     await supabase
       .from("account_deletion_requests")
       .delete()
-      .eq("user_id", claims.sub);
+      .eq("user_id", claims.sub)
+      .is("processing_at", null);
   }
 
   return <AppShell email={typeof claims.email === "string" ? claims.email : ""}>{children}</AppShell>;
