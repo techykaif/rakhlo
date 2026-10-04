@@ -28,7 +28,7 @@ It invokes:
 
 `/api/notifications/process`
 
-every 20 minutes and authenticates the request with `CRON_SECRET`.
+every 10 minutes and authenticates the request with `CRON_SECRET`.
 
 Configure these values as Cloudflare Worker secrets/variables:
 
