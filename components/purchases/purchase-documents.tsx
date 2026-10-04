@@ -71,6 +71,7 @@ export function PurchaseDocuments({
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadPhase, setUploadPhase] = useState<"idle" | "uploading" | "success">("idle");
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [showUploader, setShowUploader] = useState(initialDocuments.length === 0);
 
@@ -112,6 +113,7 @@ export function PurchaseDocuments({
     }
 
     setUploading(true);
+    setUploadPhase("uploading");
     setError("");
     setStatus("");
 
@@ -192,8 +194,13 @@ export function PurchaseDocuments({
       setSelectedFile(null);
       if (inputRef.current) inputRef.current.value = "";
       setStatus(t.documentUploaded);
-      setShowUploader(false);
+      setUploadPhase("success");
+      window.setTimeout(() => {
+        setShowUploader(false);
+        setUploadPhase("idle");
+      }, 650);
     } catch {
+      setUploadPhase("idle");
       setError(t.uploadError);
     } finally {
       setUploading(false);
@@ -327,11 +334,38 @@ export function PurchaseDocuments({
               </button>
               <button
                 type="button"
-                className={tw("button button-dark")}
+                className={tw(
+                  uploadPhase === "uploading"
+                    ? "button button-dark purchase-upload-button purchase-upload-button--uploading"
+                    : uploadPhase === "success"
+                      ? "button button-dark purchase-upload-button purchase-upload-button--success"
+                      : "button button-dark purchase-upload-button",
+                )}
                 onClick={upload}
                 disabled={uploading || !selectedFile}
+                aria-live="polite"
               >
-                {uploading ? t.uploading : t.upload}
+                <span className={tw("purchase-upload-button__content")}>
+                  <span className={tw("purchase-upload-button__icon")}>
+                    {uploadPhase === "success" ? (
+                      <Icon name="check" size={14} strokeWidth={2.2} />
+                    ) : (
+                      <Icon name="file" size={14} />
+                    )}
+                  </span>
+                  <span>
+                    {uploadPhase === "success"
+                      ? t.uploadComplete
+                      : uploadPhase === "uploading"
+                        ? t.uploading
+                        : t.upload}
+                  </span>
+                </span>
+                {uploadPhase === "uploading" ? (
+                  <span className={tw("purchase-upload-button__progress")} aria-hidden="true">
+                    <span />
+                  </span>
+                ) : null}
               </button>
             </div>
           </div>
