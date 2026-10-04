@@ -107,13 +107,13 @@ export function CommandMenu({ language }: { language: Language }) {
     <>
       <button
         type="button"
-        className={tw("command-trigger")}
+        className={tw("command-trigger group")}
         onClick={() => setOpen(true)}
         aria-label={t.openCommandMenu}
       >
         <span className={tw("command-trigger__search")}>
           <Icon name="search" size={15} />
-          <span>{t.searchOrJump}</span>
+          <span className={tw("command-trigger__label")}>{t.searchOrJump}</span>
         </span>
         <kbd>⌘K</kbd>
       </button>
