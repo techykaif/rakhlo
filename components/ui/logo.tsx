@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { tw } from "@/components/ui/styles";
 import { BRAND } from "@/lib/brand";
 
 type LogoProps = {
@@ -12,6 +11,26 @@ const markSources = {
   "on-light": "/brand/rakhlo-mark.svg",
   "on-dark": "/brand/rakhlo-mark-light.svg",
   mono: "/brand/rakhlo-mark.svg",
+} as const;
+
+const markClasses = {
+  sm: "inline-flex shrink-0 overflow-hidden rounded-[9px] h-7 w-7",
+  md: "inline-flex shrink-0 overflow-hidden rounded-[10px] h-8 w-8",
+  lg: "inline-flex shrink-0 overflow-hidden rounded-[13px] h-10 w-10",
+  xl: "inline-flex shrink-0 overflow-hidden rounded-[34px] h-40 w-40",
+} as const;
+
+const logoClasses = {
+  sm: "inline-flex items-center gap-2.5 font-extrabold tracking-[-0.02em] text-base",
+  md: "inline-flex items-center gap-2.5 font-extrabold tracking-[-0.02em] text-[19px]",
+  lg: "inline-flex items-center gap-2.5 font-extrabold tracking-[-0.02em] text-[23px]",
+  xl: "inline-flex items-center gap-2.5 font-extrabold tracking-[-0.02em]",
+} as const;
+
+const variantClasses = {
+  "on-light": "text-[#141512]",
+  "on-dark": "text-[#F7F6F1]",
+  mono: "text-[#141512]",
 } as const;
 
 function markPixels(size: LogoProps["size"]) {
@@ -28,7 +47,7 @@ export function RakhloMark({
   const pixels = markPixels(size);
 
   return (
-    <span className={tw(`brand-mark brand-mark--${size}`)} aria-hidden="true">
+    <span className={markClasses[size]} aria-hidden="true">
       <Image
         src={markSources[variant]}
         alt=""
@@ -47,11 +66,11 @@ export function Logo({
 }: LogoProps) {
   return (
     <span
-      className={tw(`brand-logo brand-logo--${size} brand-logo--${variant}`)}
+      className={logoClasses[size] + " " + variantClasses[variant]}
       aria-label={BRAND.name}
     >
       <RakhloMark size={size} variant={variant} />
-      {compact ? null : <span className={tw("brand-logo__name")}>{BRAND.wordmark}</span>}
+      {compact ? null : <span className="leading-none">{BRAND.wordmark}</span>}
     </span>
   );
 }

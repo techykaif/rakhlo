@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { LanguageProvider } from "../components/ui/language-provider";
-import HomePage from "../app/page";
+import LandingPage from "../components/landing/landing-page";
 
 describe("landing page", () => {
   it("renders the Rakhlo core promise and product proof", () => {
     render(
       <LanguageProvider>
-        <HomePage />
+        <LandingPage authenticated={false} />
       </LanguageProvider>,
     );
 
@@ -21,7 +21,7 @@ describe("landing page", () => {
   it("switches the public page language", () => {
     render(
       <LanguageProvider>
-        <HomePage />
+        <LandingPage authenticated={false} />
       </LanguageProvider>,
     );
 

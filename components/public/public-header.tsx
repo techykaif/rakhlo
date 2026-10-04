@@ -1,21 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { BRAND } from "@/lib/brand";
 import { copy } from "@/lib/i18n";
 import { Logo } from "@/components/ui/logo";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Icon } from "@/components/ui/icon";
 import { useLanguage } from "@/components/ui/language-provider";
-import { useLandingAuth } from "@/components/landing/landing-auth";
 
-export function PublicHeader() {
-  const pathname = usePathname();
+export function PublicHeader({ authenticated, isHome = false }: { authenticated: boolean; isHome?: boolean }) {
   const { language } = useLanguage();
   const t = copy[language].landing;
-  const isHome = pathname === "/";
-  const authStatus = useLandingAuth();
+
 
   const sectionHref = (id: string) => (isHome ? "#" + id : "/#" + id);
   const statusLabel = t.status;
@@ -50,9 +46,7 @@ export function PublicHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5">
-          {authStatus === "loading" ? (
-            <span aria-hidden="true" className="h-10 w-[122px] shrink-0 rounded-xl bg-white/8 max-[520px]:w-[96px]" />
-          ) : authStatus === "authenticated" ? (
+          {authenticated ? (
             <Link
               href="/dashboard"
               className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#f7f6f1] px-4 text-[11px] font-extrabold text-[#141512] shadow-[0_10px_26px_rgba(0,0,0,0.16)] transition hover:-translate-y-px hover:bg-white focus-visible:outline-2 focus-visible:outline-[#c8f76a] focus-visible:outline-offset-2 max-[520px]:px-3"
