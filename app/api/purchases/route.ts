@@ -55,7 +55,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const { supabase, userId } = await getAuthenticatedClient();
 
-  if (!supabase) {
+  if (!supabase || !userId) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
 
   const { data, error } = await supabase
     .from("purchases")
-    .insert(validation.data)
+    .insert({ ...validation.data, user_id: userId })
     .select(
       "id,title,purchase_date,amount,currency,seller_name,category_id,quantity,status,notes,created_at,updated_at",
     )
