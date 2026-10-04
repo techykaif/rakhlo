@@ -52,167 +52,6 @@ const typeLabel = (type: string, t: DocumentCopy) => {
 
 function formatSize(bytes: number) {
   if (bytes < 1024 * 1024) return Math.max(1, Math.round(bytes / 1024)) + " KB";
-  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-}
-
-export function PurchaseDocuments({
-  purchaseId,
-  initialDocuments,
-}: {
-  purchaseId: string;
-  initialDocuments: DocumentItem[];
-}) {
-  const { language } = useLanguage();
-  const t = copy[language].purchases;
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [documents, setDocuments] = useState(initialDocuments);
-  const [documentType, setDocumentType] = useState<DocumentType>("receipt");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [status, setStatus] = useState("");
-  const [error, setError] = useState("");
-  const [uploading, setUploading] = useState(false);
-  const [removingId, setRemovingId] = useState<string | null>(null);
-  const [showUploader, setShowUploader] = useState(initialDocuments.length === 0);
-
-  function selectFile(file: File | undefined) {
-    setStatus("");
-    setError("");
-
-    if (!file) {
-      setSelectedFile(null);
-      return;
-    }
-
-    if (file.size <= 0 || file.size > DOCUMENT_MAX_BYTES) {
-      setError(t.uploadError);
-      setSelectedFile(null);
-      return;
-    }
-
-    setSelectedFile(file);
-  }
-
-  function chooseFile() {
-    inputRef.current?.click();
-  }
-
-  function closeUploader() {
-    if (uploading) return;
-    setShowUploader(false);
-    setSelectedFile(null);
-    setError("");
-    setStatus("");
-    if (inputRef.current) inputRef.current.value = "";
-  }
-
-  async function upload() {
-    if (!selectedFile) {
-      setError(t.chooseFile);
-      return;
-    }
-
-    setUploading(true);
-    setError("");
-    setStatus("");
-
-    try {
-      const uploadUrlResponse = await fetch(
-        "/api/purchases/" + purchaseId + "/documents/upload-url",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            filename: selectedFile.name,
-            mime_type: selectedFile.type,
-            size_bytes: selectedFile.size,
-            type: documentType,
-          }),
-        },
-      );
-
-      const uploadUrlPayload = await uploadUrlResponse.json().catch(() => ({}));
-
-      if (!uploadUrlResponse.ok) {
-        setError(typeof uploadUrlPayload.error === "string" ? uploadUrlPayload.error : t.uploadError);
-        return;
-      }
-
-      const { path, token } = uploadUrlPayload as { path: string; token: string };
-      const supabase = createClient();
-      const { error: uploadError } = await supabase.storage
-        .from("purchase-documents")
-        .uploadToSignedUrl(path, token, selectedFile);
-
-      if (uploadError) {
-        setError(t.uploadError);
-        return;
-      }
-
-      const finalizeResponse = await fetch(
-        "/api/purchases/" + purchaseId + "/documents",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            path,
-            filename: selectedFile.name,
-            mime_type: selectedFile.type,
-            size_bytes: selectedFile.size,
-            type: documentType,
-          }),
-        },
-      );
-
-      const finalizePayload = await finalizeResponse.json().catch(() => ({}));
-
-      if (!finalizeResponse.ok) {
-        setError(typeof finalizePayload.error === "string" ? finalizePayload.error : t.uploadError);
-        return;
-      }
-
-      if (finalizePayload.document) {
-        setDocuments((current) => [finalizePayload.document, ...current]);
-      }
-
-      setSelectedFile(null);
-      if (inputRef.current) inputRef.current.value = "";
-      setStatus(t.documentUploaded);
-      setShowUploader(false);
-    } catch {
-      setError(t.uploadError);
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  async function remove(id: string) {
-    if (!window.confirm(t.deleteDocumentConfirm)) return;
-
-    setRemovingId(id);
-    setError("");
-    setStatus("");
-
-    try {
-      const response = await fetch("/api/documents/" + id, { method: "DELETE" });
-
-      if (!response.ok) {
-        const payload = await response.json().catch(() => ({}));
-        setError(typeof payload.error === "string" ? payload.error : t.uploadError);
-        return;
-      }
-
-      setDocuments((current) => {
-        const next = current.filter((document) => document.id !== id);
-        if (next.length === 0) setShowUploader(true);
-        return next;
-      });
-    } catch {
-      setError(t.uploadError);
-    } finally {
-      setRemovingId(null);
-    }
-  }
-
   return (
     <section className={tw("purchase-documents")}>
       <div className={tw("purchase-documents__header")}>
@@ -235,7 +74,6 @@ export function PurchaseDocuments({
           </button>
         ) : null}
       </div>
-      ) : null}
 
       {!showUploader && status ? (
         <p className={tw("document-status")} role="status">
@@ -244,101 +82,105 @@ export function PurchaseDocuments({
       ) : null}
 
       {showUploader ? (
-      <div className={tw("purchase-documents__uploader")}>
-        <div className={tw("purchase-documents__controls")}>
-          <label>
-            <span>{t.documentType}</span>
-            <Select
-              value={documentType}
-              onChange={(value) => setDocumentType(value as DocumentType)}
-              ariaLabel={t.documentType}
-              disabled={uploading}
-              options={DOCUMENT_TYPES.map((type) => ({
-                value: type,
-                label: typeLabel(type, t),
-              }))}
-            />
-          </label>
+        <div className={tw("purchase-documents__uploader")}>
+          <div className={tw("purchase-documents__controls")}>
+            <label>
+              <span>{t.documentType}</span>
+              <Select
+                value={documentType}
+                onChange={(value) => setDocumentType(value as DocumentType)}
+                ariaLabel={t.documentType}
+                disabled={uploading}
+                options={DOCUMENT_TYPES.map((type) => ({
+                  value: type,
+                  label: typeLabel(type, t),
+                }))}
+              />
+            </label>
 
-          <div className={tw("purchase-documents__file-field")}>
-            <span>{t.chooseFile}</span>
-            <button
-              type="button"
-              className={tw(
-                selectedFile
-                  ? "purchase-documents__choose purchase-documents__choose--selected"
-                  : "purchase-documents__choose",
-              )}
-              onClick={chooseFile}
-              disabled={uploading}
-            >
-              <span className={tw("purchase-documents__choose-copy")}>
-                <strong>{selectedFile ? selectedFile.name : t.chooseFile}</strong>
-                <small>
-                  {selectedFile ? formatSize(selectedFile.size) : t.supportedFiles}
-                </small>
-              </span>
-              <Icon name="file" size={16} />
-            </button>
-            <input
-              ref={inputRef}
-              className={tw("purchase-documents__file-input")}
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"
-              onChange={(event) => selectFile(event.target.files?.[0])}
-              disabled={uploading}
-              aria-label={t.chooseFile}
-            />
+            <div className={tw("purchase-documents__file-field")}>
+              <span>{t.chooseFile}</span>
+              <button
+                type="button"
+                className={tw(
+                  selectedFile
+                    ? "purchase-documents__choose purchase-documents__choose--selected"
+                    : "purchase-documents__choose",
+                )}
+                onClick={chooseFile}
+                disabled={uploading}
+              >
+                <span className={tw("purchase-documents__choose-copy")}>
+                  <strong>{selectedFile ? selectedFile.name : t.chooseFile}</strong>
+                  <small>
+                    {selectedFile ? formatSize(selectedFile.size) : t.supportedFiles}
+                  </small>
+                </span>
+                <Icon name="file" size={16} />
+              </button>
+              <input
+                ref={inputRef}
+                className={tw("purchase-documents__file-input")}
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"
+                onChange={(event) => selectFile(event.target.files?.[0])}
+                disabled={uploading}
+                aria-label={t.chooseFile}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className={tw("purchase-documents__upload-row")}>
-          <span>
-            {selectedFile ? t.fileReady : t.fileNotSelected}
-          </span>
-          <div className={tw("purchase-documents__upload-actions")}>
-            <button
-              type="button"
-              className={tw("button button-light")}
-              onClick={closeUploader}
-              disabled={uploading}
-            >
-              {copy[language].common.cancel}
-            </button>
-            <button
-            type="button"
-            className={tw("button button-dark")}
-            onClick={upload}
-            disabled={uploading || !selectedFile}
-          >
-            {uploading ? t.uploading : t.upload}
-            </button>
+          <div className={tw("purchase-documents__upload-row")}>
+            <span>{selectedFile ? t.fileReady : t.fileNotSelected}</span>
+            <div className={tw("purchase-documents__upload-actions")}>
+              <button
+                type="button"
+                className={tw("button button-light")}
+                onClick={closeUploader}
+                disabled={uploading}
+              >
+                {copy[language].common.cancel}
+              </button>
+              <button
+                type="button"
+                className={tw("button button-dark")}
+                onClick={upload}
+                disabled={uploading || !selectedFile}
+              >
+                {uploading ? t.uploading : t.upload}
+              </button>
+            </div>
           </div>
+
+          {error ? (
+            <p className={tw("document-error")} role="alert">
+              {error}
+            </p>
+          ) : null}
         </div>
-
-        {status ? <p className={tw("document-status")} role="status">{status}</p> : null}
-        {error ? <p className={tw("document-error")} role="alert">{error}</p> : null}
-      </div>
-
-      {!showUploader && status ? (
-        <p className={tw("document-status")} role="status">
-          {status}
-        </p>
       ) : null}
 
       {documents.length ? (
         <div className={tw("purchase-document-list")}>
           {documents.map((document) => (
             <div className={tw("purchase-document-row")} key={document.id}>
-              <div className={tw("purchase-document-row__icon")} aria-hidden="true">
+              <div
+                className={tw("purchase-document-row__icon")}
+                aria-hidden="true"
+              >
                 {document.type === "product_photo" ? "IMG" : "DOC"}
               </div>
               <div className={tw("purchase-document-row__body")}>
                 <strong title={document.filename}>{document.filename}</strong>
-                <span>{typeLabel(document.type, t)} · {formatSize(document.size_bytes)}</span>
+                <span>
+                  {typeLabel(document.type, t)} · {formatSize(document.size_bytes)}
+                </span>
               </div>
               <div className={tw("purchase-document-row__actions")}>
-                <a className={tw("button button-light")} href={"/api/documents/" + document.id + "/download"}>
+                <a
+                  className={tw("button button-light")}
+                  href={"/api/documents/" + document.id + "/download"}
+                >
                   {t.download}
                 </a>
                 <button
@@ -347,15 +189,17 @@ export function PurchaseDocuments({
                   onClick={() => remove(document.id)}
                   disabled={removingId === document.id}
                 >
-                  {removingId === document.id ? t.removingDocument : t.removeDocument}
+                  {removingId === document.id
+                    ? t.removingDocument
+                    : t.removeDocument}
                 </button>
               </div>
             </div>
           ))}
         </div>
-      ) : (
+      ) : !showUploader ? (
         <p className={tw("purchase-documents__empty")}>{t.noDocuments}</p>
-      )}
+      ) : null}
     </section>
   );
 }
