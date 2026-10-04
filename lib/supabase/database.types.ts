@@ -339,11 +339,11 @@ export type Database = {
             referencedColumns: ["id", "user_id"]
           },
           {
-            foreignKeyName: "reminders_warranty_id_fkey"
-            columns: ["warranty_id"]
+            foreignKeyName: "reminders_warranty_id_user_id_fkey"
+            columns: ["warranty_id", "user_id"]
             isOneToOne: false
             referencedRelation: "warranties"
-            referencedColumns: ["id"]
+            referencedColumns: ["id", "user_id"]
           },
         ]
       }
