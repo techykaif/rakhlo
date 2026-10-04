@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { addOneCalendarYear } from "@/lib/purchases/warranty";
+import { parseIndiaDateTimeInput } from "@/lib/purchases/payment-time";
 
 type Context = { params: Promise<{ id: string }> };
 
@@ -77,14 +78,18 @@ export async function POST(request: Request, context: Context) {
   if (kind === "payment") {
     const paymentAmount = amount(value.amount);
     const method = value.method;
+    const paidAt = parseIndiaDateTimeInput(value.paid_at);
     if (paymentAmount === null || !["cash", "upi", "card", "bank_transfer", "other"].includes(String(method))) {
       return NextResponse.json({ error: "Payment amount and method are required." }, { status: 422 });
+    }
+    if (paidAt === undefined) {
+      return NextResponse.json({ error: "Payment date and time are invalid." }, { status: 422 });
     }
     const { data, error } = await a.supabase.from("payments").insert({
       purchase_id: purchaseId,
       amount: paymentAmount,
       method: String(method),
-      paid_at: typeof value.paid_at === "string" ? value.paid_at : null,
+      paid_at: paidAt,
       reference: text(value.reference, 200),
       notes: text(value.notes, 5000),
       document_id: typeof value.document_id === "string" ? value.document_id : null,
@@ -146,10 +151,15 @@ export async function PATCH(request: Request, context: Context) {
   }
 
   if (value.kind === "payment") {
+    const paidAt = parseIndiaDateTimeInput(value.paid_at);
+    if (paidAt === undefined) {
+      return NextResponse.json({ error: "Payment date and time are invalid." }, { status: 422 });
+    }
+
     const { data, error } = await a.supabase.from("payments").update({
       amount: amount(value.amount) ?? undefined,
       method: String(value.method),
-      paid_at: typeof value.paid_at === "string" ? value.paid_at : null,
+      paid_at: paidAt,
       reference: text(value.reference, 200),
       notes: text(value.notes, 5000),
       document_id: typeof value.document_id === "string" ? value.document_id : null,
