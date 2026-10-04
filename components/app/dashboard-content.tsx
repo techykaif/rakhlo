@@ -33,7 +33,12 @@ export function DashboardContent({
   const p = copy[language].purchases;
   const locale = language === "hi" ? "hi-IN" : "en-IN";
   const greetingKey = getDashboardGreeting(new Date().getHours());
-  const greeting = t[`greeting${greetingKey.charAt(0).toUpperCase()}${greetingKey.slice(1)}` as keyof typeof t];
+  const greeting = {
+    morning: t.greetingMorning,
+    afternoon: t.greetingAfternoon,
+    evening: t.greetingEvening,
+    night: t.greetingNight,
+  }[greetingKey];
 
   const dateFormatter = new Intl.DateTimeFormat(locale, {
     day: "numeric",
