@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   DOCUMENT_MAX_BYTES,
+  DOCUMENT_MAX_COUNT,
+  DOCUMENT_MAX_TOTAL_BYTES,
   validateDocumentUpload,
 } from "../lib/documents/validation";
 
@@ -34,6 +36,11 @@ describe("document upload validation", () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it("defines the purchase attachment limits", () => {
+    expect(DOCUMENT_MAX_COUNT).toBe(5);
+    expect(DOCUMENT_MAX_TOTAL_BYTES).toBe(50 * 1024 * 1024);
   });
 
   it("rejects files above the configured limit", () => {
