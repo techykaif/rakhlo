@@ -144,6 +144,36 @@ describe("PurchaseExtras", () => {
     });
   });
 
+
+  it("keeps text fields editable and updates the floating label state", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        new Response(
+          JSON.stringify({ items: [], payments: [], warranties: [] }),
+          { status: 200, headers: { "Content-Type": "application/json" } },
+        ),
+      ),
+    );
+
+    render(
+      <LanguageProvider>
+        <PurchaseExtras purchaseId="purchase-1" purchaseDate="2026-10-03" />
+      </LanguageProvider>,
+    );
+
+    fireEvent.click(await screen.findByRole("button", { name: "Add details" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add item" }));
+
+    const itemName = screen.getByRole("textbox", { name: "Item name" });
+    fireEvent.change(itemName, { target: { value: "Samsung Refrigerator" } });
+
+    expect(itemName).toHaveValue("Samsung Refrigerator");
+    expect(screen.getByText("Item name", { selector: "span" })).toHaveClass(
+      "purchase-floating-field__label--floating",
+    );
+  });
+
   it("defaults warranty coverage to one year from the purchase date", async () => {
     vi.stubGlobal(
       "fetch",
