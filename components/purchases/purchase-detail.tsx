@@ -107,6 +107,7 @@ export function PurchaseDetail({
 
       <PurchaseExtras
         purchaseId={purchase.id}
+        purchaseDate={purchase.purchase_date}
         returnStart={purchase.return_start_date}
         returnEnd={purchase.return_end_date}
         returnSource={purchase.return_source}

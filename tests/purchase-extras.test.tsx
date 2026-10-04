@@ -8,7 +8,7 @@ describe("PurchaseExtras", () => {
     vi.restoreAllMocks();
   });
 
-  it("does not reuse an edit id from another detail type when saving a new payment", async () => {
+  it("shows only saved details and opens the editor on demand", async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input);
 
@@ -56,13 +56,17 @@ describe("PurchaseExtras", () => {
 
     render(
       <LanguageProvider>
-        <PurchaseExtras purchaseId="purchase-1" />
+        <PurchaseExtras purchaseId="purchase-1" purchaseDate="2026-10-03" />
       </LanguageProvider>,
     );
 
     await screen.findByText("Samsung Refrigerator");
 
+    expect(screen.queryByRole("textbox", { name: "Item name" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Add item" })).toBeTruthy();
+
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add payment" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Amount" }), {
       target: { value: "20000" },
     });
@@ -76,14 +80,12 @@ describe("PurchaseExtras", () => {
     });
 
     expect(
-      fetchMock.mock.calls.some(([, init]) => init?.method === "PATCH"),
+      fetchMock.mock.calls.some(([, request]) => request?.method === "PATCH"),
     ).toBe(false);
   });
 
-  it("saves pending details with the main Save purchase details button", async () => {
+  it("opens a clean add form and keeps the global save action out of the saved state", async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
-
       if (!init || init.method === "GET") {
         return new Response(
           JSON.stringify({ items: [], payments: [], warranties: [] }),
@@ -91,7 +93,7 @@ describe("PurchaseExtras", () => {
         );
       }
 
-      if (init.method === "POST" && url.includes("/extras")) {
+      if (init.method === "POST") {
         return new Response(
           JSON.stringify({
             item: {
@@ -109,23 +111,25 @@ describe("PurchaseExtras", () => {
         );
       }
 
-      throw new Error(`Unexpected request: ${init.method ?? "GET"} ${url}`);
+      throw new Error("Unexpected request.");
     });
 
     vi.stubGlobal("fetch", fetchMock);
 
     render(
       <LanguageProvider>
-        <PurchaseExtras purchaseId="purchase-1" />
+        <PurchaseExtras purchaseId="purchase-1" purchaseDate="2026-10-03" />
       </LanguageProvider>,
     );
 
-    await screen.findByRole("button", { name: "Save purchase details" });
+    await screen.findByRole("button", { name: "Add item" });
+    expect(screen.queryByRole("button", { name: "Save purchase details" })).toBeNull();
 
+    fireEvent.click(screen.getByRole("button", { name: "Add item" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Item name" }), {
       target: { value: "Air Conditioner" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Save purchase details" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save item" }));
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
@@ -136,7 +140,28 @@ describe("PurchaseExtras", () => {
         }),
       );
     });
+  });
 
-    expect(screen.getByRole("status").textContent).toContain("Saved");
+  it("defaults warranty coverage to one year from the purchase date", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        new Response(
+          JSON.stringify({ items: [], payments: [], warranties: [] }),
+          { status: 200, headers: { "Content-Type": "application/json" } },
+        ),
+      ),
+    );
+
+    render(
+      <LanguageProvider>
+        <PurchaseExtras purchaseId="purchase-1" purchaseDate="2026-10-03" />
+      </LanguageProvider>,
+    );
+
+    fireEvent.click(await screen.findByRole("button", { name: "Add warranty" }));
+
+    expect((screen.getByLabelText("Starts") as HTMLInputElement).value).toBe("2026-10-03");
+    expect((screen.getByLabelText("Ends") as HTMLInputElement).value).toBe("2027-10-03");
   });
 });
