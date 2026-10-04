@@ -5,6 +5,7 @@ import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Select } from "@/components/ui/select";
+import { FloatingField } from "@/components/ui/floating-field";
 import type { ReminderInput, ReminderType } from "@/lib/reminders/validation";
 import type { ReminderWithPurchase } from "@/lib/reminders/service";
 
@@ -225,17 +226,16 @@ export function ReminderForm({
             {errors.type ? <small className={tw("reminder-field-error")}>{errors.type}</small> : null}
           </label>
 
-          <label>
-            <span>{t.reminderTitle}</span>
-            <input
+          <div className={tw("reminder-floating-field-with-error")}>
+            <FloatingField
+              label={t.reminderTitle}
               value={form.title}
-              onChange={(event) => update("title", event.target.value)}
-              placeholder={t.titlePlaceholder}
+              onChange={(value) => update("title", value)}
               maxLength={200}
               required
             />
             {errors.title ? <small className={tw("reminder-field-error")}>{errors.title}</small> : null}
-          </label>
+          </div>
         </div>
 
         <label>
