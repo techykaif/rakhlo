@@ -8,17 +8,21 @@ import { Logo } from "@/components/ui/logo";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { Icon } from "@/components/ui/icon";
 import { useLanguage } from "@/components/ui/language-provider";
+import { useLandingAuth } from "@/components/landing/landing-auth";
 
 export function PublicHeader() {
   const pathname = usePathname();
   const { language } = useLanguage();
   const t = copy[language].landing;
   const isHome = pathname === "/";
+  const authStatus = useLandingAuth();
 
   const sectionHref = (id: string) => (isHome ? "#" + id : "/#" + id);
   const statusLabel = language === "hi" ? "स्थिति" : "Status";
   const supportLabel = language === "hi" ? "सहायता" : "Support";
   const openLabel = language === "hi" ? "Rakhlo खोलें" : "Open Rakhlo";
+  const loginLabel = t.login;
+  const getStartedLabel = t.start;
 
   return (
     <header className="border-b border-white/10 bg-[#141512] text-[#f7f6f1]">
@@ -45,14 +49,34 @@ export function PublicHeader() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href="/dashboard"
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#f7f6f1] px-4 text-[11px] font-extrabold text-[#141512] shadow-[0_10px_26px_rgba(0,0,0,0.16)] transition hover:-translate-y-px hover:bg-white focus-visible:outline-2 focus-visible:outline-[#c8f76a] focus-visible:outline-offset-2 max-[520px]:px-3"
-          >
-            <span>{openLabel}</span>
-            <Icon name="arrow-right" size={15} />
-          </Link>
+        <div className="flex items-center gap-1.5">
+          {authStatus === "loading" ? (
+            <span aria-hidden="true" className="h-10 w-[122px] shrink-0 rounded-xl bg-white/8 max-[520px]:w-[96px]" />
+          ) : authStatus === "authenticated" ? (
+            <Link
+              href="/dashboard"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#f7f6f1] px-4 text-[11px] font-extrabold text-[#141512] shadow-[0_10px_26px_rgba(0,0,0,0.16)] transition hover:-translate-y-px hover:bg-white focus-visible:outline-2 focus-visible:outline-[#c8f76a] focus-visible:outline-offset-2 max-[520px]:px-3"
+            >
+              <span>{openLabel}</span>
+              <Icon name="arrow-right" size={15} />
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="hidden min-h-10 items-center justify-center px-2.5 text-[11px] font-extrabold text-[#b5b6ae] transition hover:text-[#f7f6f1] sm:inline-flex"
+              >
+                {loginLabel}
+              </Link>
+              <Link
+                href="/signup"
+                className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#f7f6f1] px-4 text-[11px] font-extrabold text-[#141512] shadow-[0_10px_26px_rgba(0,0,0,0.16)] transition hover:-translate-y-px hover:bg-white focus-visible:outline-2 focus-visible:outline-[#c8f76a] focus-visible:outline-offset-2 max-[520px]:px-3"
+              >
+                <span>{getStartedLabel}</span>
+                <Icon name="arrow-right" size={15} />
+              </Link>
+            </>
+          )}
           <LanguageToggle />
         </div>
       </div>
