@@ -79,28 +79,30 @@ export function PurchaseDetail({
             <strong>{date}</strong>
           </div>
           <div className={tw("detail-cell")}>
-            <span>{t.seller}</span>
-            <strong>{purchase.seller_name || t.sellerUnknown}</strong>
-          </div>
-          <div className={tw("detail-cell")}>
-            <span>{t.category}</span>
-            <strong>{purchase.categories?.name || t.categoryUnknown}</strong>
-          </div>
-          <div className={tw("detail-cell")}>
             <span>{t.quantity}</span>
             <strong>{purchase.quantity}</strong>
           </div>
+          {purchase.seller_name ? (
+            <div className={tw("detail-cell")}>
+              <span>{t.seller}</span>
+              <strong>{purchase.seller_name}</strong>
+            </div>
+          ) : null}
+          {purchase.categories?.name ? (
+            <div className={tw("detail-cell")}>
+              <span>{t.category}</span>
+              <strong>{purchase.categories.name}</strong>
+            </div>
+          ) : null}
         </div>
 
-        <section className={tw("purchase-detail__section")}>
-          <span className={tw("panel-kicker")}>{t.notes}</span>
-          {purchase.notes ? (
+        {purchase.notes ? (
+          <section className={tw("purchase-detail__section")}>
+            <span className={tw("panel-kicker")}>{t.notes}</span>
             <p className={tw("purchase-note")}>{purchase.notes}</p>
-          ) : (
-            <p className={tw("purchase-note purchase-note--empty")}>{t.notesPlaceholder}</p>
-          )}
-          {purchase.notes ? <small>{t.notesHint}</small> : null}
-        </section>
+            <small>{t.notesHint}</small>
+          </section>
+        ) : null}
       </div>
 
       <PurchaseDocuments purchaseId={purchase.id} initialDocuments={documents} />

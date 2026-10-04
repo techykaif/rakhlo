@@ -18,9 +18,11 @@ export function NotificationSettings() {
   const t = copy[language].reminders;
   const [supported, setSupported] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const [permission, setPermission] = useState<NotificationPermission>("default");
   const [enabled, setEnabled] = useState(true);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageTone, setMessageTone] = useState<"info" | "success">("info");
 
   useEffect(() => {
     const available =
@@ -31,10 +33,14 @@ export function NotificationSettings() {
     setSupported(available);
     if (!available) return;
 
+    setPermission(Notification.permission);
+
     fetch("/api/notifications/preferences")
       .then((response) => response.json())
       .then((data) => {
-        if (typeof data.preferences?.enabled === "boolean") setEnabled(data.preferences.enabled);
+        if (typeof data.preferences?.enabled === "boolean") {
+          setEnabled(data.preferences.enabled);
+        }
       })
       .catch(() => undefined);
 
@@ -44,18 +50,43 @@ export function NotificationSettings() {
       .catch(() => undefined);
   }, []);
 
+  function explainBlocked() {
+    setMessageTone("info");
+    setMessage(t.notificationsBlocked);
+  }
+
   async function toggle() {
     setBusy(true);
     setMessage("");
 
     try {
       if (!subscribed) {
-        const permission = await Notification.requestPermission();
-        if (permission !== "granted") throw new Error();
+        const currentPermission = Notification.permission;
+        setPermission(currentPermission);
+
+        if (currentPermission === "denied") {
+          explainBlocked();
+          return;
+        }
+
+        const nextPermission =
+          currentPermission === "granted"
+            ? "granted"
+            : await Notification.requestPermission();
+
+        setPermission(nextPermission);
+
+        if (nextPermission !== "granted") {
+          setMessageTone("info");
+          setMessage(t.notificationsPermissionRequired);
+          return;
+        }
 
         const keyResponse = await fetch("/api/notifications/vapid-public-key");
         const keyPayload = await keyResponse.json();
-        if (!keyResponse.ok || !keyPayload.publicKey) throw new Error();
+        if (!keyResponse.ok || !keyPayload.publicKey) {
+          throw new Error("Notification service unavailable");
+        }
 
         const registration = await navigator.serviceWorker.ready;
         const existing = await registration.pushManager.getSubscription();
@@ -72,36 +103,41 @@ export function NotificationSettings() {
           body: JSON.stringify(subscription.toJSON()),
         });
 
-        if (!response.ok) throw new Error();
+        if (!response.ok) throw new Error("Subscription failed");
 
         setSubscribed(true);
         setEnabled(true);
+        setMessageTone("success");
+        setMessage(t.notificationsEnabledMessage);
       } else {
         const registration = await navigator.serviceWorker.ready;
         const subscription = await registration.pushManager.getSubscription();
 
         if (subscription) {
-          await fetch("/api/notifications/subscribe", {
+          const response = await fetch("/api/notifications/subscribe", {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ endpoint: subscription.endpoint }),
           });
+          if (!response.ok) throw new Error("Unsubscribe failed");
           await subscription.unsubscribe();
         } else {
-          await fetch("/api/notifications/preferences", {
+          const response = await fetch("/api/notifications/preferences", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ enabled: false }),
           });
+          if (!response.ok) throw new Error("Preference update failed");
         }
 
         setSubscribed(false);
         setEnabled(false);
+        setMessageTone("success");
+        setMessage(t.notificationsDisabledMessage);
       }
-
-      setMessage(t.saved);
     } catch {
-      setMessage(t.errors.save);
+      setMessageTone("info");
+      setMessage(t.notificationsEnableError);
     } finally {
       setBusy(false);
     }
@@ -109,25 +145,42 @@ export function NotificationSettings() {
 
   if (!supported) return null;
 
+  const blocked = permission === "denied";
+  const active = enabled && subscribed && permission === "granted";
+
   return (
-    <section className={tw("notification-settings")} aria-labelledby="notification-settings-title">
+    <section className={tw(blocked ? "notification-settings notification-settings--blocked" : "notification-settings")} aria-labelledby="notification-settings-title">
       <div className={tw("notification-settings__icon")} aria-hidden="true">
         <Icon name="bell" size={16} />
       </div>
-      <div>
-        <h2 id="notification-settings-title">{t.notificationsTitle}</h2>
-        <p>{t.notificationsText}</p>
+      <div className={tw("notification-settings__copy")}>
+        <div className={tw("notification-settings__title-row")}>
+          <h2 id="notification-settings-title">{t.notificationsTitle}</h2>
+          <span className={tw(active ? "notification-settings__state" : "notification-settings__state notification-settings__state--off")}>
+            {active ? t.notificationsOn : t.notificationsOff}
+          </span>
+        </div>
+        <p>{blocked ? t.notificationsBlocked : t.notificationsText}</p>
+        {blocked ? (
+          <small className={tw("notification-settings__help")}>
+            {t.notificationsBlockedHelp}
+          </small>
+        ) : null}
       </div>
       <div className={tw("notification-settings__action")}>
-        <span className={tw(enabled && subscribed ? "notification-settings__state" : "notification-settings__state notification-settings__state--off")}>
-          {enabled && subscribed ? t.notificationsOn : t.notificationsOff}
-        </span>
-        <button type="button" className={tw("button button-dark")} onClick={toggle} disabled={busy}>
-          {enabled && subscribed ? t.disableNotifications : t.enableNotifications}
+        <button type="button" className={tw("button button-dark")} onClick={blocked ? explainBlocked : toggle} disabled={busy}>
+          {blocked ? t.notificationsPermissionHelp : active ? t.disableNotifications : t.enableNotifications}
         </button>
       </div>
       {message ? (
-        <p className={tw("notification-settings__message")} role="status">
+        <p
+          className={tw(
+            messageTone === "success"
+              ? "notification-settings__message notification-settings__message--success"
+              : "notification-settings__message",
+          )}
+          role={messageTone === "success" ? "status" : "alert"}
+        >
           {message}
         </p>
       ) : null}

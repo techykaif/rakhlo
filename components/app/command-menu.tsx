@@ -122,7 +122,7 @@ export function CommandMenu({ language }: { language: Language }) {
         <div
           className={tw("command-overlay")}
           role="presentation"
-          onMouseDown={(event) => {
+          onPointerDown={(event) => {
             if (event.target === event.currentTarget) setOpen(false);
           }}
         >
