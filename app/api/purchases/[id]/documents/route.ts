@@ -28,7 +28,7 @@ export async function GET(_request: Request, context: Context) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const { supabase } = auth;
+  const { supabase, userId } = auth;
   const { id: purchaseId } = await context.params;
 
   const { data: documents, error } = await supabase
