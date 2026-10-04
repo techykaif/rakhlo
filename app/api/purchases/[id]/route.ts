@@ -10,7 +10,7 @@ async function getAuthenticatedClient() {
     return null;
   }
 
-  return supabase;
+  return { supabase, userId: data.claims.sub };
 }
 
 async function getId(context: { params: Promise<{ id: string }> }) {
@@ -22,19 +22,19 @@ export async function GET(
   _request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
-  const supabase = await getAuthenticatedClient();
+  const auth = await getAuthenticatedClient();
 
-  if (!supabase) {
+  if (!auth) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const id = await getId(context);
+  const { supabase, userId } = auth;\n  const id = await getId(context);
   const { data, error } = await supabase
     .from("purchases")
     .select(
       "id,title,purchase_date,amount,currency,seller_name,category_id,quantity,status,notes,return_start_date,return_end_date,return_source,return_note,created_at,updated_at,categories(name)",
     )
-    .eq("id", id)
+    .eq("id", id)\n    .eq("user_id", userId)
     .maybeSingle();
 
   if (error) {
