@@ -6,6 +6,7 @@ import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
 import { DashboardOnboarding } from "@/components/app/getting-started-guide";
+import { getDashboardGreeting } from "@/lib/dashboard-greeting";
 
 type Attention = { id: string; title: string; due_at: string; purchase_id: string; purchases: { title: string } | null };
 
@@ -31,6 +32,8 @@ export function DashboardContent({
   const t = copy[language].dashboard;
   const p = copy[language].purchases;
   const locale = language === "hi" ? "hi-IN" : "en-IN";
+  const greetingKey = getDashboardGreeting(new Date().getHours());
+  const greeting = t[`greeting${greetingKey.charAt(0).toUpperCase()}${greetingKey.slice(1)}` as keyof typeof t];
 
   const dateFormatter = new Intl.DateTimeFormat(locale, {
     day: "numeric",
@@ -53,7 +56,7 @@ export function DashboardContent({
       {recentPurchases.length === 0 ? <DashboardOnboarding userId={userId} /> : null}
       <header className={tw("app-header dashboard-header")}>
         <div>
-          <span className={tw("app-kicker")}>{t.greeting}</span>
+          <span className={tw("app-kicker")}>{greeting}</span>
           <h1>{t.home}</h1>
           <p className={tw("dashboard-header__subtitle")}>{t.homeSubtitle}</p>
         </div>
