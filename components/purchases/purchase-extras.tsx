@@ -65,7 +65,6 @@ const labels = {
     start: "Starts",
     end: "Ends",
     provider: "Provider",
-    source: "Source",
     saveWarranty: "Save warranty",
     user: "Added by you",
     document: "From document",
@@ -123,7 +122,6 @@ const labels = {
     start: "शुरू",
     end: "समाप्त",
     provider: "प्रदाता",
-    source: "स्रोत",
     saveWarranty: "वारंटी सेव करें",
     user: "आपने जोड़ा",
     document: "दस्तावेज़ से",
@@ -889,20 +887,6 @@ export function PurchaseExtras({
               }
               placeholder={t.provider}
               aria-label={t.provider}
-            />
-
-            <Select
-              value={warranty.source}
-              onChange={(value) =>
-                setWarranty({ ...warranty, source: value })
-              }
-              ariaLabel={t.source}
-              disabled={saving}
-              options={[
-                { value: "user", label: t.user },
-                { value: "document", label: t.document },
-                { value: "system", label: t.system },
-              ]}
             />
 
             <div className={tw("purchase-extras__form-actions")}>
