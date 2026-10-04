@@ -60,8 +60,8 @@ const styles: Record<string, StyleValue> = {
   "app-topbar__actions": "flex shrink-0 items-center gap-2 max-[420px]:gap-1.5",
   "app-content": "mx-auto w-full max-w-[1180px] px-8 py-6 md:px-8 max-[760px]:px-[14px] max-[760px]:py-[18px] max-[760px]:pb-[calc(84px+env(safe-area-inset-bottom))]",
   "app-nav": "flex flex-col gap-1",
-  "app-nav--mobile": "fixed inset-x-3 bottom-3 z-50 grid grid-cols-5 gap-1 rounded-2xl border border-[#dfded7] bg-white/95 p-1.5 shadow-[0_18px_40px_rgba(23,23,19,0.14)] backdrop-blur md:hidden [&_.app-nav__item]:min-w-0 [&_.app-nav__item]:min-h-12 [&_.app-nav__item]:justify-center [&_.app-nav__item]:gap-0.5 [&_.app-nav__item]:overflow-hidden [&_.app-nav__item]:px-1 [&_.app-nav__item]:py-1 [&_.app-nav__item]:flex-col [&_.app-nav__item]:text-[9px] [&_.app-nav__item_span]:max-w-full [&_.app-nav__item_span]:truncate max-[360px]:inset-x-2 max-[360px]:gap-0.5 max-[760px]:bottom-[calc(12px+env(safe-area-inset-bottom))]",
-  "app-nav__item": "relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[11px] font-bold text-[#86877f] transition hover:bg-[#f5f5f1] hover:text-[#171713] [&.active]:bg-[#171713] [&.active]:text-white",
+  "app-nav--mobile": "fixed inset-x-3 bottom-3 z-50 grid grid-cols-5 gap-1.5 rounded-[20px] border border-[#deddd6] bg-white/96 p-1.5 shadow-[0_18px_45px_rgba(23,23,19,0.16)] backdrop-blur-xl md:hidden [&_.app-nav__item]:min-w-0 [&_.app-nav__item]:min-h-[52px] [&_.app-nav__item]:justify-center [&_.app-nav__item]:gap-1 [&_.app-nav__item]:overflow-hidden [&_.app-nav__item]:px-1.5 [&_.app-nav__item]:py-1.5 [&_.app-nav__item]:flex-col [&_.app-nav__item]:text-[9px] [&_.app-nav__item]:font-bold [&_.app-nav__item]:leading-none [&_.app-nav__item_span]:max-w-full [&_.app-nav__item_span]:truncate [&_.app-nav__item.active]:shadow-[0_7px_18px_rgba(23,23,19,0.18)] [&_.app-nav__item.active_.app-nav__icon]:text-[#C8F76A] [&_.app-nav__icon]:grid [&_.app-nav__icon]:h-6 [&_.app-nav__icon]:w-6 [&_.app-nav__icon]:shrink-0 [&_.app-nav__icon]:place-items-center [&_.app-nav__icon]:rounded-lg [&_.app-nav__icon]:transition-colors [&_.app-nav__label]:max-w-full [&_.app-nav__label]:truncate max-[380px]:gap-1 max-[380px]:p-1 [&_.app-nav__item.active]:min-w-[56px] max-[360px]:inset-x-2 max-[360px]:gap-1 max-[760px]:bottom-[calc(12px+env(safe-area-inset-bottom))] max-[360px]:[&_.app-nav__item:not(.active)_.app-nav__label]:hidden",
+  "app-nav__item": "relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[11px] font-bold text-[#86877f] transition-[background-color,color,transform,box-shadow] duration-150 hover:bg-[#f5f5f1] hover:text-[#171713] active:scale-[0.98] [&.active]:bg-[#171713] [&.active]:text-white",
   "active": "active",
   "app-header": "mb-6 flex items-start justify-between gap-5 [&_h1]:m-0 [&_h1]:text-[clamp(30px,4vw,42px)] [&_h1]:font-extrabold [&_h1]:tracking-normal [&_p]:m-0 max-[760px]:flex-wrap max-[760px]:items-end",
   "dashboard-header": "",
@@ -82,7 +82,7 @@ const styles: Record<string, StyleValue> = {
 
   "command-trigger__search": "inline-flex min-w-0 items-center gap-2 truncate [&>span]:truncate",
   "command-trigger__label": "",
-  "command-dismiss": "fixed inset-0 z-[100] cursor-default bg-transparent",
+  "command-dismiss": "fixed inset-0 z-[100] cursor-default bg-black/[0.02] touch-none",
   "command-overlay": "",
 
   "command-dialog": "absolute left-0 top-[calc(100%+10px)] z-[110] w-[min(620px,calc(100vw-28px))] overflow-hidden rounded-[22px] border border-[#d9d8d1] bg-white shadow-[0_30px_80px_rgba(23,23,19,0.2)] animate-[command-dialog-in_220ms_cubic-bezier(.22,1,.36,1)] max-[760px]:fixed max-[760px]:left-3 max-[760px]:right-3 max-[760px]:top-[64px] max-[760px]:w-auto max-[760px]:max-w-none max-[520px]:rounded-[18px] max-[420px]:left-2 max-[420px]:right-2",
