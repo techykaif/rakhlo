@@ -7,7 +7,7 @@ import { Icon, type IconName } from "@/components/ui/icon";
 import { tw } from "@/components/ui/styles";
 
 const navItems: Array<{
-  key: "home" | "purchases" | "reminders" | "status" | "support" | "addPurchase";
+  key: "home" | "purchases" | "reminders" | "account" | "status" | "support" | "addPurchase";
   href: string;
   icon: IconName;
   mobileOnly?: boolean;
@@ -16,6 +16,7 @@ const navItems: Array<{
   { key: "home", href: "/dashboard", icon: "home" },
   { key: "purchases", href: "/purchases", icon: "purchase" },
   { key: "reminders", href: "/reminders", icon: "bell" },
+  { key: "account", href: "/account", icon: "settings" },
   { key: "status", href: "/status", icon: "calendar", hideOnMobile: true },
   { key: "support", href: "/support", icon: "info", hideOnMobile: true },
   { key: "addPurchase", href: "/purchases/new", icon: "plus", mobileOnly: true },
@@ -51,7 +52,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
               aria-current={active ? "page" : undefined}
             >
               <Icon name={item.icon} size={17} />
-              <span>{item.key === "status" ? "Status" : item.key === "support" ? "Support" : t[item.key]}</span>
+              <span>{item.key === "status" ? "Status" : item.key === "support" ? "Support" : item.key === "account" ? t.account : t[item.key]}</span>
             </Link>
           );
         })}
