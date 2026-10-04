@@ -168,7 +168,12 @@ export function CommandMenu({ language }: { language: Language }) {
             </div>
 
             <div className={tw("command-list")}>
-              {searchingPurchases ? (\n                <div className={tw("command-search-loading")} aria-live="polite">\n                  <span className={tw("command-search-loading__spinner")} aria-hidden="true" />\n                  <span>{language === "hi" ? "आपकी खरीदारी खोज रहे हैं…" : "Searching your purchases…"}</span>\n                </div>\n              ) : results.length ? (
+              {searchingPurchases ? (
+                <div className={tw("command-search-loading")} aria-live="polite">
+                  <span className={tw("command-search-loading__spinner")} aria-hidden="true" />
+                  <span>{language === "hi" ? "आपकी खरीदारी खोज रहे हैं…" : "Searching your purchases…"}</span>
+                </div>
+              ) : results.length ? (
                 results.map((item, index) => (
                   <button
                     type="button"
@@ -178,7 +183,10 @@ export function CommandMenu({ language }: { language: Language }) {
                     onClick={() => navigate(item.href)}
                   >
                     <span className={tw("command-item__icon")}><Icon name={item.icon} size={16} /></span>
-                    <span className={tw("command-item__content")}>\n                      <span className={tw("command-item__label")}>{item.label}</span>\n                      {item.meta ? <span className={tw("command-item__meta")}>{item.meta}</span> : null}\n                    </span>
+                    <span className={tw("command-item__content")}>
+                      <span className={tw("command-item__label")}>{item.label}</span>
+                      {item.meta ? <span className={tw("command-item__meta")}>{item.meta}</span> : null}
+                    </span>
                     <Icon name="chevron-right" size={15} />
                   </button>
                 ))
