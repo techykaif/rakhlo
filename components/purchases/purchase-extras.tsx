@@ -301,7 +301,6 @@ export function PurchaseExtras({
     setMessage("");
     setEditing(null);
     setOpenForm(kind);
-    setFocusedField("");
 
     if (kind === "item") {
       reset("item");
@@ -327,7 +326,6 @@ export function PurchaseExtras({
     setMessage("");
     setEditing({ kind, id });
     setOpenForm(kind);
-    setFocusedField("");
 
     if (kind === "item") {
       const value = items.find((entry) => entry.id === id);
