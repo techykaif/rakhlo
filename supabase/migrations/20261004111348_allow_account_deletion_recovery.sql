@@ -1,0 +1,1 @@
+-- Let an authenticated user cancel a pending deletion during the recovery window.\n\ncreate policy account_deletion_requests_delete\non public.account_deletion_requests for delete to authenticated\nusing (user_id = (select auth.uid()));\n

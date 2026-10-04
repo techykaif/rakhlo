@@ -11,5 +11,20 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     redirect("/login");
   }
 
+  // A successful sign-in during the seven-day deletion window is the recovery action.
+  const { data: pendingDeletion } = await supabase
+    .from("account_deletion_requests")
+    .select("user_id")
+    .eq("user_id", claims.sub)
+    .maybeSingle();
+
+  if (pendingDeletion) {
+    await supabase
+      .from("account_deletion_requests")
+      .delete()
+      .eq("user_id", claims.sub)
+      .is("processing_at", null);
+  }
+
   return <AppShell email={typeof claims.email === "string" ? claims.email : ""}>{children}</AppShell>;
 }

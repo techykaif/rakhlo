@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
 import { sendWebPush } from "@/lib/notifications/web-push";
 
 import { BRAND } from "@/lib/brand";
+
 const DELIVERY_LOOKBACK_MS = 24 * 60 * 60 * 1000;
 const DELIVERY_LOOKAHEAD_MS = 15 * 60 * 1000;
+const DELIVERY_CLAIM_STALE_MS = 15 * 60 * 1000;
+const DELETION_CLAIM_STALE_MS = 30 * 60 * 1000;
+const PURCHASE_DOCUMENTS_BUCKET = "purchase-documents";
 
-function getAdminClient() {
+type AdminClient = SupabaseClient<Database>;
+
+function getAdminClient(): AdminClient {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) throw new Error("Notification worker is not configured.");
@@ -25,6 +32,91 @@ export function shouldProcessScheduledTime(scheduledFor: Date, now: Date) {
   return difference >= -DELIVERY_LOOKAHEAD_MS && difference <= DELIVERY_LOOKBACK_MS;
 }
 
+async function deleteUserStorage(supabase: AdminClient, userId: string) {
+  const paths: string[] = [];
+
+  async function collect(prefix: string, depth: number) {
+    const { data, error } = await supabase.storage
+      .from(PURCHASE_DOCUMENTS_BUCKET)
+      .list(prefix, { limit: 1000, sortBy: { column: "name", order: "asc" } });
+
+    if (error) throw error;
+
+    for (const entry of data ?? []) {
+      const path = prefix ? `${prefix}/${entry.name}` : entry.name;
+      if (entry.id === null && depth < 4) {
+        await collect(path, depth + 1);
+      } else if (entry.id !== null) {
+        paths.push(path);
+      }
+    }
+  }
+
+  await collect(userId, 0);
+
+  for (let index = 0; index < paths.length; index += 1000) {
+    const chunk = paths.slice(index, index + 1000);
+    if (!chunk.length) continue;
+    const { error } = await supabase.storage
+      .from(PURCHASE_DOCUMENTS_BUCKET)
+      .remove(chunk);
+    if (error) throw error;
+  }
+}
+
+async function processAccountDeletions(
+  supabase: AdminClient,
+  now: Date,
+) {
+  const nowIso = now.toISOString();
+  const staleIso = new Date(now.getTime() - DELETION_CLAIM_STALE_MS).toISOString();
+
+  const { data: candidates, error } = await supabase
+    .from("account_deletion_requests")
+    .select("user_id,scheduled_for")
+    .lte("scheduled_for", nowIso)
+    .or(`processing_at.is.null,processing_at.lt.${staleIso}`)
+    .limit(50);
+
+  if (error) throw error;
+
+  let deleted = 0;
+
+  for (const candidate of candidates ?? []) {
+    const { data: claimed, error: claimError } = await supabase
+      .from("account_deletion_requests")
+      .update({ processing_at: nowIso })
+      .eq("user_id", candidate.user_id)
+      .eq("scheduled_for", candidate.scheduled_for)
+      .or(`processing_at.is.null,processing_at.lt.${staleIso}`)
+      .select("user_id")
+      .maybeSingle();
+
+    if (claimError || !claimed) continue;
+
+    try {
+      await deleteUserStorage(supabase, candidate.user_id);
+
+      const { error: deleteError } = await supabase.auth.admin.deleteUser(candidate.user_id);
+      if (deleteError) throw deleteError;
+
+      deleted += 1;
+    } catch (error) {
+      console.error("scheduled account deletion failed", {
+        userId: candidate.user_id,
+        error,
+      });
+
+      await supabase
+        .from("account_deletion_requests")
+        .update({ processing_at: null })
+        .eq("user_id", candidate.user_id);
+    }
+  }
+
+  return deleted;
+}
+
 export async function GET(request: Request) {
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
@@ -33,6 +125,10 @@ export async function GET(request: Request) {
   try {
     const supabase = getAdminClient();
     const now = new Date();
+    const nowIso = now.toISOString();
+    const staleClaimIso = new Date(now.getTime() - DELIVERY_CLAIM_STALE_MS).toISOString();
+
+    const deletedAccounts = await processAccountDeletions(supabase, now);
 
     const { data: reminders, error } = await supabase
       .from("reminders")
@@ -46,6 +142,7 @@ export async function GET(request: Request) {
 
     let sent = 0;
     let failed = 0;
+    let claimedCount = 0;
 
     for (const reminder of reminders ?? []) {
       const offsets = Array.isArray(reminder.reminder_offsets) ? reminder.reminder_offsets : [];
@@ -69,10 +166,22 @@ export async function GET(request: Request) {
             },
             { onConflict: "reminder_id,due_at,offset_days", ignoreDuplicates: false },
           )
-          .select("id,delivered_at")
+          .select("id,delivered_at,claimed_at")
           .single();
 
         if (deliveryError || !delivery || delivery.delivered_at) continue;
+
+        const { data: claimed, error: claimError } = await supabase
+          .from("reminder_deliveries")
+          .update({ claimed_at: nowIso })
+          .eq("id", delivery.id)
+          .is("delivered_at", null)
+          .or(`claimed_at.is.null,claimed_at.lt.${staleClaimIso}`)
+          .select("id")
+          .maybeSingle();
+
+        if (claimError || !claimed) continue;
+        claimedCount += 1;
 
         const { data: preferences } = await supabase
           .from("notification_preferences")
@@ -80,14 +189,20 @@ export async function GET(request: Request) {
           .eq("user_id", reminder.user_id)
           .maybeSingle();
 
-        if (preferences?.enabled === false) continue;
+        if (preferences?.enabled === false) {
+          await supabase.from("reminder_deliveries").update({ claimed_at: null }).eq("id", delivery.id);
+          continue;
+        }
 
         const { data: subscriptions } = await supabase
           .from("notification_subscriptions")
           .select("id,endpoint,p256dh,auth")
           .eq("user_id", reminder.user_id);
 
-        if (!subscriptions?.length) continue;
+        if (!subscriptions?.length) {
+          await supabase.from("reminder_deliveries").update({ claimed_at: null }).eq("id", delivery.id);
+          continue;
+        }
 
         const { data: purchase } = await supabase
           .from("purchases")
@@ -129,18 +244,28 @@ export async function GET(request: Request) {
           const deliveredAt = new Date().toISOString();
           await supabase
             .from("reminder_deliveries")
-            .update({ delivered_at: deliveredAt })
+            .update({ delivered_at: deliveredAt, claimed_at: null })
             .eq("id", delivery.id);
 
           await supabase
             .from("reminders")
             .update({ last_notified_at: deliveredAt })
             .eq("id", reminder.id);
+        } else {
+          await supabase
+            .from("reminder_deliveries")
+            .update({ claimed_at: null })
+            .eq("id", delivery.id);
         }
       }
     }
 
-    return NextResponse.json({ sent, failed });
+    return NextResponse.json({
+      sent,
+      failed,
+      claimed: claimedCount,
+      deletedAccounts,
+    });
   } catch (error) {
     console.error("notification processing failed", error);
     return NextResponse.json({ error: "Notification processing failed." }, { status: 500 });
