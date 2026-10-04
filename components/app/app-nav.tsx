@@ -7,14 +7,14 @@ import { Icon, type IconName } from "@/components/ui/icon";
 import { tw } from "@/components/ui/styles";
 
 const navItems: Array<{
-  key: "home" | "purchases" | "reminders" | "addPurchase";
+  key: "home" | "purchases" | "reminders" | "status" | "support" | "addPurchase";
   href: string;
   icon: IconName;
   mobileOnly?: boolean;
 }> = [
   { key: "home", href: "/dashboard", icon: "home" },
   { key: "purchases", href: "/purchases", icon: "purchase" },
-  { key: "reminders", href: "/reminders", icon: "bell" },
+  { key: "reminders", href: "/reminders", icon: "bell" },\n  { key: "status", href: "/status", icon: "activity" },\n  { key: "support", href: "/support", icon: "help" },
   { key: "addPurchase", href: "/purchases/new", icon: "plus", mobileOnly: true },
 ];
 
