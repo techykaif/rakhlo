@@ -248,6 +248,12 @@ export function PurchaseDocuments({
         {error ? <p className={tw("document-error")} role="alert">{error}</p> : null}
       </div>
 
+      {!showUploader && status ? (
+        <p className={tw("document-status")} role="status">
+          {status}
+        </p>
+      ) : null}
+
       {documents.length ? (
         <div className={tw("purchase-document-list")}>
           {documents.map((document) => (
