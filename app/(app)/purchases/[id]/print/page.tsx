@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { PrintPageButton } from "@/components/purchases/print-page-button";
 
 export const dynamic = "force-dynamic";
 
@@ -76,7 +77,7 @@ export default async function PurchasePrintPage({
   return (
     <main className="print-document">
       <div className="print-toolbar no-print">
-        <button type="button" onClick={() => window.print()} className="print-button">Print / Save PDF</button>
+        <PrintPageButton />
         <span>Use your browser's Print dialog and choose “Save as PDF”.</span>
       </div>
 
