@@ -28,14 +28,13 @@ export async function GET(_request: Request, context: Context) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const { supabase, userId } = auth;
+  const { supabase } = auth;
   const { id: purchaseId } = await context.params;
 
   const { data: documents, error } = await supabase
     .from("documents")
     .select("id,purchase_id,type,storage_path,filename,mime_type,size_bytes,created_at")
     .eq("purchase_id", purchaseId)
-    .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
   if (error) {

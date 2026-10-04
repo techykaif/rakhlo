@@ -47,7 +47,6 @@ export async function POST(request: Request, context: Context) {
     .from("purchases")
     .select("id")
     .eq("id", purchaseId)
-    .eq("user_id", userId)
     .maybeSingle();
 
   if (purchaseError) {

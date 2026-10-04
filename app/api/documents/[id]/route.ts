@@ -12,14 +12,12 @@ export async function DELETE(_request: Request, context: Context) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const userId = claims.claims.sub;
   const { id } = await context.params;
 
   const { data: document, error: documentError } = await supabase
     .from("documents")
     .select("id,storage_path")
     .eq("id", id)
-    .eq("user_id", userId)
     .maybeSingle();
 
   if (documentError) {
@@ -41,8 +39,7 @@ export async function DELETE(_request: Request, context: Context) {
   const { error } = await supabase
     .from("documents")
     .delete()
-    .eq("id", id)
-    .eq("user_id", userId);
+    .eq("id", id);
 
   if (error) {
     return NextResponse.json(

@@ -160,8 +160,6 @@ export default function HomePage() {
             <a href="#why">{t.navWhy}{language === "en" ? " " : " "}{BRAND.name}</a>
             <a href="#how">{t.navHow}</a>
             <a href="#features">{t.navFeatures}</a>
-            <Link href="/status">Status</Link>
-            <Link href="/support">Support</Link>
           </div>
 
           <div className={tw("landing-nav-actions")}>
@@ -341,13 +339,6 @@ export default function HomePage() {
             <a href="#why">{t.navWhy}</a>
             <a href="#how">{t.navHow}</a>
             <a href="#features">{t.navFeatures}</a>
-            <Link href="/status">Status</Link>
-            <Link href="/support">Support</Link>
-            <Link href="/support#feedback">Feedback</Link>
-            <Link href="/guidelines">Guidelines</Link>
-            <Link href="/privacy">Privacy &amp; data</Link>
-            <Link href="/disclaimer">Disclaimer</Link>
-            <Link href="/terms">Terms</Link>
           </div>
         </div>
 
