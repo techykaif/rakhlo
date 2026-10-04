@@ -14,10 +14,10 @@ export function PublicSiteShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#f7f6f2] text-[#171713]">
+    <div className="flex min-h-screen flex-col bg-[#f7f6f2] text-[#171713]">
       <PublicHeader />
 
-      <main>
+      <main className="flex-1">
         <section className="mx-auto w-[min(960px,calc(100%-32px))] py-14 md:py-20">
           <div className="max-w-[820px]">
             <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#8b8c84]">
@@ -37,7 +37,7 @@ export function PublicSiteShell({
         </section>
       </main>
 
-      <footer className="border-t border-[#d9d7cf] bg-[#eeede7]">
+      <footer className="mt-auto border-t border-[#d9d7cf] bg-[#eeede7]">
         <div className="mx-auto grid w-[min(1160px,calc(100%-32px))] gap-10 py-12 md:grid-cols-[1.25fr_0.75fr_0.75fr]">
           <div>
             <Link href="/" aria-label="Rakhlo home">
