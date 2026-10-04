@@ -44,17 +44,20 @@ export function GettingStartedGuide({
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const wasOpenRef = useRef(false);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!open) {
       if (wasOpenRef.current) {
         wasOpenRef.current = false;
-        requestAnimationFrame(() => closeButtonRef.current?.blur());
+        requestAnimationFrame(() => previousFocusRef.current?.focus());
       }
       return;
     }
 
     wasOpenRef.current = true;
+    previousFocusRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
     closeButtonRef.current?.focus();
 
     function onKeyDown(event: KeyboardEvent) {
