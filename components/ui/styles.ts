@@ -383,6 +383,14 @@ const styles: Record<string, StyleValue> = {
   "landing-mobile-nav": "hidden",
   "landing-language-option": "",
 
+  "pdf-preview": "grid gap-5 pb-24",
+  "pdf-preview__header": "flex items-end justify-between gap-6 rounded-[24px] border border-[#deddd6] bg-white p-5 shadow-[0_12px_30px_rgba(20,21,18,0.035)] md:p-6 max-[760px]:flex-col max-[760px]:items-stretch",
+  "pdf-preview__header h1": "",
+  "pdf-preview__actions": "flex shrink-0 gap-2 max-[520px]:grid max-[520px]:grid-cols-2",
+  "pdf-preview__frame": "overflow-hidden rounded-[24px] border border-[#deddd6] bg-[#e8e7e1] shadow-[0_18px_45px_rgba(20,21,18,0.08)]",
+  "pdf-preview__iframe": "block h-[min(78vh,920px)] w-full border-0 bg-white max-[760px]:h-[72vh]",
+  "pdf-preview__hint": "px-1 text-[10px] leading-5 text-[#77786f] max-[760px]:pb-6",
+
   "account-page": "grid gap-5",
   "account-card": "flex gap-4 rounded-[24px] border border-[#deddd6] bg-white p-5 shadow-[0_12px_30px_rgba(20,21,18,0.035)] md:p-6",
   "account-card--danger": "border-[#ead8d8] bg-[#fffafa]",
