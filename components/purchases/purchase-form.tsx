@@ -160,12 +160,12 @@ export function PurchaseForm({
       </div>
 
       <div className={tw("purchase-form-grid")}>
-        <label>
+        <label className={tw("purchase-form-field")}>
           <span>{t.purchaseDate}</span>
           <input type="date" name="purchase_date" value={purchaseDate} onChange={(event) => setPurchaseDate(event.target.value)} required aria-invalid={Boolean(errors.purchase_date)} />
           {errors.purchase_date ? <small className={tw("field-error")}>{errors.purchase_date}</small> : null}
         </label>
-        <label>
+        <label className={tw("purchase-form-field")}>
           <span>{t.amount}</span>
           <div className={tw("money-input")}>
             <span aria-hidden="true">₹</span>
@@ -183,7 +183,7 @@ export function PurchaseForm({
           onChange={setSeller}
           autoComplete="organization"
         />
-        <label>
+        <label className={tw("purchase-form-field")}>
           <span>{t.quantity} <em>{t.optional}</em></span>
           <input type="number" name="quantity" value={quantity} onChange={(event) => setQuantity(event.target.value)} inputMode="decimal" min="0.001" step="0.001" />
           {errors.quantity ? <small className={tw("field-error")}>{errors.quantity}</small> : null}
@@ -191,7 +191,7 @@ export function PurchaseForm({
       </div>
 
       <div className="grid min-w-0 gap-1.5">
-        <label htmlFor="purchase-category">
+        <label className={tw("purchase-form-field")} htmlFor="purchase-category">
           <span>{t.category} <em>{t.optional}</em></span>
         </label>
         <Select
@@ -208,26 +208,27 @@ export function PurchaseForm({
       </div>
 
       <div className={tw("purchase-form-grid")}>
-        <label>
+        <label className={tw("purchase-form-field")}>
           <span>{returnLabels.start} <em>{t.optional}</em></span>
           <input type="date" value={returnStart} onChange={(event) => setReturnStart(event.target.value)} />
         </label>
-        <label>
+        <label className={tw("purchase-form-field")}>
           <span>{returnLabels.end} <em>{t.optional}</em></span>
           <input type="date" value={returnEnd} onChange={(event) => setReturnEnd(event.target.value)} />
           {errors.return_end_date ? <small className={tw("field-error")}>{errors.return_end_date}</small> : null}
         </label>
       </div>
 
-      <FloatingField
-        label={returnLabels.note}
+      <div className={tw("purchase-form__floating-with-error")}>
+        <FloatingField
+          label={returnLabels.note}
         value={returnNote}
         onChange={setReturnNote}
-        maxLength={5000}
-      />
+          maxLength={5000}
+        />
+      </div>
 
-
-      <label>
+      <label className={tw("purchase-form-field")}>
         <span>{language === "hi" ? "स्थिति" : "Status"} <em>{t.optional}</em></span>
         <Select
           value={status}
@@ -242,7 +243,7 @@ export function PurchaseForm({
         />
       </label>
 
-      <label>
+      <label className={tw("purchase-form-field")}>
         <span>{t.notes} <em>{t.optional}</em></span>
         <textarea name="notes" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder={t.notesPlaceholder} rows={5} />
         <small className={tw("field-hint")}>{t.notesHint}</small>
