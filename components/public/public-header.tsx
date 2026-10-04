@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { BRAND } from "@/lib/brand";
 import { copy } from "@/lib/i18n";
 import { Logo } from "@/components/ui/logo";
@@ -10,7 +9,6 @@ import { Icon } from "@/components/ui/icon";
 import { useLanguage } from "@/components/ui/language-provider";
 
 export function PublicHeader({ authenticated, isHome = false }: { authenticated: boolean; isHome?: boolean }) {
-  const pathname = usePathname();
   const { language } = useLanguage();
   const t = copy[language].landing;
 
