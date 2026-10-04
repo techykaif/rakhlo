@@ -46,7 +46,7 @@ export async function POST(request: Request, context: Context) {
   const { data: purchase, error: purchaseError } = await supabase
     .from("purchases")
     .select("id")
-    .eq("id", purchaseId)
+    .eq("id", purchaseId)\n    .eq("user_id", userId)
     .maybeSingle();
 
   if (purchaseError) {
