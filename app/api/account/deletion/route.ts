@@ -61,6 +61,8 @@ export async function POST() {
     return NextResponse.json({ error: "Unable to schedule account deletion." }, { status: 500 });
   }
 
+  await current.supabase.auth.signOut({ scope: "global" });
+
   return NextResponse.json({
     scheduledFor: data.scheduled_for,
     requestedAt: data.requested_at,
