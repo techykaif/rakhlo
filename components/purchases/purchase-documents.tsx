@@ -4,9 +4,9 @@ import { useRef, useState } from "react";
 import { tw } from "@/components/ui/styles";
 import { createClient } from "@/lib/supabase/client";
 import { copy } from "@/lib/i18n";
-import { Icon } from "@/components/ui/icon";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Select } from "@/components/ui/select";
+import { Icon } from "@/components/ui/icon";
 import {
   DOCUMENT_MAX_BYTES,
   DOCUMENT_TYPES,
@@ -33,7 +33,7 @@ type DocumentCopy = {
   otherDocument: string;
 };
 
-const typeLabel = (type: string, t: DocumentCopy) => {
+function typeLabel(type: string, t: DocumentCopy) {
   switch (type) {
     case "receipt":
       return t.receipt;
@@ -48,10 +48,190 @@ const typeLabel = (type: string, t: DocumentCopy) => {
     default:
       return t.otherDocument;
   }
-};
+}
 
 function formatSize(bytes: number) {
   if (bytes < 1024 * 1024) return Math.max(1, Math.round(bytes / 1024)) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
+
+export function PurchaseDocuments({
+  purchaseId,
+  initialDocuments,
+}: {
+  purchaseId: string;
+  initialDocuments: DocumentItem[];
+}) {
+  const { language } = useLanguage();
+  const t = copy[language].purchases;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [documents, setDocuments] = useState(initialDocuments);
+  const [documentType, setDocumentType] = useState<DocumentType>("receipt");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [removingId, setRemovingId] = useState<string | null>(null);
+  const [showUploader, setShowUploader] = useState(initialDocuments.length === 0);
+
+  function selectFile(file: File | undefined) {
+    setStatus("");
+    setError("");
+
+    if (!file) {
+      setSelectedFile(null);
+      return;
+    }
+
+    if (file.size <= 0 || file.size > DOCUMENT_MAX_BYTES) {
+      setError(t.uploadError);
+      setSelectedFile(null);
+      return;
+    }
+
+    setSelectedFile(file);
+  }
+
+  function chooseFile() {
+    inputRef.current?.click();
+  }
+
+  function closeUploader() {
+    if (uploading) return;
+    setShowUploader(false);
+    setSelectedFile(null);
+    setError("");
+    setStatus("");
+    if (inputRef.current) inputRef.current.value = "";
+  }
+
+  async function upload() {
+    if (!selectedFile) {
+      setError(t.chooseFileFirst);
+      return;
+    }
+
+    setUploading(true);
+    setError("");
+    setStatus("");
+
+    try {
+      const uploadUrlResponse = await fetch(
+        "/api/purchases/" + purchaseId + "/documents/upload-url",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: selectedFile.name,
+            mime_type: selectedFile.type,
+            size_bytes: selectedFile.size,
+            type: documentType,
+          }),
+        },
+      );
+
+      const uploadUrlPayload = await uploadUrlResponse.json().catch(() => ({}));
+
+      if (!uploadUrlResponse.ok) {
+        setError(
+          typeof uploadUrlPayload.error === "string"
+            ? uploadUrlPayload.error
+            : t.uploadError,
+        );
+        return;
+      }
+
+      const { path, token } = uploadUrlPayload as {
+        path: string;
+        token: string;
+      };
+
+      const supabase = createClient();
+      const { error: uploadError } = await supabase.storage
+        .from("purchase-documents")
+        .uploadToSignedUrl(path, token, selectedFile);
+
+      if (uploadError) {
+        setError(t.uploadError);
+        return;
+      }
+
+      const finalizeResponse = await fetch(
+        "/api/purchases/" + purchaseId + "/documents",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            path,
+            filename: selectedFile.name,
+            mime_type: selectedFile.type,
+            size_bytes: selectedFile.size,
+            type: documentType,
+          }),
+        },
+      );
+
+      const finalizePayload = await finalizeResponse.json().catch(() => ({}));
+
+      if (!finalizeResponse.ok) {
+        setError(
+          typeof finalizePayload.error === "string"
+            ? finalizePayload.error
+            : t.uploadError,
+        );
+        return;
+      }
+
+      if (finalizePayload.document) {
+        setDocuments((current) => [
+          finalizePayload.document as DocumentItem,
+          ...current,
+        ]);
+      }
+
+      setSelectedFile(null);
+      if (inputRef.current) inputRef.current.value = "";
+      setStatus(t.documentUploaded);
+      setShowUploader(false);
+    } catch {
+      setError(t.uploadError);
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function remove(id: string) {
+    if (!window.confirm(t.deleteDocumentConfirm)) return;
+
+    setRemovingId(id);
+    setError("");
+    setStatus("");
+
+    try {
+      const response = await fetch("/api/documents/" + id, { method: "DELETE" });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        setError(
+          typeof payload.error === "string"
+            ? payload.error
+            : t.uploadError,
+        );
+        return;
+      }
+
+      setDocuments((current) => {
+        const next = current.filter((document) => document.id !== id);
+        if (next.length === 0) setShowUploader(true);
+        return next;
+      });
+    } catch {
+      setError(t.uploadError);
+    } finally {
+      setRemovingId(null);
+    }
+  }
+
   return (
     <section className={tw("purchase-documents")}>
       <div className={tw("purchase-documents__header")}>
@@ -111,9 +291,13 @@ function formatSize(bytes: number) {
                 disabled={uploading}
               >
                 <span className={tw("purchase-documents__choose-copy")}>
-                  <strong>{selectedFile ? selectedFile.name : t.chooseFile}</strong>
+                  <strong>
+                    {selectedFile ? selectedFile.name : t.chooseFile}
+                  </strong>
                   <small>
-                    {selectedFile ? formatSize(selectedFile.size) : t.supportedFiles}
+                    {selectedFile
+                      ? formatSize(selectedFile.size)
+                      : t.supportedFiles}
                   </small>
                 </span>
                 <Icon name="file" size={16} />
