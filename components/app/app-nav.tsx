@@ -7,18 +7,15 @@ import { Icon, type IconName } from "@/components/ui/icon";
 import { tw } from "@/components/ui/styles";
 
 const navItems: Array<{
-  key: "home" | "purchases" | "reminders" | "account" | "status" | "support" | "addPurchase";
+  key: "home" | "purchases" | "reminders" | "account" | "addPurchase";
   href: string;
   icon: IconName;
   mobileOnly?: boolean;
-  hideOnMobile?: boolean;
 }> = [
   { key: "home", href: "/dashboard", icon: "home" },
   { key: "purchases", href: "/purchases", icon: "purchase" },
   { key: "reminders", href: "/reminders", icon: "bell" },
   { key: "account", href: "/account", icon: "settings" },
-  { key: "status", href: "/status", icon: "calendar", hideOnMobile: true },
-  { key: "support", href: "/support", icon: "info", hideOnMobile: true },
   { key: "addPurchase", href: "/purchases/new", icon: "plus", mobileOnly: true },
 ];
 
@@ -29,7 +26,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
   return (
     <nav className={tw(mobile ? "app-nav app-nav--mobile" : "app-nav")} aria-label={t.navigation}>
       {navItems
-        .filter((item) => (!item.mobileOnly || mobile) && (!item.hideOnMobile || !mobile))
+        .filter((item) => !item.mobileOnly || mobile)
         .map((item) => {
           const active =
             item.key === "home"
@@ -40,11 +37,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
                   ? pathname.startsWith("/reminders")
                   : item.key === "account"
                     ? pathname.startsWith("/account")
-                    : item.key === "status"
-                      ? pathname === "/status"
-                    : item.key === "support"
-                      ? pathname.startsWith("/support")
-                      : false;
+                    : false;
 
           return (
             <Link
@@ -54,7 +47,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
               aria-current={active ? "page" : undefined}
             >
               <span className={tw("app-nav__icon")}><Icon name={item.icon} size={mobile ? 18 : 17} /></span>
-              <span className={tw("app-nav__label")}>{item.key === "status" ? "Status" : item.key === "support" ? "Support" : item.key === "account" ? t.account : mobile && item.key === "addPurchase" ? (language === "hi" ? "जोड़ें" : "Add") : t[item.key]}</span>
+              <span className={tw("app-nav__label")}>{item.key === "account" ? t.account : mobile && item.key === "addPurchase" ? (language === "hi" ? "जोड़ें" : "Add") : t[item.key]}</span>
             </Link>
           );
         })}
