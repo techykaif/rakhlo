@@ -38,7 +38,7 @@ export function PublicSiteShell({
         </section>
       </main>
 
-      <PublicFooter />>
+      <PublicFooter />
     </div>
   );
 }
