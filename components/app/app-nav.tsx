@@ -38,8 +38,10 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
                 ? pathname.startsWith("/purchases")
                 : item.key === "reminders"
                   ? pathname.startsWith("/reminders")
-                  : item.key === "status"
-                    ? pathname === "/status"
+                  : item.key === "account"
+                    ? pathname.startsWith("/account")
+                    : item.key === "status"
+                      ? pathname === "/status"
                     : item.key === "support"
                       ? pathname.startsWith("/support")
                       : false;
