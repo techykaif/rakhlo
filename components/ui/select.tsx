@@ -150,7 +150,7 @@ export function Select({
                 // Keep the document-level outside-click handler from racing the selection.
                 event.stopPropagation();
               }}
-              onClick={() => choose(option.value)}
+              onClick={(event) => { event.preventDefault(); event.stopPropagation(); choose(option.value); }}
             >
               <span className="truncate">{option.label}</span>
               {option.value === value ? <Icon name="check" size={14} strokeWidth={2} /> : null}
