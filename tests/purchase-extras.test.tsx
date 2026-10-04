@@ -63,9 +63,10 @@ describe("PurchaseExtras", () => {
     await screen.findByText("Samsung Refrigerator");
 
     expect(screen.queryByRole("textbox", { name: "Item name" })).toBeNull();
-    expect(screen.getByRole("button", { name: "Add item" })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Add item" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Edit details" })).toBeTruthy();
 
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit details" }));
     fireEvent.click(screen.getByRole("button", { name: "Add payment" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Amount" }), {
       target: { value: "20000" },
@@ -122,8 +123,9 @@ describe("PurchaseExtras", () => {
       </LanguageProvider>,
     );
 
-    await screen.findByRole("button", { name: "Add item" });
-    expect(screen.queryByRole("button", { name: "Save purchase details" })).toBeNull();
+    await screen.findByRole("button", { name: "Add details" });
+    fireEvent.click(screen.getByRole("button", { name: "Add details" }));
+    expect(screen.getByRole("button", { name: "Add item" })).toBeTruthy();
 
     fireEvent.click(screen.getByRole("button", { name: "Add item" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Item name" }), {
@@ -159,7 +161,8 @@ describe("PurchaseExtras", () => {
       </LanguageProvider>,
     );
 
-    fireEvent.click(await screen.findByRole("button", { name: "Add warranty" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Add details" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add warranty" }));
 
     expect((screen.getByLabelText("Starts") as HTMLInputElement).value).toBe("2026-10-03");
     expect((screen.getByLabelText("Ends") as HTMLInputElement).value).toBe("2027-10-03");
