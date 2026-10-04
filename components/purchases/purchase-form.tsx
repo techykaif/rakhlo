@@ -35,6 +35,7 @@ export function PurchaseForm({
 }: {
   categories: Category[];
   initialPurchase?: PurchaseValue;
+  userId: string;
 }) {
   const { language } = useLanguage();
   const t = copy[language].purchases;
