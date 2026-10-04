@@ -18,8 +18,8 @@ export function PublicHeader() {
   const authStatus = useLandingAuth();
 
   const sectionHref = (id: string) => (isHome ? "#" + id : "/#" + id);
-  const statusLabel = language === "hi" ? "स्थिति" : "Status";
-  const supportLabel = language === "hi" ? "सहायता" : "Support";
+  const statusLabel = t.status;
+  const supportLabel = t.support;
   const openLabel = language === "hi" ? "Rakhlo खोलें" : "Open Rakhlo";
   const loginLabel = t.login;
   const getStartedLabel = t.start;
@@ -31,7 +31,7 @@ export function PublicHeader() {
           <Logo size="md" variant="on-dark" />
         </Link>
 
-        <nav className="hidden items-center gap-7 text-[12px] font-semibold text-[#969890] md:flex" aria-label="Public navigation">
+        <nav className="hidden items-center gap-7 text-[12px] font-semibold text-[#969890] md:flex" aria-label={t.publicNavigation}>
           <Link href={sectionHref("why")} className="transition-colors hover:text-[#f7f6f1]">
             {language === "hi" ? "क्यों Rakhlo" : t.navWhy + " Rakhlo"}
           </Link>
