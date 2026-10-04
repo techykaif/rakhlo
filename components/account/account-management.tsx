@@ -352,5 +352,5 @@ async function createStoredZip(entries: Array<{ name: string; blob: Blob }>) {
   endView.setUint32(12, centralSize, true);
   endView.setUint32(16, offset, true);
 
-  return new Blob([...chunks, ...central, end], { type: "application/zip" });
+  return new Blob([...chunks, ...central, end] as unknown as BlobPart[], { type: "application/zip" });
 }
