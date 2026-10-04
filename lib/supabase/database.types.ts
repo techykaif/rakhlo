@@ -280,6 +280,7 @@ export type Database = {
       }
       reminders: {
         Row: {
+          automation_key: string | null
           completed_at: string | null
           created_at: string
           due_at: string
@@ -293,8 +294,10 @@ export type Database = {
           type: string
           updated_at: string
           user_id: string
+          warranty_id: string | null
         }
         Insert: {
+          automation_key?: string | null
           completed_at?: string | null
           created_at?: string
           due_at: string
@@ -308,8 +311,10 @@ export type Database = {
           type: string
           updated_at?: string
           user_id?: string
+          warranty_id?: string | null
         }
         Update: {
+          automation_key?: string | null
           completed_at?: string | null
           created_at?: string
           due_at?: string
@@ -323,6 +328,7 @@ export type Database = {
           type?: string
           updated_at?: string
           user_id?: string
+          warranty_id?: string | null
         }
         Relationships: [
           {
@@ -331,6 +337,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "purchases"
             referencedColumns: ["id", "user_id"]
+          },
+          {
+            foreignKeyName: "reminders_warranty_id_fkey"
+            columns: ["warranty_id"]
+            isOneToOne: false
+            referencedRelation: "warranties"
+            referencedColumns: ["id"]
           },
         ]
       }
