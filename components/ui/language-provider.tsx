@@ -27,6 +27,9 @@ export function LanguageProvider({
     if (saved === "en" || saved === "hi") {
       setLanguageState(saved);
       document.documentElement.lang = saved;
+      if (!document.cookie.includes(STORAGE_KEY + "=")) {
+        document.cookie = STORAGE_KEY + "=" + saved + "; Path=/; Max-Age=31536000; SameSite=Lax";
+      }
     } else {
       document.documentElement.lang = initialLanguage;
     }
