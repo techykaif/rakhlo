@@ -366,7 +366,7 @@ export function PurchaseDocuments({
                 </span>
                 {uploadPhase === "uploading" ? (
                   <span className={tw("purchase-upload-button__progress")} aria-hidden="true">
-                    <span />
+                    <span className={tw("purchase-upload-button__progress-bar")} />
                   </span>
                 ) : null}
               </button>
