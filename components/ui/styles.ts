@@ -391,6 +391,7 @@ const styles: Record<string, StyleValue> = {
   "account-form": "mt-4 grid max-w-[620px] gap-2.5 sm:grid-cols-2",
   "account-input": "min-h-11 rounded-xl border border-[#c9c8c0] bg-[#faf9f4] px-3 text-[12px] outline-none transition focus:border-[#96978f] focus:ring-4 focus:ring-[#c8f76a22]",
   "account-message": "mt-3 text-[10px] font-semibold text-[#59624e]",
+  "account-signout": "mt-4 min-h-10 w-full sm:w-auto",
 
 };
 
