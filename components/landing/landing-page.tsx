@@ -16,7 +16,7 @@ function ProductPreview({
   t: LandingCopy;
 }) {
   return (
-    <div className="landing-product-scene")}>
+    <div className="landing-product-scene">
       <div className={"pointer-events-none absolute -inset-10 rounded-[48px] bg-[radial-gradient(circle_at_55%_40%,rgba(200,247,106,0.11),transparent_42%),radial-gradient(circle_at_75%_80%,rgba(255,255,255,0.05),transparent_35%)] blur-2xl"} aria-hidden="true" />
 
       <div className={"relative overflow-hidden rounded-[28px] border border-white/12 bg-[#EEEDE7] p-2.5 shadow-[0_34px_90px_rgba(0,0,0,0.34)]"}>
