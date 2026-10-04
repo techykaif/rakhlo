@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
-import { tw } from "@/components/ui/styles";
 
 export function PublicSiteShell({
   eyebrow,
