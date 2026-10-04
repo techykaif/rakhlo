@@ -66,7 +66,7 @@ export function PurchaseDetail({
           <div className={tw("purchase-result__icon purchase-result__icon--large")}>
             {purchase.title.charAt(0).toUpperCase()}
           </div>
-          <div>
+          <div className={tw("purchase-detail__hero-copy")}>
             <span className={tw("app-kicker")}>{t.detailsEyebrow}</span>
             <h2>{purchase.title}</h2>
             <strong>{money}</strong>

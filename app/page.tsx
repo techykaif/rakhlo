@@ -6,6 +6,7 @@ import { copy } from "@/lib/i18n";
 import { Icon } from "@/components/ui/icon";
 import { Logo } from "@/components/ui/logo";
 import { LanguageToggle } from "@/components/ui/language-toggle";
+import { useLandingAuth } from "@/components/landing/landing-auth";
 import { useLanguage } from "@/components/ui/language-provider";
 import { tw } from "@/components/ui/styles";
 
@@ -147,6 +148,8 @@ function ProductPreview({
 export default function HomePage() {
   const { language } = useLanguage();
   const t = copy[language].landing;
+  const authStatus = useLandingAuth();
+  const authenticated = authStatus === "authenticated";
 
   return (
     <main className={tw("landing-shell")} lang={language}>
@@ -163,13 +166,16 @@ export default function HomePage() {
           </div>
 
           <div className={tw("landing-nav-actions")}>
-            <Link href="/login" className={tw("landing-login")}>
-              {t.login}
-            </Link>
-            <Link href="/signup" className={tw("landing-nav-cta")}>
-              {t.start}
-              <Icon name="arrow-right" size={16} />
-            </Link>
+            {authStatus === "authenticated" ? (
+              <Link href="/dashboard" className={tw("landing-nav-dashboard")}>
+                {t.openDashboard}<Icon name="arrow-right" size={16} />
+              </Link>
+            ) : authStatus === "anonymous" ? (
+              <>
+                <Link href="/login" className={tw("landing-login")}>{t.login}</Link>
+                <Link href="/signup" className={tw("landing-nav-cta")}>{t.start}<Icon name="arrow-right" size={16} /></Link>
+              </>
+            ) : <span className={tw("landing-nav-auth-placeholder")} aria-hidden="true" />}
             <LanguageToggle />
           </div>
         </nav>
@@ -191,9 +197,8 @@ export default function HomePage() {
             <p>{t.heroText}</p>
 
             <div className={tw("landing-hero-actions")}>
-              <Link href="/signup" className={tw("landing-button landing-button-dark")}>
-                {t.heroPrimary}
-                <Icon name="arrow-right" size={16} />
+              <Link href={authenticated ? "/dashboard" : "/signup"} className={tw("landing-button landing-button-dark")}>
+                {authenticated ? t.openDashboard : t.heroPrimary}<Icon name="arrow-right" size={16} />
               </Link>
               <a href="#how" className={tw("landing-button landing-button-light")}>
                 {t.heroSecondary}
@@ -312,9 +317,8 @@ export default function HomePage() {
                   : <>अगली बार कुछ खरीदें, बस {BRAND.name}.</>}
               </h2>
               <p>{t.ctaText}</p>
-              <Link href="/signup" className={tw("landing-button landing-button-lime")}>
-                {t.cta}
-                <Icon name="arrow-right" size={16} />
+              <Link href={authenticated ? "/dashboard" : "/signup"} className={tw("landing-button landing-button-lime")}>
+                {authenticated ? t.openDashboard : t.cta}<Icon name="arrow-right" size={16} />
               </Link>
             </div>
             <div className={tw("landing-cta-mark")} aria-hidden="true">

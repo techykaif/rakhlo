@@ -52,3 +52,6 @@
     transition: none !important;
   }
 }
+
+@keyframes search-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .command-search-loading__spinner { animation: none !important; } }

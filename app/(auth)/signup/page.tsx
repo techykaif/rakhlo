@@ -1,3 +1,4 @@
+import { redirectIfAuthenticated } from "@/lib/auth/guest";
 import { AuthCard } from "@/components/auth/auth-card";
 import { AuthForm } from "@/components/auth/auth-form";
 import { copy } from "@/lib/i18n";
@@ -8,7 +9,8 @@ export const metadata = {
   description: `Create your ${BRAND.name} account.`,
 };
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+  await redirectIfAuthenticated();
   return (
     <AuthCard
       eyebrow={{ en: BRAND.name, hi: BRAND.name }}
