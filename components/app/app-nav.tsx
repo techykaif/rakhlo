@@ -53,8 +53,8 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
               className={tw(active ? "app-nav__item active" : "app-nav__item")}
               aria-current={active ? "page" : undefined}
             >
-              <Icon name={item.icon} size={17} />
-              <span>{item.key === "status" ? "Status" : item.key === "support" ? "Support" : item.key === "account" ? t.account : mobile && item.key === "addPurchase" ? (language === "hi" ? "जोड़ें" : "Add") : t[item.key]}</span>
+              <span className={tw("app-nav__icon")}><Icon name={item.icon} size={mobile ? 18 : 17} /></span>
+              <span className={tw("app-nav__label")}>{item.key === "status" ? "Status" : item.key === "support" ? "Support" : item.key === "account" ? t.account : mobile && item.key === "addPurchase" ? (language === "hi" ? "जोड़ें" : "Add") : t[item.key]}</span>
             </Link>
           );
         })}
