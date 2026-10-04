@@ -14,11 +14,11 @@ export default function PrivacyPage() {
         </section>
         <section className="rounded-2xl border border-[#deddd6] bg-white p-6">
           <h2 className="text-[18px] font-extrabold text-[#171713]">Uploaded files</h2>
-          <p>Purchase documents are stored in a private Supabase Storage bucket. Upload and download access uses signed URLs. Rakhlo accepts only purchase-proof document categories (such as receipts, invoices, warranty cards and payment proofs), limited to PDF, JPEG, PNG and WebP files up to 10 MB with basic file-signature validation. Rakhlo is not intended to be a general-purpose image or file host and prohibits sexually explicit content.</p>
+          <p>Purchase documents are stored in a private Supabase Storage bucket. Upload and download access uses signed URLs, and uploads are limited to PDF, JPEG, PNG and WebP files up to 10 MB with basic file-signature validation.</p>
         </section>
         <section className="rounded-2xl border border-[#deddd6] bg-white p-6">
           <h2 className="text-[18px] font-extrabold text-[#171713]">Notifications and offline data</h2>
-          <p>When browser notifications are enabled, a web-push subscription is stored so scheduled reminders can be delivered. Rakhlo also keeps queued purchase drafts in your browser’s local storage so they can be submitted when connectivity returns. The public Purchase Print Tool is different: its working data stays in the current page and is never sent to or stored by Rakhlo.</p>
+          <p>When browser notifications are enabled, a web-push subscription is stored so scheduled reminders can be delivered. Rakhlo also keeps queued purchase drafts in your browser’s local storage so they can be submitted when connectivity returns.</p>
         </section>
         <section className="rounded-2xl border border-[#deddd6] bg-[#faf9f4] p-6">
           <h2 className="text-[18px] font-extrabold text-[#171713]">Deletion and requests</h2>
