@@ -171,6 +171,8 @@ function FloatingField({
   value,
   type = "text",
   inputMode,
+  min,
+  step,
   onChange,
   onFocus,
   onBlur,
@@ -180,6 +182,8 @@ function FloatingField({
   value: string;
   type?: string;
   inputMode?: "decimal" | "numeric" | "text";
+  min?: string;
+  step?: string;
   onChange: (value: string) => void;
   onFocus: () => void;
   onBlur: () => void;
@@ -191,6 +195,8 @@ function FloatingField({
         className={tw("purchase-floating-field__input")}
         type={type}
         inputMode={inputMode}
+        min={min}
+        step={step}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         onFocus={onFocus}
@@ -631,6 +637,8 @@ export function PurchaseExtras({
                 value={item.quantity}
                 type="number"
                 inputMode="decimal"
+                min="0.001"
+                step="0.001"
                 onChange={(value) => setItem({ ...item, quantity: value })}
                 onFocus={() => setFocusedField("item-quantity")}
                 onBlur={() => setFocusedField("")}
@@ -641,6 +649,8 @@ export function PurchaseExtras({
                 value={item.unit_price}
                 type="number"
                 inputMode="decimal"
+                min="0"
+                step="0.01"
                 onChange={(value) => setItem({ ...item, unit_price: value })}
                 onFocus={() => setFocusedField("item-price")}
                 onBlur={() => setFocusedField("")}
@@ -724,6 +734,8 @@ export function PurchaseExtras({
                 value={payment.amount}
                 type="number"
                 inputMode="decimal"
+                min="0"
+                step="0.01"
                 onChange={(value) => setPayment({ ...payment, amount: value })}
                 onFocus={() => setFocusedField("payment-amount")}
                 onBlur={() => setFocusedField("")}
