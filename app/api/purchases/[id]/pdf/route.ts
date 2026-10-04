@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
 import { readFile } from "node:fs/promises";
 import { NextResponse } from "next/server";
-import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, PDFFont, PDFPage, rgb } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -18,8 +18,10 @@ const MARGIN = 48;
 const require = createRequire(import.meta.url);
 
 type FontPair = {
-  regular: PDFFont;
-  bold: PDFFont;
+  latinRegular: PDFFont;
+  latinBold: PDFFont;
+  devanagariRegular: PDFFont;
+  devanagariBold: PDFFont;
 };
 
 function clean(value: string | number | null | undefined) {
@@ -125,8 +127,8 @@ function drawText(
 
   for (const segment of splitTextByScript(text)) {
     const font = segment.devanagari
-      ? (options.bold ? fonts.bold : fonts.regular)
-      : (options.bold ? fonts.bold : fonts.regular);
+      ? (options.bold ? fonts.devanagariBold : fonts.devanagariRegular)
+      : (options.bold ? fonts.latinBold : fonts.latinRegular);
 
     page.drawText(segment.text, {
       x,
@@ -156,8 +158,10 @@ async function embedFonts(pdf: PDFDocument): Promise<FontPair> {
   ]);
 
   return {
-    regular: await pdf.embedFont(latinRegular),
-    bold: await pdf.embedFont(latinBold),
+    latinRegular: await pdf.embedFont(latinRegular),
+    latinBold: await pdf.embedFont(latinBold),
+    devanagariRegular: await pdf.embedFont(devanagariRegular),
+    devanagariBold: await pdf.embedFont(devanagariBold),
   };
 }
 
