@@ -16,6 +16,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
   openGraph: {
     title: `${BRAND.name} | Buy it. Save it. Remember it.`,
     description: "Keep purchases, proof, memories and important dates in one simple place.",
@@ -25,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${BRAND.name} | Buy it. Save it. Remember it.`,
+    title: `${BRAND.name} | Buy it. Save it. Remember it.",
     description: "Keep purchases, proof, memories and important dates in one simple place.",
   },
   robots: {
