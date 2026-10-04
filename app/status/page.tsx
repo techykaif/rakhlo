@@ -57,7 +57,7 @@ export default async function StatusPage() {
               </span>
               <div>
                 <h2 className="m-0 text-[15px] font-extrabold">Rakhlo web app</h2>
-                <p className="mt-1 text-[10px] leading-5 text-[#77786f]">The page itself is responding and serving the public site.</p>
+                <p className="mt-1 text-[10px] leading-5 text-[#6f7068]">The page itself is responding and serving the public site.</p>
               </div>
             </div>
             <div className="mt-4 rounded-xl bg-[#faf9f4] px-3 py-2.5 text-[9px] font-bold text-[#6f7068]">Operational</div>
@@ -70,7 +70,7 @@ export default async function StatusPage() {
               </span>
               <div>
                 <h2 className="m-0 text-[15px] font-extrabold">Authentication service</h2>
-                <p className="mt-1 text-[10px] leading-5 text-[#77786f]">Live health check against the configured Supabase Auth service.</p>
+                <p className="mt-1 text-[10px] leading-5 text-[#6f7068]">Live health check against the configured Supabase Auth service.</p>
               </div>
             </div>
             <div className={authHealthy ? "mt-4 rounded-xl bg-[#eef7e9] px-3 py-2.5 text-[9px] font-bold text-[#4e6b3c]" : "mt-4 rounded-xl bg-[#faf1f1] px-3 py-2.5 text-[9px] font-bold text-[#7d4d4d]"}>
@@ -81,7 +81,7 @@ export default async function StatusPage() {
 
         <div className="grid gap-4 md:grid-cols-2">
           <section className="rounded-[24px] border border-[#deddd6] bg-white p-5">
-            <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#8b8c84]">How to read this</span>
+            <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#6f7068]">How to read this</span>
             <h2 className="mt-2 text-[20px] font-extrabold tracking-[-0.02em]">A green signal is useful, not absolute.</h2>
             <p className="mt-2 text-[11px] leading-6 text-[#6f7068]">This page checks a small set of service paths. A browser, network, cached session or account can still have a problem while these checks are green. Check the original action and contact Support for account-specific issues.</p>
           </section>
@@ -100,7 +100,7 @@ export default async function StatusPage() {
         <section className="rounded-[28px] border border-[#deddd6] bg-white p-6 md:p-7">
           <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
             <div>
-              <span className="text-[9px] font-extrabold uppercase tracking-[0.13em] text-[#8b8c84]">Built by</span>
+              <span className="text-[9px] font-extrabold uppercase tracking-[0.13em] text-[#6f7068]">Built by</span>
               <h2 className="mt-2 text-[26px] font-extrabold tracking-[-0.03em]">A small product, built deliberately.</h2>
               <p className="mt-2 max-w-[690px] text-[11px] leading-6 text-[#6f7068]">Rakhlo is independently designed, developed and maintained by Kaif Ansari. The goal is simple: make the details that matter after a purchase easy to keep, find and act on without turning everyday life into paperwork.</p>
             </div>
@@ -111,7 +111,7 @@ export default async function StatusPage() {
           </div>
         </section>
 
-        <div className="rounded-2xl border border-[#deddd6] bg-[#faf9f4] px-4 py-3 text-[9px] leading-5 text-[#77786f]">
+        <div className="rounded-2xl border border-[#deddd6] bg-[#faf9f4] px-4 py-3 text-[9px] leading-5 text-[#6f7068]">
           Last checked: {checkedAt}. Checks run when this page is requested; this is not a live incident monitor.
         </div>
       </div>

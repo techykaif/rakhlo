@@ -55,3 +55,19 @@
 
 @keyframes search-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .command-search-loading__spinner { animation: none !important; } }
+
+
+/* Devanagari needs neutral tracking and a more open line box. */
+html[lang="hi"] h1,
+html[lang="hi"] h2,
+html[lang="hi"] h3,
+html[lang="hi"] h4,
+html[lang="hi"] h5,
+html[lang="hi"] h6 {
+  letter-spacing: 0 !important;
+  line-height: 1.15 !important;
+}
+
+html[lang="hi"] [class*="tracking-"] {
+  letter-spacing: normal !important;
+}

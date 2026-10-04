@@ -10,7 +10,8 @@ test.describe("public trust and support routes", () => {
     await expect(header.getByRole("link", { name: /Features/i })).toBeVisible();
     await expect(header.getByRole("link", { name: "Status" })).toBeVisible();
     await expect(header.getByRole("link", { name: "Support" })).toBeVisible();
-    await expect(header.getByRole("link", { name: "Open Rakhlo" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Get started" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Log in" })).toBeVisible();
 
     await header.getByRole("button", { name: "हिंदी" }).click();
     await expect(page.locator("html")).toHaveAttribute("lang", "hi");
