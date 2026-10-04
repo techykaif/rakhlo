@@ -214,7 +214,6 @@ const styles: Record<string, StyleValue> = {
   "purchase-date-field": "grid min-w-0 gap-1.5 rounded-xl border border-[#b7b6ad] bg-white p-2.5 [&>span]:flex [&>span]:items-center [&>span]:gap-1.5 [&>span]:text-[9px] [&>span]:font-bold [&>span]:text-[#5f6059] [&>small]:text-[8px] [&>small]:leading-4 [&>small]:text-[#8c8d85] [&_input]:min-h-8 [&_input]:w-full [&_input]:border-0 [&_input]:bg-transparent [&_input]:p-0 [&_input]:text-[11px] [&_input]:font-semibold [&_input]:text-[#171713] [&_input]:outline-none [&:focus-within]:border-[#8f9087] [&:focus-within]:ring-4 [&:focus-within]:ring-[#c8f76a22]",
   "purchase-extras__form-actions": "flex items-center justify-end gap-1.5 max-[620px]:col-span-full max-[620px]:[&_button]:flex-1",
   "purchase-extras__return-block": "[&>p]:mt-1.5",
-  "purchase-extras__form-actions": "flex items-end justify-end gap-1.5 max-[520px]:col-span-full max-[520px]:[&_button]:flex-1",
   "purchase-extras__actions": "flex justify-end border-t border-[#e6e5de] pt-4 max-[520px]:[&_button]:w-full",
   /* reminders */
   "reminders-layout": "grid grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)] items-start gap-5 max-[900px]:grid-cols-1",
