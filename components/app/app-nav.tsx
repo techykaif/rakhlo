@@ -10,11 +10,11 @@ const navItems: Array<{
   key: "home" | "purchases" | "reminders" | "status" | "support" | "addPurchase";
   href: string;
   icon: IconName;
-  mobileOnly?: boolean;
+  mobileOnly?: boolean;\n  hideOnMobile?: boolean;
 }> = [
   { key: "home", href: "/dashboard", icon: "home" },
   { key: "purchases", href: "/purchases", icon: "purchase" },
-  { key: "reminders", href: "/reminders", icon: "bell" },\n  { key: "status", href: "/status", icon: "calendar" },\n  { key: "support", href: "/support", icon: "info" },
+  { key: "reminders", href: "/reminders", icon: "bell" },\n  { key: "status", href: "/status", icon: "calendar", hideOnMobile: true },\n  { key: "support", href: "/support", icon: "info", hideOnMobile: true },
   { key: "addPurchase", href: "/purchases/new", icon: "plus", mobileOnly: true },
 ];
 
@@ -24,7 +24,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
 
   return (
     <nav className={tw(mobile ? "app-nav app-nav--mobile" : "app-nav")} aria-label={t.navigation}>
-      {navItems.filter((item) => !item.mobileOnly || mobile).map((item) => {
+      {navItems.filter((item) => (!item.mobileOnly || mobile) && (!item.hideOnMobile || !mobile)).map((item) => {
         const active =
           item.key === "home"
             ? pathname === "/dashboard"
