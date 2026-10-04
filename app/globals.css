@@ -47,7 +47,7 @@
   .purchase-upload-button,
   .purchase-upload-button__icon,
   .purchase-upload-button__progress,
-  .purchase-upload-button__progress span {
+  .purchase-upload-button__progress-bar {
     animation: none !important;
     transition: none !important;
   }
