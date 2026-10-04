@@ -19,6 +19,7 @@ export async function GET(_request: Request, context: Context) {
     .from("documents")
     .select("id,storage_path")
     .eq("id", id)
+    .eq("user_id", userId)
     .maybeSingle();
 
   if (error) {
