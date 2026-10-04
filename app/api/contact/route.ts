@@ -32,7 +32,7 @@ function isRateLimited(key: string) {
 }
 
 function cleanLine(value: string) {
-  return value.replace(/[\\r\\n]+/g, " ").trim();
+  return value.replace(/[\r\n]+/g, " ").trim();
 }
 
 export async function POST(request: Request) {
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true }, { status: 200, headers: { "Cache-Control": "no-store" } });
   }
 
-  if (!topic || !subject || !message || email.length > 320 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+  if (!topic || !subject || !message || email.length > 320 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: "Please provide a valid email, subject and message." }, { status: 422, headers: { "Cache-Control": "no-store" } });
   }
 
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     message,
     "",
     `Reply to: ${email}`,
-  ].join("\\n");
+  ].join("\n");
 
   try {
     const response = await fetch("https://api.resend.com/emails", {
