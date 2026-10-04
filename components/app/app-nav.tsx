@@ -54,7 +54,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
               aria-current={active ? "page" : undefined}
             >
               <Icon name={item.icon} size={17} />
-              <span>{item.key === "status" ? "Status" : item.key === "support" ? "Support" : item.key === "account" ? t.account : t[item.key]}</span>
+              <span>{item.key === "status" ? "Status" : item.key === "support" ? "Support" : item.key === "account" ? t.account : mobile && item.key === "addPurchase" ? (language === "hi" ? "जोड़ें" : "Add") : t[item.key]}</span>
             </Link>
           );
         })}
