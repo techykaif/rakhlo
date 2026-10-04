@@ -14,7 +14,7 @@ const navItems: Array<{
 }> = [
   { key: "home", href: "/dashboard", icon: "home" },
   { key: "purchases", href: "/purchases", icon: "purchase" },
-  { key: "reminders", href: "/reminders", icon: "bell" },\n  { key: "status", href: "/status", icon: "activity" },\n  { key: "support", href: "/support", icon: "help" },
+  { key: "reminders", href: "/reminders", icon: "bell" },\n  { key: "status", href: "/status", icon: "calendar" },\n  { key: "support", href: "/support", icon: "info" },
   { key: "addPurchase", href: "/purchases/new", icon: "plus", mobileOnly: true },
 ];
 
