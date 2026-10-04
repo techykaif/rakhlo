@@ -6,36 +6,11 @@ type Topic = "support" | "feedback";
 
 export function ContactForm() {
   const [topic, setTopic] = useState<Topic>("support");
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-  const [error, setError] = useState("");
+  const [status, setStatus] = useState<"idle" | "unavailable">("idle");
 
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
+  function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("sending");
-    setError("");
-
-    const form = new FormData(event.currentTarget);
-    form.set("topic", topic);
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(form.entries())),
-      });
-      const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-
-      if (!response.ok) {
-        throw new Error(payload?.error || "We could not send your message.");
-      }
-
-      event.currentTarget.reset();
-      setTopic("support");
-      setStatus("success");
-    } catch (err) {
-      setStatus("error");
-      setError(err instanceof Error ? err.message : "We could not send your message.");
-    }
+    setStatus("unavailable");
   }
 
   return (
@@ -81,18 +56,20 @@ export function ContactForm() {
         <p className="m-0 max-w-[520px] text-[9px] leading-5 text-[#85867e]">
           Please do not include passwords, payment card numbers, OTPs or other secrets.
         </p>
-        <button type="submit" disabled={status === "sending"} className="min-h-11 rounded-xl bg-[#171713] px-4 text-[11px] font-extrabold text-white transition hover:bg-[#2b2b26] disabled:cursor-not-allowed disabled:opacity-55">
-          {status === "sending" ? "Sending…" : "Send message"}
+        <button type="submit" disabled={true} className="min-h-11 rounded-xl bg-[#171713] px-4 text-[11px] font-extrabold text-white transition hover:bg-[#2b2b26] disabled:cursor-not-allowed disabled:opacity-55">
+          {status === "unavailable" ? "Email delivery unavailable" : "Send message"}
         </button>
       </div>
 
-      {status === "success" ? (
-        <p role="status" className="rounded-xl border border-[#d5e6c8] bg-[#eff7e8] px-3 py-2.5 text-[10px] font-semibold leading-5 text-[#4e6b3c]">
-          Your message was sent. We’ll route it to the right inbox.
+      {false ? (
+        {status === "unavailable" ? (
+        <p role="status" className="rounded-xl border border-[#deddd6] bg-[#faf9f4] px-3 py-2.5 text-[10px] leading-5 text-[#6f7068]">
+          The form is in place, but email delivery has not been connected yet. No email provider has been enabled.
         </p>
       ) : null}
+      ) : null}
 
-      {status === "error" ? (
+      {false ? (
         <p role="alert" className="rounded-xl border border-[#ead8d8] bg-[#faf1f1] px-3 py-2.5 text-[10px] leading-5 text-[#7d4d4d]">
           {error}
         </p>
