@@ -14,9 +14,9 @@ async function getAuthenticatedClient() {
 }
 
 export async function GET(request: Request) {
-  const { supabase } = await getAuthenticatedClient();
+  const { supabase, userId } = await getAuthenticatedClient();
 
-  if (!supabase) {
+  if (!supabase || !userId) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
@@ -30,10 +30,10 @@ export async function GET(request: Request) {
     )
     .order("purchase_date", { ascending: false })
     .order("created_at", { ascending: false })
-    .limit(50);
+    .eq("user_id", userId!)\n    .limit(50);
 
   if (search) {
-    const safeSearch = search.replace(/[,*()]/g, " ").trim();
+    const safeSearch = search.replace(/[,*()%_]/g, " ").trim();
 
     if (safeSearch) {
       query = query.or(
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const { supabase } = await getAuthenticatedClient();
+  const { supabase, userId } = await getAuthenticatedClient();
 
   if (!supabase) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
