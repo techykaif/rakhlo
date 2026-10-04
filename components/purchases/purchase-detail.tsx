@@ -7,6 +7,7 @@ import { useLanguage } from "@/components/ui/language-provider";
 import { DeletePurchaseButton } from "@/components/purchases/delete-purchase-button";
 import { PurchaseDocuments } from "@/components/purchases/purchase-documents";
 import { PurchaseExtras } from "@/components/purchases/purchase-extras";
+import { PrintPurchaseButton } from "@/components/purchases/print-purchase-button";
 
 type PurchaseDocument = {
   id: string;
@@ -117,6 +118,7 @@ export function PurchaseDetail({
       />
 
       <div className={tw("purchase-detail__actions")}>
+        <PrintPurchaseButton purchaseId={purchase.id} />
         <Link href={"/purchases/" + purchase.id + "/edit"} className={tw("button button-light")}>
           {t.editPurchase}
         </Link>
