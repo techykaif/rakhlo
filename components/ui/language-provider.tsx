@@ -13,20 +13,29 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("en");
+export function LanguageProvider({
+  children,
+  initialLanguage = "en",
+}: {
+  children: ReactNode;
+  initialLanguage?: Language;
+}) {
+  const [language, setLanguageState] = useState<Language>(initialLanguage);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY);
     if (saved === "en" || saved === "hi") {
       setLanguageState(saved);
       document.documentElement.lang = saved;
+    } else {
+      document.documentElement.lang = initialLanguage;
     }
-  }, []);
+  }, [initialLanguage]);
 
   function setLanguage(next: Language) {
     setLanguageState(next);
     window.localStorage.setItem(STORAGE_KEY, next);
+    document.cookie = `${STORAGE_KEY}=${next}; Path=/; Max-Age=31536000; SameSite=Lax`;
     document.documentElement.lang = next;
   }
 
