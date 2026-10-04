@@ -73,13 +73,23 @@ export async function DELETE() {
   const current = await auth();
   if (!current) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
 
-  const { error } = await current.supabase
+  const { data, error } = await current.supabase
     .from("account_deletion_requests")
     .delete()
-    .eq("user_id", current.userId);
+    .eq("user_id", current.userId)
+    .is("processing_at", null)
+    .select("user_id")
+    .maybeSingle();
 
   if (error) {
     return NextResponse.json({ error: "Unable to cancel account deletion." }, { status: 500 });
+  }
+
+  if (!data) {
+    return NextResponse.json(
+      { error: "Account deletion is already being processed." },
+      { status: 409 },
+    );
   }
 
   return new Response(null, { status: 204 });
