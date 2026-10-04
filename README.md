@@ -419,3 +419,15 @@ The core MVP workflows are implemented end to end and are being hardened through
 ## License
 
 License will be defined before the first public production release.
+
+
+## Public utility ideas
+
+### Purchase Print
+A browser-only utility that lets anyone create a professional purchase record and print it or save it as PDF. The public version should remain anonymous and upload-free: purchase details stay in the current browser page and are never persisted by Rakhlo.
+
+**Potential follow-ups**
+- Add a polished print template with optional branding.
+- Support more currencies and localized date/number formatting.
+- Keep the tool separate from authenticated purchase storage.
+- Consider additional privacy-first utilities only when they can remain genuinely client-side.
