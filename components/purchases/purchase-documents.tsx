@@ -135,6 +135,7 @@ export function PurchaseDocuments({
       const uploadUrlPayload = await uploadUrlResponse.json().catch(() => ({}));
 
       if (!uploadUrlResponse.ok) {
+        setUploadPhase("idle");
         setError(
           typeof uploadUrlPayload.error === "string"
             ? uploadUrlPayload.error
@@ -154,6 +155,7 @@ export function PurchaseDocuments({
         .uploadToSignedUrl(path, token, selectedFile);
 
       if (uploadError) {
+        setUploadPhase("idle");
         setError(t.uploadError);
         return;
       }
@@ -176,6 +178,7 @@ export function PurchaseDocuments({
       const finalizePayload = await finalizeResponse.json().catch(() => ({}));
 
       if (!finalizeResponse.ok) {
+        setUploadPhase("idle");
         setError(
           typeof finalizePayload.error === "string"
             ? finalizePayload.error
