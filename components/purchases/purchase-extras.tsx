@@ -192,7 +192,11 @@ function FloatingField({
   return (
     <label className={tw("purchase-floating-field")}>
       <input
-        className={tw("purchase-floating-field__input")}
+        className={tw(
+          floating
+            ? "purchase-floating-field__input purchase-floating-field__input--floating"
+            : "purchase-floating-field__input",
+        )}
         type={type}
         inputMode={inputMode}
         min={min}
@@ -210,6 +214,7 @@ function FloatingField({
             ? "purchase-floating-field__label purchase-floating-field__label--floating"
             : "purchase-floating-field__label",
         )}
+        aria-hidden="true"
       >
         {label}
       </span>
