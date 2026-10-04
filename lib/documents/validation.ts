@@ -3,8 +3,6 @@ export const DOCUMENT_TYPES = [
   "invoice",
   "warranty_card",
   "payment_proof",
-  "product_photo",
-  "other",
 ] as const;
 
 export type DocumentType = (typeof DOCUMENT_TYPES)[number];

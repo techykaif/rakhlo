@@ -300,6 +300,14 @@ export default function HomePage() {
               <h3 className="mt-8 text-[15px] font-extrabold">{t.featureProofTitle}</h3>
               <p className="mt-2 text-[11px] leading-5 text-[#77786f]">{t.featureProofText}</p>
             </article>
+            <article className="rounded-[24px] border border-[#dce8ce] bg-[#f0f8e9] p-6 shadow-[0_12px_30px_rgba(20,21,18,0.035)]">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-white"><Icon name="file" size={18} /></div>
+              <h3 className="mt-8 text-[15px] font-extrabold">{t.featurePrintTitle}</h3>
+              <p className="mt-2 text-[11px] leading-5 text-[#77786f]">{t.featurePrintText}</p>
+              <Link href="/tools/purchase-print" className="mt-5 inline-flex items-center gap-1.5 text-[11px] font-extrabold text-[#4f692f] hover:underline">
+                {t.featurePrintCta}<Icon name="arrow-right" size={14} />
+              </Link>
+            </article>
             <article className="rounded-[24px] border border-[#e1dfd7] bg-white p-6 shadow-[0_12px_30px_rgba(20,21,18,0.035)]">
               <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#eff7e7]"><Icon name="bell" size={18} /></div>
               <h3 className="mt-8 text-[15px] font-extrabold">{t.featureRemindersTitle}</h3>
@@ -362,6 +370,7 @@ export default function HomePage() {
             <a href="#why">{t.navWhy}</a>
             <a href="#how">{t.navHow}</a>
             <a href="#features">{t.navFeatures}</a>
+            <Link href="/tools/purchase-print">{t.navPrint}</Link>
             <Link href="/status">Status</Link>
             <Link href="/support">Support</Link>
             <Link href="/support#feedback">Feedback</Link>

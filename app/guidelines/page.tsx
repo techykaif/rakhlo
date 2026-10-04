@@ -11,7 +11,7 @@ export default function GuidelinesPage() {
         <section className="rounded-[24px] border border-[#deddd6] bg-white p-6">
           <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#8b8c84]">01 · Your data</span>
           <h2 className="mt-2 text-[19px] font-extrabold text-[#171713]">Store only what you are allowed to keep</h2>
-          <p className="mt-2">Upload receipts, invoices, warranty cards, payment proofs, product photos and notes that you have the right to store. Keep unnecessary sensitive information out of documents whenever possible.</p>
+          <p className="mt-2">Upload only purchase-related proof such as receipts, invoices, warranty cards and payment proofs that you have the right to store. Rakhlo is not a general-purpose photo or file hosting service. Keep unnecessary sensitive information out of documents whenever possible.</p>
         </section>
         <section className="rounded-[24px] border border-[#deddd6] bg-white p-6">
           <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#8b8c84]">02 · Account safety</span>
@@ -26,7 +26,7 @@ export default function GuidelinesPage() {
         <section className="rounded-[24px] border border-[#deddd6] bg-white p-6">
           <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#8b8c84]">04 · Fair use</span>
           <h2 className="mt-2 text-[19px] font-extrabold text-[#171713]">Do not abuse or bypass the service</h2>
-          <p className="mt-2">Do not attempt to access another user’s records, bypass authentication or storage controls, probe private endpoints, upload malicious content, submit spam or intentionally generate harmful traffic.</p>
+          <p className="mt-2">Do not attempt to access another user’s records, bypass authentication or storage controls, probe private endpoints, upload malicious or sexually explicit content, submit spam, use Rakhlo as general-purpose file hosting, or intentionally generate harmful traffic.</p>
         </section>
         <section className="rounded-[24px] border border-[#dce8ce] bg-[#f0f8e9] p-6">
           <span className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#75816e]">05 · Security</span>
