@@ -24,7 +24,7 @@ export function PurchasePdfPreview({ purchaseId }: { purchaseId: string }) {
         </div>
         <div className={tw("pdf-preview__actions")}>
           <button type="button" className={tw("button button-light")} onClick={printPdf}>
-            <Icon name="printer" size={15} />
+            <Icon name="file" size={15} />
             Print
           </button>
           <a
@@ -32,7 +32,7 @@ export function PurchasePdfPreview({ purchaseId }: { purchaseId: string }) {
             download
             className={tw("button button-dark")}
           >
-            <Icon name="download" size={15} />
+            <Icon name="file" size={15} />
             Download PDF
           </a>
         </div>
