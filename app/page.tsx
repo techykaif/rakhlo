@@ -362,6 +362,7 @@ export default function HomePage() {
             <a href="#why">{t.navWhy}</a>
             <a href="#how">{t.navHow}</a>
             <a href="#features">{t.navFeatures}</a>
+            <Link href="/tools/purchase-print">{t.navPrint}</Link>
             <Link href="/status">Status</Link>
             <Link href="/support">Support</Link>
             <Link href="/support#feedback">Feedback</Link>
