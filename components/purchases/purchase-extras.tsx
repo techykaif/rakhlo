@@ -5,6 +5,7 @@ import { tw } from "@/components/ui/styles";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Select } from "@/components/ui/select";
 import { Icon } from "@/components/ui/icon";
+import { FloatingField } from "@/components/ui/floating-field";
 import { addOneCalendarYear } from "@/lib/purchases/warranty";
 
 type Item = {
@@ -166,57 +167,6 @@ const labels = {
   },
 } as const;
 
-function FloatingField({
-  label,
-  value,
-  type = "text",
-  inputMode,
-  min,
-  step,
-  onChange,
-  onFocus,
-  onBlur,
-  floating,
-}: {
-  label: string;
-  value: string;
-  type?: string;
-  inputMode?: "decimal" | "numeric" | "text";
-  min?: string;
-  step?: string;
-  onChange: (value: string) => void;
-  onFocus: () => void;
-  onBlur: () => void;
-  floating: boolean;
-}) {
-  return (
-    <label className={tw("purchase-floating-field")}>
-      <input
-        className={tw("purchase-floating-field__input")}
-        type={type}
-        inputMode={inputMode}
-        min={min}
-        step={step}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        aria-label={label}
-        placeholder=" "
-      />
-      <span
-        className={tw(
-          floating
-            ? "purchase-floating-field__label purchase-floating-field__label--floating"
-            : "purchase-floating-field__label",
-        )}
-      >
-        {label}
-      </span>
-    </label>
-  );
-}
-
 export function PurchaseExtras({
   purchaseId,
   purchaseDate,
@@ -242,7 +192,6 @@ export function PurchaseExtras({
   const [manageOpen, setManageOpen] = useState(false);
   const [openForm, setOpenForm] = useState<DetailKind | null>(null);
   const [editing, setEditing] = useState<{ kind: DetailKind; id: string } | null>(null);
-  const [focusedField, setFocusedField] = useState("");
   const [message, setMessage] = useState("");
   const [messageTone, setMessageTone] = useState<MessageTone>("success");
   const [saving, setSaving] = useState(false);
@@ -340,7 +289,6 @@ export function PurchaseExtras({
   function closeForm() {
     setEditing(null);
     setOpenForm(null);
-    setFocusedField("");
   }
 
   function openManager() {
@@ -353,7 +301,6 @@ export function PurchaseExtras({
     setMessage("");
     setEditing(null);
     setOpenForm(kind);
-    setFocusedField("");
 
     if (kind === "item") {
       reset("item");
@@ -379,7 +326,6 @@ export function PurchaseExtras({
     setMessage("");
     setEditing({ kind, id });
     setOpenForm(kind);
-    setFocusedField("");
 
     if (kind === "item") {
       const value = items.find((entry) => entry.id === id);
@@ -537,10 +483,6 @@ export function PurchaseExtras({
   const showPayments = payments.length > 0 || manageOpen || openForm === "payment";
   const showWarranty = warranties.length > 0 || manageOpen || openForm === "warranty";
 
-  function floating(field: string, value: string) {
-    return focusedField === field || Boolean(value);
-  }
-
   return (
     <section className={tw("purchase-extras")}>
       <div className={tw("purchase-extras__header")}>
@@ -628,9 +570,6 @@ export function PurchaseExtras({
                 label={t.itemName}
                 value={item.name}
                 onChange={(value) => setItem({ ...item, name: value })}
-                onFocus={() => setFocusedField("item-name")}
-                onBlur={() => setFocusedField("")}
-                floating={floating("item-name", item.name)}
               />
               <FloatingField
                 label={t.quantity}
@@ -640,9 +579,6 @@ export function PurchaseExtras({
                 min="0.001"
                 step="0.001"
                 onChange={(value) => setItem({ ...item, quantity: value })}
-                onFocus={() => setFocusedField("item-quantity")}
-                onBlur={() => setFocusedField("")}
-                floating={floating("item-quantity", item.quantity)}
               />
               <FloatingField
                 label={t.unitPrice}
@@ -652,25 +588,16 @@ export function PurchaseExtras({
                 min="0"
                 step="0.01"
                 onChange={(value) => setItem({ ...item, unit_price: value })}
-                onFocus={() => setFocusedField("item-price")}
-                onBlur={() => setFocusedField("")}
-                floating={floating("item-price", item.unit_price)}
               />
               <FloatingField
                 label={t.serial}
                 value={item.serial_number}
                 onChange={(value) => setItem({ ...item, serial_number: value })}
-                onFocus={() => setFocusedField("item-serial")}
-                onBlur={() => setFocusedField("")}
-                floating={floating("item-serial", item.serial_number)}
               />
               <FloatingField
                 label={t.imei}
                 value={item.imei}
                 onChange={(value) => setItem({ ...item, imei: value })}
-                onFocus={() => setFocusedField("item-imei")}
-                onBlur={() => setFocusedField("")}
-                floating={floating("item-imei", item.imei)}
               />
               <div className={tw("purchase-extras__form-actions")}>
                 <button type="button" className={tw("button button-light")} disabled={saving} onClick={closeForm}>
@@ -737,9 +664,6 @@ export function PurchaseExtras({
                 min="0"
                 step="0.01"
                 onChange={(value) => setPayment({ ...payment, amount: value })}
-                onFocus={() => setFocusedField("payment-amount")}
-                onBlur={() => setFocusedField("")}
-                floating={floating("payment-amount", payment.amount)}
               />
               <label className={tw("purchase-date-field")}>
                 <span>{t.method}</span>
@@ -773,9 +697,6 @@ export function PurchaseExtras({
                 label={t.reference}
                 value={payment.reference}
                 onChange={(value) => setPayment({ ...payment, reference: value })}
-                onFocus={() => setFocusedField("payment-reference")}
-                onBlur={() => setFocusedField("")}
-                floating={floating("payment-reference", payment.reference)}
               />
               <div className={tw("purchase-extras__form-actions")}>
                 <button type="button" className={tw("button button-light")} disabled={saving} onClick={closeForm}>
@@ -883,9 +804,6 @@ export function PurchaseExtras({
                 label={t.provider}
                 value={warranty.provider}
                 onChange={(value) => setWarranty({ ...warranty, provider: value })}
-                onFocus={() => setFocusedField("warranty-provider")}
-                onBlur={() => setFocusedField("")}
-                floating={floating("warranty-provider", warranty.provider)}
               />
               <div className={tw("purchase-extras__form-actions")}>
                 <button type="button" className={tw("button button-light")} disabled={saving} onClick={closeForm}>

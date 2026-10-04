@@ -172,6 +172,7 @@ describe("PurchaseExtras", () => {
     expect(screen.getByText("Item name", { selector: "span" }).className).toContain(
       "top-0",
     );
+    expect(itemName.className).toContain("pt-3");
   });
 
   it("defaults warranty coverage to one year from the purchase date", async () => {

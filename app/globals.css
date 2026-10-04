@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+@keyframes command-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes command-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .command-overlay,
+  .command-dialog {
+    animation: none !important;
+  }
+}
