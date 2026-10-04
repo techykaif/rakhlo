@@ -14,7 +14,6 @@ export function PublicHeader() {
   const { language } = useLanguage();
   const t = copy[language].landing;
   const isHome = pathname === "/";
-  const hi = language === "hi";
 
   const sectionHref = (id: string) => (isHome ? "#" + id : "/#" + id);
   const statusLabel = language === "hi" ? "स्थिति" : "Status";
@@ -37,9 +36,6 @@ export function PublicHeader() {
           </Link>
           <Link href={sectionHref("features")} className="transition-colors hover:text-[#f7f6f1]">
             {t.navFeatures}
-          </Link>
-          <Link href="/tools/purchase-print" className="transition-colors hover:text-[#f7f6f1]">
-            {hi ? "खरीद प्रिंट" : "Purchase Print"}
           </Link>
           <Link href="/status" className="transition-colors hover:text-[#f7f6f1]">
             {statusLabel}
