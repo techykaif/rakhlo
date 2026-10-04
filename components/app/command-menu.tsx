@@ -11,6 +11,7 @@ type CommandItem = {
   label: string;
   href: string;
   icon: IconName;
+  meta?: string;
 };
 
 export function CommandMenu({ language }: { language: Language }) {
@@ -20,6 +21,8 @@ export function CommandMenu({ language }: { language: Language }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [purchaseResults, setPurchaseResults] = useState<CommandItem[]>([]);
+  const [searchingPurchases, setSearchingPurchases] = useState(false);
 
   const items = useMemo<CommandItem[]>(
     () => [
@@ -30,27 +33,50 @@ export function CommandMenu({ language }: { language: Language }) {
     [t],
   );
 
+  useEffect(() => {
+    const normalized = query.trim();
+    if (!normalized) {
+      setPurchaseResults([]);
+      setSearchingPurchases(false);
+      return;
+    }
+    const controller = new AbortController();
+    const timeout = window.setTimeout(async () => {
+      setSearchingPurchases(true);
+      try {
+        const response = await fetch("/api/purchases?q=" + encodeURIComponent(normalized.slice(0, 80)), {
+          signal: controller.signal, headers: { Accept: "application/json" }, cache: "no-store",
+        });
+        if (!response.ok) throw new Error("search_failed");
+        const payload = (await response.json()) as { purchases?: Array<{ id: string; title: string; purchase_date: string; seller_name: string | null }> };
+        const formatter = new Intl.DateTimeFormat(language === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+        setPurchaseResults((payload.purchases ?? []).slice(0, 6).map((purchase) => ({
+          id: "purchase:" + purchase.id, label: purchase.title, href: "/purchases/" + purchase.id, icon: "purchase" as const,
+          meta: [formatter.format(new Date(purchase.purchase_date + "T00:00:00Z")), purchase.seller_name].filter(Boolean).join(" · "),
+        })));
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === "AbortError")) setPurchaseResults([]);
+      } finally {
+        if (!controller.signal.aborted) setSearchingPurchases(false);
+      }
+    }, 160);
+    return () => { controller.abort(); window.clearTimeout(timeout); };
+  }, [language, query]);
+
   const results = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
-
-    const actions = normalized
-      ? items.filter((item) => item.label.toLocaleLowerCase().includes(normalized))
-      : items;
-
-    if (normalized) {
-      return [
-        {
-          id: "search:" + normalized,
-          label: language === "hi" ? `“${query.trim()}” में खरीदारी खोजें` : `Search purchases for “${query.trim()}”`,
-          href: "/purchases?q=" + encodeURIComponent(query.trim()),
-          icon: "search" as const,
-        },
-        ...actions,
-      ];
-    }
-
-    return actions;
-  }, [items, language, query]);
+    const actions = normalized ? items.filter((item) => item.label.toLocaleLowerCase().includes(normalized)) : items;
+    if (!normalized) return actions;
+    return [
+      ...purchaseResults,
+      {
+        id: "search:" + normalized,
+        label: language === "hi" ? `“${query.trim()}” में सभी खरीदारी खोजें` : `Search all purchases for “${query.trim()}”`,
+        href: "/purchases?q=" + encodeURIComponent(query.trim()), icon: "search" as const,
+      },
+      ...actions,
+    ];
+  }, [items, language, purchaseResults, query]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -72,7 +98,7 @@ export function CommandMenu({ language }: { language: Language }) {
         setSelectedIndex((current) => Math.max(current - 1, 0));
       }
 
-      if (event.key === "Enter" && results[selectedIndex]) {
+      if (event.key === "Enter" && !searchingPurchases && results[selectedIndex]) {
         event.preventDefault();
         navigate(results[selectedIndex].href);
       }
@@ -100,6 +126,8 @@ export function CommandMenu({ language }: { language: Language }) {
 
   function navigate(href: string) {
     setOpen(false);
+    setQuery("");
+    setPurchaseResults([]);
     router.push(href);
   }
 
@@ -107,13 +135,13 @@ export function CommandMenu({ language }: { language: Language }) {
     <>
       <button
         type="button"
-        className={tw("command-trigger group")}
+        className={tw("command-trigger")}
         onClick={() => setOpen(true)}
         aria-label={t.openCommandMenu}
       >
         <span className={tw("command-trigger__search")}>
           <Icon name="search" size={15} />
-          <span className={tw("command-trigger__label")}>{t.searchOrJump}</span>
+          <span>{t.searchOrJump}</span>
         </span>
         <kbd>⌘K</kbd>
       </button>
@@ -140,7 +168,12 @@ export function CommandMenu({ language }: { language: Language }) {
             </div>
 
             <div className={tw("command-list")}>
-              {results.length ? (
+              {searchingPurchases ? (
+                <div className={tw("command-search-loading")} aria-live="polite">
+                  <span className={tw("command-search-loading__spinner")} aria-hidden="true" />
+                  <span>{language === "hi" ? "आपकी खरीदारी खोज रहे हैं…" : "Searching your purchases…"}</span>
+                </div>
+              ) : results.length ? (
                 results.map((item, index) => (
                   <button
                     type="button"
@@ -150,7 +183,10 @@ export function CommandMenu({ language }: { language: Language }) {
                     onClick={() => navigate(item.href)}
                   >
                     <span className={tw("command-item__icon")}><Icon name={item.icon} size={16} /></span>
-                    <span className={tw("command-item__label")}>{item.label}</span>
+                    <span className={tw("command-item__content")}>
+                      <span className={tw("command-item__label")}>{item.label}</span>
+                      {item.meta ? <span className={tw("command-item__meta")}>{item.meta}</span> : null}
+                    </span>
                     <Icon name="chevron-right" size={15} />
                   </button>
                 ))
