@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { RegisterServiceWorker } from "@/components/pwa/register-sw";
 import { LanguageProvider } from "@/components/ui/language-provider";
@@ -16,11 +16,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
-  },
   openGraph: {
     title: `${BRAND.name} | Buy it. Save it. Remember it.`,
     description: "Keep purchases, proof, memories and important dates in one simple place.",
@@ -33,10 +28,22 @@ export const metadata: Metadata = {
     title: `${BRAND.name} | Buy it. Save it. Remember it.`,
     description: "Keep purchases, proof, memories and important dates in one simple place.",
   },
+  appleWebApp: {
+    capable: true,
+    title: BRAND.name,
+    statusBarStyle: "black-translucent",
+  },
   robots: {
     index: true,
     follow: true,
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: BRAND.colors.ink,
+  colorScheme: "light",
 };
 
 export default function RootLayout({

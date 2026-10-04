@@ -18,6 +18,9 @@ export function CommandMenu({ language }: { language: Language }) {
   const t = copy[language].dashboard;
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const wasOpenRef = useRef(false);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -142,6 +145,30 @@ export function CommandMenu({ language }: { language: Language }) {
 
       if (event.key === "Escape") {
         setOpen(false);
+        return;
+      }
+
+      if (event.key === "Tab") {
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+        const focusable = Array.from(
+          dialog.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+          ),
+        );
+        if (!focusable.length) {
+          event.preventDefault();
+          return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     }
 
@@ -151,9 +178,16 @@ export function CommandMenu({ language }: { language: Language }) {
 
   useEffect(() => {
     if (open) {
+      wasOpenRef.current = true;
       setQuery("");
       setSelectedIndex(0);
       requestAnimationFrame(() => inputRef.current?.focus());
+      return;
+    }
+
+    if (wasOpenRef.current) {
+      wasOpenRef.current = false;
+      requestAnimationFrame(() => triggerRef.current?.focus());
     }
   }, [open]);
 
@@ -173,6 +207,7 @@ export function CommandMenu({ language }: { language: Language }) {
       <button
         type="button"
         className={tw("command-trigger")}
+        ref={triggerRef}
         onClick={() => setOpen(true)}
         aria-label={t.openCommandMenu}
       >
@@ -196,6 +231,7 @@ export function CommandMenu({ language }: { language: Language }) {
             onClick={() => setOpen(false)}
           />
           <div
+            ref={dialogRef}
             className={tw("command-dialog")}
             role="dialog"
             aria-modal="true"

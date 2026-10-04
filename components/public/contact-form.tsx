@@ -28,7 +28,7 @@ export function ContactForm() {
               <option value="support">{hi ? "सहायता" : "Support"}</option>
               <option value="feedback">{hi ? "फ़ीडबैक" : "Feedback"}</option>
             </select>
-            <Icon name="chevron-down" size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#77786f]" />
+            <Icon name="chevron-down" size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#6f7068]" />
           </div>
         </div>
 
@@ -36,7 +36,7 @@ export function ContactForm() {
           <label className="text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#6f7068]" htmlFor="email">
             {hi ? "आपका ईमेल" : "Your email"}
           </label>
-          <input id="email" name="email" type="email" required maxLength={320} autoComplete="email" placeholder="you@example.com" className="min-h-11 rounded-xl border border-[#b7b6ad] bg-white px-3 text-[12px] outline-none transition-[border-color,box-shadow] placeholder:text-[#9a9b93] hover:border-[#999890] focus:border-[#8f9087] focus:ring-4 focus:ring-[#c8f76a22]" />
+          <input id="email" name="email" type="email" required maxLength={320} autoComplete="email" placeholder="you@example.com" className="min-h-11 rounded-xl border border-[#b7b6ad] bg-white px-3 text-[12px] outline-none transition-[border-color,box-shadow] placeholder:text-[#6f7068] hover:border-[#999890] focus:border-[#8f9087] focus:ring-4 focus:ring-[#c8f76a22]" />
         </div>
       </div>
 
@@ -44,7 +44,7 @@ export function ContactForm() {
         <label className="text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#6f7068]" htmlFor="subject">
           {hi ? "विषय" : "Subject"}
         </label>
-        <input id="subject" name="subject" type="text" required maxLength={150} placeholder={hi ? "यह किस बारे में है?" : "Tell us what this is about"} className="min-h-11 rounded-xl border border-[#b7b6ad] bg-white px-3 text-[12px] outline-none transition-[border-color,box-shadow] placeholder:text-[#9a9b93] hover:border-[#999890] focus:border-[#8f9087] focus:ring-4 focus:ring-[#c8f76a22]" />
+        <input id="subject" name="subject" type="text" required maxLength={150} placeholder={hi ? "यह किस बारे में है?" : "Tell us what this is about"} className="min-h-11 rounded-xl border border-[#b7b6ad] bg-white px-3 text-[12px] outline-none transition-[border-color,box-shadow] placeholder:text-[#6f7068] hover:border-[#999890] focus:border-[#8f9087] focus:ring-4 focus:ring-[#c8f76a22]" />
       </div>
 
       <div className="grid gap-1.5">
@@ -52,13 +52,13 @@ export function ContactForm() {
           <label className="text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#6f7068]" htmlFor="message">
             {hi ? "संदेश" : "Message"}
           </label>
-          <span className="text-[9px] text-[#9a9b93]">{hi ? "अधिकतम 5000 अक्षर" : "Up to 5,000 characters"}</span>
+          <span className="text-[9px] text-[#6f7068]">{hi ? "अधिकतम 5000 अक्षर" : "Up to 5,000 characters"}</span>
         </div>
-        <textarea id="message" name="message" required maxLength={5000} rows={8} placeholder={hi ? "जानकारी यहाँ लिखें…" : "Write the details here…"} className="resize-y rounded-xl border border-[#b7b6ad] bg-white p-3 text-[12px] leading-6 outline-none transition-[border-color,box-shadow] placeholder:text-[#9a9b93] hover:border-[#999890] focus:border-[#8f9087] focus:ring-4 focus:ring-[#c8f76a22]" />
+        <textarea id="message" name="message" required maxLength={5000} rows={8} placeholder={hi ? "जानकारी यहाँ लिखें…" : "Write the details here…"} className="resize-y rounded-xl border border-[#b7b6ad] bg-white p-3 text-[12px] leading-6 outline-none transition-[border-color,box-shadow] placeholder:text-[#6f7068] hover:border-[#999890] focus:border-[#8f9087] focus:ring-4 focus:ring-[#c8f76a22]" />
       </div>
 
       <div className="grid gap-2.5 rounded-2xl border border-[#e2dfd5] bg-[#faf9f4] px-4 py-3.5 text-[10px] leading-5 text-[#6f7068] md:grid-cols-[auto_1fr] md:items-start">
-        <span className="grid h-7 w-7 place-items-center rounded-lg bg-white text-[#77786f] shadow-sm">
+        <span className="grid h-7 w-7 place-items-center rounded-lg bg-white text-[#6f7068] shadow-sm">
           <Icon name="info" size={15} />
         </span>
         <div>
