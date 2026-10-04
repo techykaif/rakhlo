@@ -215,6 +215,7 @@ export function AccountManagement({
                 value={newPassword}
                 onChange={(event) => setNewPassword(event.target.value)}
                 placeholder={t.newPassword}
+                className={tw("account-input")}
                 autoComplete="new-password"
               />
               <input
@@ -222,6 +223,7 @@ export function AccountManagement({
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 placeholder={t.confirmPassword}
+                className={tw("account-input")}
                 autoComplete="new-password"
               />
               <button type="button" className={tw("button button-light")} disabled={passwordBusy} onClick={changePassword}>
