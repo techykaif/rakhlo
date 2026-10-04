@@ -161,7 +161,7 @@ describe("PurchaseExtras", () => {
 
     fireEvent.click(await screen.findByRole("button", { name: "Add warranty" }));
 
-    expect(screen.getByRole("textbox", { name: "Starts" })).toHaveValue("2026-10-03");
-    expect(screen.getByRole("textbox", { name: "Ends" })).toHaveValue("2027-10-03");
+    expect((screen.getByLabelText("Starts") as HTMLInputElement).value).toBe("2026-10-03");
+    expect((screen.getByLabelText("Ends") as HTMLInputElement).value).toBe("2027-10-03");
   });
 });
