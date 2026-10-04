@@ -42,7 +42,7 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
             aria-current={active ? "page" : undefined}
           >
             <Icon name={item.icon} size={17} />
-            <span>{t[item.key]}</span>
+            <span>{item.key === "status" ? "Status" : item.key === "support" ? "Support" : t[item.key]}</span>
           </Link>
         );
       })}
