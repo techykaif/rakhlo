@@ -99,9 +99,49 @@ jobs:
       - name: Production build
         run: npm run build
 
+  production-deploy:
+    name: Delayed production deploy
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - typecheck
+      - unit-tests
+      - production-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Wait 90 seconds before production deployment
+        run: sleep 90
+
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Confirm commit is still current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          latest_sha="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [ "$latest_sha" != "$GITHUB_SHA" ]; then
+            echo "A newer commit is already on main; skipping this deployment."
+            exit 0
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Deploy to Vercel Production
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_ozddg1bltgjUN4DyOBc9pYnl
+          VERCEL_PROJECT_ID: prj_FvCqT3nBbEYQoH0Z3lXOq2ezgZ4j
+        run: npx --yes vercel@62.1.0 deploy --prod --yes --token="$VERCEL_TOKEN"
+
   e2e:
     name: Production E2E tests
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: production-deploy
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.production-deploy.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
