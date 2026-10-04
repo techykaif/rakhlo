@@ -31,8 +31,10 @@ export function AppNav({ language, mobile = false }: { language: Language; mobil
           const active =
             item.key === "home"
               ? pathname === "/dashboard"
+              : item.key === "addPurchase"
+                ? pathname === "/purchases/new"
               : item.key === "purchases"
-                ? pathname.startsWith("/purchases")
+                ? pathname.startsWith("/purchases") && pathname !== "/purchases/new"
                 : item.key === "reminders"
                   ? pathname.startsWith("/reminders")
                   : item.key === "account"
