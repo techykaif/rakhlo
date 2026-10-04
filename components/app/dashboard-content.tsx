@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { tw } from "@/components/ui/styles";
 import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
 import { DashboardOnboarding } from "@/components/app/getting-started-guide";
+import { getDashboardGreeting } from "@/lib/dashboard-greeting";
 
 type Attention = { id: string; title: string; due_at: string; purchase_id: string; purchases: { title: string } | null };
 
@@ -31,6 +33,22 @@ export function DashboardContent({
   const t = copy[language].dashboard;
   const p = copy[language].purchases;
   const locale = language === "hi" ? "hi-IN" : "en-IN";
+  const [localHour, setLocalHour] = useState(() => new Date().getHours());
+
+  useEffect(() => {
+    const updateHour = () => setLocalHour(new Date().getHours());
+    updateHour();
+    const intervalId = window.setInterval(updateHour, 60_000);
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  const greetingKey = getDashboardGreeting(localHour);
+  const greeting = {
+    morning: t.greetingMorning,
+    afternoon: t.greetingAfternoon,
+    evening: t.greetingEvening,
+    night: t.greetingNight,
+  }[greetingKey];
 
   const dateFormatter = new Intl.DateTimeFormat(locale, {
     day: "numeric",
@@ -53,7 +71,7 @@ export function DashboardContent({
       {recentPurchases.length === 0 ? <DashboardOnboarding userId={userId} /> : null}
       <header className={tw("app-header dashboard-header")}>
         <div>
-          <span className={tw("app-kicker")}>{t.greeting}</span>
+          <span className={tw("app-kicker")} suppressHydrationWarning>{greeting}</span>
           <h1>{t.home}</h1>
           <p className={tw("dashboard-header__subtitle")}>{t.homeSubtitle}</p>
         </div>

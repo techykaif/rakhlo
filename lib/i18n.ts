@@ -120,7 +120,10 @@ export const copy = {
       oauthError: "Unable to continue with that provider. Please try again.",
     },
     dashboard: {
-      greeting: "Good evening",
+      greetingMorning: "Good morning",
+      greetingAfternoon: "Good afternoon",
+      greetingEvening: "Good evening",
+      greetingNight: "Good night",
       home: "Home",
       purchases: "Purchases",
       reminders: "Reminders",
@@ -433,7 +436,10 @@ export const copy = {
       oauthError: "इस प्रदाता के साथ आगे नहीं बढ़ सके। कृपया फिर से कोशिश करें।",
     },
     dashboard: {
-      greeting: "शुभ संध्या",
+      greetingMorning: "सुप्रभात",
+      greetingAfternoon: "शुभ दोपहर",
+      greetingEvening: "शुभ संध्या",
+      greetingNight: "शुभ रात्रि",
       home: "होम",
       purchases: "खरीदारियाँ",
       reminders: "रिमाइंडर",
