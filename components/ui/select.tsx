@@ -146,10 +146,11 @@ export function Select({
                 "hover:bg-[#f4f4ef] focus-visible:bg-[#f4f4ef] focus-visible:outline-none",
                 option.value === value ? "bg-[#eef5e8] font-bold text-[#171713]" : "",
               ].join(" ")}
-              onClick={(event) => {
+              onPointerDown={(event) => {
+                // Keep the document-level outside-click handler from racing the selection.
                 event.stopPropagation();
-                choose(option.value);
               }}
+              onClick={() => choose(option.value)}
             >
               <span className="truncate">{option.label}</span>
               {option.value === value ? <Icon name="check" size={14} strokeWidth={2} /> : null}
