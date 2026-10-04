@@ -21,6 +21,7 @@ async function checkAuth() {
 
 export default async function StatusPage() {
   const authHealthy = await checkAuth();
+  const contactConfigured = Boolean(process.env.RESEND_API_KEY?.trim() && process.env.RESEND_FROM_EMAIL?.trim());
   const checkedAt = new Date().toISOString();
 
   return (
@@ -48,6 +49,18 @@ export default async function StatusPage() {
             </div>
             <span className={authHealthy ? "rounded-full bg-[#eef6e8] px-2.5 py-1 text-[9px] font-extrabold text-[#4e6b3c]" : "rounded-full bg-[#faf1f1] px-2.5 py-1 text-[9px] font-extrabold text-[#7d4d4d]"}>
               {authHealthy ? "Operational" : "Needs attention"}
+            </span>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-[#deddd6] bg-white p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="m-0 text-[15px] font-extrabold">Support & feedback delivery</h2>
+              <p className="mt-1 text-[10px] leading-5 text-[#77786f]">Server-side email delivery configuration for the contact form.</p>
+            </div>
+            <span className={contactConfigured ? "rounded-full bg-[#eef6e8] px-2.5 py-1 text-[9px] font-extrabold text-[#4e6b3c]" : "rounded-full bg-[#faf1f1] px-2.5 py-1 text-[9px] font-extrabold text-[#7d4d4d]"}>
+              {contactConfigured ? "Configured" : "Needs configuration"}
             </span>
           </div>
         </div>
