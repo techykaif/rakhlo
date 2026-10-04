@@ -8,7 +8,7 @@ export function ContactForm() {
   const [topic, setTopic] = useState<Topic>("support");
 
   return (
-    <form id="feedback" className="grid gap-4 rounded-3xl border border-[#deddd6] bg-white p-5 shadow-[0_16px_40px_rgba(20,21,18,0.05)] md:p-7]">
+    <form id="feedback" className="grid gap-4 rounded-3xl border border-[#deddd6] bg-white p-5 shadow-[0_16px_40px_rgba(20,21,18,0.05)] md:p-7">
       <div className="grid gap-1.5">
         <label className="text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#6f7068]" htmlFor="topic">What can we help with?</label>
         <select
