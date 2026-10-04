@@ -24,6 +24,12 @@ describe("auth error classification", () => {
     ).toBe("google-config");
   });
 
+  it("sanitizes unknown provider errors", () => {
+    expect(
+      getReturnedAuthErrorMessage("internal database detail", messages),
+    ).toBe("fallback");
+  });
+
   it("keeps network failures distinct", () => {
     expect(
       getReturnedAuthErrorMessage("Failed to fetch", messages),
