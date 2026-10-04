@@ -28,13 +28,15 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
-  const { supabase, userId } = auth;\n  const id = await getId(context);
+  const { supabase, userId } = auth;
+  const id = await getId(context);
   const { data, error } = await supabase
     .from("purchases")
     .select(
       "id,title,purchase_date,amount,currency,seller_name,category_id,quantity,status,notes,return_start_date,return_end_date,return_source,return_note,created_at,updated_at,categories(name)",
     )
-    .eq("id", id)\n    .eq("user_id", userId)
+    .eq("id", id)
+    .eq("user_id", userId)
     .maybeSingle();
 
   if (error) {
