@@ -31,9 +31,11 @@ type PurchaseValue = {
 export function PurchaseForm({
   categories,
   initialPurchase,
+  userId,
 }: {
   categories: Category[];
   initialPurchase?: PurchaseValue;
+  userId: string;
 }) {
   const { language } = useLanguage();
   const t = copy[language].purchases;
@@ -58,11 +60,11 @@ export function PurchaseForm({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    void flushQueuedPurchases();
-    const handleOnline = () => { void flushQueuedPurchases(); };
+    void flushQueuedPurchases(userId);
+    const handleOnline = () => { void flushQueuedPurchases(userId); };
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);
-  }, []);
+  }, [userId]);
 
   function translateFieldError(field: string) {
     if (field === "title") return t.productNameError;
@@ -118,7 +120,7 @@ export function PurchaseForm({
       }
     } catch {
       if (!isEditing && typeof navigator !== "undefined" && !navigator.onLine) {
-        queuePurchase({
+        queuePurchase(userId, {
           title,
           purchase_date: purchaseDate,
           amount,

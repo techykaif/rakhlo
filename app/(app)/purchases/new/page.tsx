@@ -7,6 +7,9 @@ import { copy } from "@/lib/i18n";
 
 export default async function NewPurchasePage() {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+
   const { data: categories } = await supabase
     .from("categories")
     .select("id,name")
@@ -24,7 +27,7 @@ export default async function NewPurchasePage() {
         backLabel={{ en: t.en.backToPurchases, hi: t.hi.backToPurchases }}
       />
       <div className={tw("purchase-editor")}>
-        <PurchaseForm categories={categories ?? []} />
+        <PurchaseForm categories={categories ?? []} userId={user.id} />
         <Link className={tw("purchase-editor-cancel")} href="/purchases">
           {copy.en.common.cancel}
         </Link>

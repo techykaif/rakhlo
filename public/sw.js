@@ -1,4 +1,4 @@
-const CACHE = "rakhlo-static-v4";
+const CACHE = "rakhlo-static-v5";
 
 self.addEventListener("install", () => {
   self.skipWaiting();

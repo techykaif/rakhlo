@@ -13,6 +13,9 @@ export default async function EditPurchasePage({
   const { id } = await params;
   const supabase = await createClient();
 
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+
   const [{ data: purchase }, { data: categories }] = await Promise.all([
     supabase
       .from("purchases")
@@ -40,7 +43,7 @@ export default async function EditPurchasePage({
         backLabel={{ en: t.en.detailsEyebrow, hi: t.hi.detailsEyebrow }}
       />
       <div className={tw("purchase-editor")}>
-        <PurchaseForm categories={categories ?? []} initialPurchase={purchase} />
+        <PurchaseForm categories={categories ?? []} initialPurchase={purchase} userId={user.id} />
       </div>
     </>
   );

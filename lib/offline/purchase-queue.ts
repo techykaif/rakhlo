@@ -13,32 +13,35 @@ export type OfflinePurchasePayload = {
   return_note: string | null;
 };
 
-const KEY = "rakhlo:offline-purchases";
+function getKey(userId: string) {
+  return `rakhlo:offline-purchases:${userId}`;
+}
 
-function readQueue(): OfflinePurchasePayload[] {
-  if (typeof window === "undefined") return [];
+function readQueue(userId: string): OfflinePurchasePayload[] {
+  if (typeof window === "undefined" || !userId) return [];
   try {
-    const value = JSON.parse(localStorage.getItem(KEY) ?? "[]");
+    const value = JSON.parse(localStorage.getItem(getKey(userId)) ?? "[]");
     return Array.isArray(value) ? value : [];
   } catch {
     return [];
   }
 }
 
-export function queuePurchase(payload: OfflinePurchasePayload) {
-  const queue = readQueue();
+export function queuePurchase(userId: string, payload: OfflinePurchasePayload) {
+  const queue = readQueue(userId);
   queue.push(payload);
-  localStorage.setItem(KEY, JSON.stringify(queue));
+  localStorage.setItem(getKey(userId), JSON.stringify(queue));
 }
 
-export function queuedPurchaseCount() {
-  return readQueue().length;
+export function queuedPurchaseCount(userId: string) {
+  return readQueue(userId).length;
 }
 
-export async function flushQueuedPurchases() {
-  if (typeof window === "undefined" || !navigator.onLine) return 0;
+export async function flushQueuedPurchases(userId: string) {
+  if (typeof window === "undefined" || !userId || !navigator.onLine) return 0;
 
-  const queue = readQueue();
+  const key = getKey(userId);
+  const queue = readQueue(userId);
   const remaining: OfflinePurchasePayload[] = [];
   let saved = 0;
 
@@ -57,6 +60,6 @@ export async function flushQueuedPurchases() {
     }
   }
 
-  localStorage.setItem(KEY, JSON.stringify(remaining));
+  localStorage.setItem(key, JSON.stringify(remaining));
   return saved;
 }
