@@ -7,7 +7,7 @@ export default function SupportPage() {
     <PublicSiteShell
       eyebrow="Support & feedback"
       title="Tell us what’s wrong, confusing or worth improving."
-      description="Use the form below for support questions and feedback. Messages are routed server-side to the appropriate Rakhlo inbox; no direct email links are used here."
+      description="Use the form below for support questions and feedback. This is the single place for support and feedback. Email delivery is intentionally not connected yet; no direct email links are shown here."
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
         <ContactForm />
