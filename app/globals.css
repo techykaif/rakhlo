@@ -67,7 +67,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   background:
     linear-gradient(
@@ -82,6 +82,7 @@
 .glass-dark-strong::after {
   content: "";
   position: absolute;
+  z-index: 1;
   top: 0;
   left: 9%;
   right: 9%;
@@ -118,7 +119,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-@supports not ((backdrop-filter: blur(1px))) {
+@supports not (backdrop-filter: blur(1px)) {
   .glass-light,
   .glass-light-strong {
     background: #fdfcf8;
@@ -223,6 +224,15 @@
 @media (prefers-reduced-motion: reduce) { .command-search-loading__spinner { animation: none !important; } }
 
 /* Devanagari needs neutral tracking and a more open line box. */
+/* Keep content above the decorative glass highlight layer. */
+.glass-light > *,
+.glass-light-strong > *,
+.glass-dark > *,
+.glass-dark-strong > * {
+  position: relative;
+  z-index: 2;
+}
+
 html[lang="hi"] h1,
 html[lang="hi"] h2,
 html[lang="hi"] h3,
