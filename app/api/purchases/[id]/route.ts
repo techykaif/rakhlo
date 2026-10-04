@@ -10,7 +10,7 @@ async function getAuthenticatedClient() {
     return null;
   }
 
-  return supabase;
+  return { supabase, userId: data.claims.sub };
 }
 
 async function getId(context: { params: Promise<{ id: string }> }) {
@@ -22,12 +22,13 @@ export async function GET(
   _request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
-  const supabase = await getAuthenticatedClient();
+  const auth = await getAuthenticatedClient();
 
-  if (!supabase) {
+  if (!auth) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
+  const { supabase, userId } = auth;
   const id = await getId(context);
   const { data, error } = await supabase
     .from("purchases")
@@ -35,6 +36,7 @@ export async function GET(
       "id,title,purchase_date,amount,currency,seller_name,category_id,quantity,status,notes,return_start_date,return_end_date,return_source,return_note,created_at,updated_at,categories(name)",
     )
     .eq("id", id)
+    .eq("user_id", userId)
     .maybeSingle();
 
   if (error) {
@@ -52,12 +54,13 @@ export async function PATCH(
   request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
-  const supabase = await getAuthenticatedClient();
+  const auth = await getAuthenticatedClient();
 
-  if (!supabase) {
+  if (!auth) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
+  const { supabase, userId } = auth;
   let body: unknown;
 
   try {
@@ -80,6 +83,7 @@ export async function PATCH(
     .from("purchases")
     .update(validation.data)
     .eq("id", id)
+    .eq("user_id", userId)
     .select(
       "id,title,purchase_date,amount,currency,seller_name,category_id,quantity,status,notes,created_at,updated_at",
     )
@@ -100,17 +104,19 @@ export async function DELETE(
   _request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
-  const supabase = await getAuthenticatedClient();
+  const auth = await getAuthenticatedClient();
 
-  if (!supabase) {
+  if (!auth) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
+  const { supabase, userId } = auth;
   const id = await getId(context);
   const { data, error } = await supabase
     .from("purchases")
     .delete()
     .eq("id", id)
+    .eq("user_id", userId)
     .select("id")
     .maybeSingle();
 
