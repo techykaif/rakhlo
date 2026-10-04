@@ -255,9 +255,6 @@ const styles: Record<string, StyleValue> = {
   "reminder-offsets": "grid grid-cols-3 gap-2",
   "reminder-offset": "inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#d1cfc6] bg-[#faf9f4] px-3 text-[10px] font-semibold text-[#6f7068] transition-[border-color,background-color,transform] hover:-translate-y-px hover:border-[#b7b6ad] [&:has(input:checked)]:border-[#c3dbac] [&:has(input:checked)]:bg-[#f0f7e9] [&:has(input:checked)]:text-[#171713] [&_input]:shrink-0",
 
-  "reminder-form-grid": "grid grid-cols-[0.82fr_1.18fr] gap-2.5 max-[760px]:grid-cols-1",
-  "reminder-offsets": "grid grid-cols-3 gap-1.5",
-  "reminder-offset": "inline-flex min-h-9 items-center gap-2 rounded-lg border border-[#dfded7] bg-[#fafaf7] px-2 text-[9px] text-[#6f7068] [&:has(input:checked)]:border-[#cadbb8] [&:has(input:checked)]:bg-[#f0f6e8] [&:has(input:checked)]:text-[#171713]",
   "reminder-enabled": "inline-flex items-center gap-2 text-[10px] text-[#6f7068]",
   "reminder-field-error": "block text-[9px] text-[#8f5959]",
   "reminder-message": "mb-1 rounded-lg px-2.5 py-2.5 text-[10px] leading-5",
