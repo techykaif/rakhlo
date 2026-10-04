@@ -8,6 +8,8 @@ export const DOCUMENT_TYPES = [
 export type DocumentType = (typeof DOCUMENT_TYPES)[number];
 
 export const DOCUMENT_MAX_BYTES = 10 * 1024 * 1024;
+export const DOCUMENT_MAX_COUNT = 5;
+export const DOCUMENT_MAX_TOTAL_BYTES = DOCUMENT_MAX_COUNT * DOCUMENT_MAX_BYTES;
 
 const MIME_TYPES = new Set([
   "application/pdf",
