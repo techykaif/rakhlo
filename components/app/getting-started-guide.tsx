@@ -65,7 +65,7 @@ export function GettingStartedGuide({
     <div
       className={tw("guide-overlay")}
       role="presentation"
-      onMouseDown={(event) => {
+      onPointerDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
     >
