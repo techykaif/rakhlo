@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { tw } from "@/components/ui/styles";
 import { createClient } from "@/lib/supabase/client";
 import { copy } from "@/lib/i18n";
+import { Icon } from "@/components/ui/icon";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Select } from "@/components/ui/select";
 import {
@@ -71,6 +72,7 @@ export function PurchaseDocuments({
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const [showUploader, setShowUploader] = useState(initialDocuments.length === 0);
 
   function selectFile(file: File | undefined) {
     setStatus("");
@@ -88,6 +90,19 @@ export function PurchaseDocuments({
     }
 
     setSelectedFile(file);
+  }
+
+  function chooseFile() {
+    inputRef.current?.click();
+  }
+
+  function closeUploader() {
+    if (uploading) return;
+    setShowUploader(false);
+    setSelectedFile(null);
+    setError("");
+    setStatus("");
+    if (inputRef.current) inputRef.current.value = "";
   }
 
   async function upload() {
@@ -162,6 +177,7 @@ export function PurchaseDocuments({
       setSelectedFile(null);
       if (inputRef.current) inputRef.current.value = "";
       setStatus(t.documentUploaded);
+      setShowUploader(false);
     } catch {
       setError(t.uploadError);
     } finally {
@@ -185,7 +201,11 @@ export function PurchaseDocuments({
         return;
       }
 
-      setDocuments((current) => current.filter((document) => document.id !== id));
+      setDocuments((current) => {
+        const next = current.filter((document) => document.id !== id);
+        if (next.length === 0) setShowUploader(true);
+        return next;
+      });
     } catch {
       setError(t.uploadError);
     } finally {
@@ -200,8 +220,30 @@ export function PurchaseDocuments({
           <span className={tw("panel-kicker")}>{t.documentsTitle}</span>
           <p>{t.documentsText}</p>
         </div>
+        {!showUploader ? (
+          <button
+            type="button"
+            className={tw("purchase-documents__add")}
+            onClick={() => {
+              setError("");
+              setStatus("");
+              setShowUploader(true);
+            }}
+          >
+            <Icon name="plus" size={13} />
+            {t.addDocument}
+          </button>
+        ) : null}
       </div>
+      ) : null}
 
+      {!showUploader && status ? (
+        <p className={tw("document-status")} role="status">
+          {status}
+        </p>
+      ) : null}
+
+      {showUploader ? (
       <div className={tw("purchase-documents__uploader")}>
         <div className={tw("purchase-documents__controls")}>
           <label>
@@ -218,30 +260,60 @@ export function PurchaseDocuments({
             />
           </label>
 
-          <label>
+          <div className={tw("purchase-documents__file-field")}>
             <span>{t.chooseFile}</span>
+            <button
+              type="button"
+              className={tw(
+                selectedFile
+                  ? "purchase-documents__choose purchase-documents__choose--selected"
+                  : "purchase-documents__choose",
+              )}
+              onClick={chooseFile}
+              disabled={uploading}
+            >
+              <span className={tw("purchase-documents__choose-copy")}>
+                <strong>{selectedFile ? selectedFile.name : t.chooseFile}</strong>
+                <small>
+                  {selectedFile ? formatSize(selectedFile.size) : t.supportedFiles}
+                </small>
+              </span>
+              <Icon name="file" size={16} />
+            </button>
             <input
               ref={inputRef}
+              className={tw("purchase-documents__file-input")}
               type="file"
               accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"
               onChange={(event) => selectFile(event.target.files?.[0])}
               disabled={uploading}
+              aria-label={t.chooseFile}
             />
-          </label>
+          </div>
         </div>
 
         <div className={tw("purchase-documents__upload-row")}>
           <span>
-            {selectedFile ? selectedFile.name + " · " + formatSize(selectedFile.size) : t.supportedFiles}
+            {selectedFile ? t.fileReady : t.fileNotSelected}
           </span>
-          <button
+          <div className={tw("purchase-documents__upload-actions")}>
+            <button
+              type="button"
+              className={tw("button button-light")}
+              onClick={closeUploader}
+              disabled={uploading}
+            >
+              {copy[language].common.cancel}
+            </button>
+            <button
             type="button"
             className={tw("button button-dark")}
             onClick={upload}
             disabled={uploading || !selectedFile}
           >
             {uploading ? t.uploading : t.upload}
-          </button>
+            </button>
+          </div>
         </div>
 
         {status ? <p className={tw("document-status")} role="status">{status}</p> : null}
