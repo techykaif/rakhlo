@@ -147,6 +147,11 @@ export const copy = {
       googleConfig: "Google sign-in is not configured yet. Please use email or try again later.",
       continueWith: "Continue with {provider}",
       oauthError: "Unable to continue with that provider. Please try again.",
+      termsConsentRequired: "Please agree to the Terms and Privacy Policy to create your account.",
+      termsConsentPrefix: "I agree to the",
+      termsConsentTerms: "Terms",
+      termsConsentAnd: "and",
+      termsConsentPrivacy: "Privacy Policy",
     },
     dashboard: {
       greetingMorning: "Good morning",
@@ -542,6 +547,11 @@ export const copy = {
       googleConfig: "Google sign-in अभी configured नहीं है। कृपया email से जारी रखें।",
       continueWith: "{provider} के साथ जारी रखें",
       oauthError: "इस प्रदाता के साथ आगे नहीं बढ़ सके। कृपया फिर से कोशिश करें।",
+      termsConsentRequired: "खाता बनाने के लिए Terms और Privacy Policy से सहमत हों।",
+      termsConsentPrefix: "मैं सहमत हूँ",
+      termsConsentTerms: "Terms",
+      termsConsentAnd: "और",
+      termsConsentPrivacy: "Privacy Policy",
     },
     dashboard: {
       greetingMorning: "सुप्रभात",
