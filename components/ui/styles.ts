@@ -391,6 +391,7 @@ const styles: Record<string, StyleValue> = {
   "pdf-preview__frame": "overflow-hidden rounded-[24px] border border-[#deddd6] bg-[#e8e7e1] shadow-[0_18px_45px_rgba(20,21,18,0.08)]",
   "pdf-preview__iframe": "block h-[min(78vh,920px)] w-full border-0 bg-white max-[760px]:h-[72vh]",
   "pdf-preview__hint": "px-1 text-[10px] leading-5 text-[#77786f] max-[760px]:pb-6",
+  "pdf-preview__loading": "grid min-h-[620px] place-items-center gap-2 text-[11px] font-semibold text-[#6f7068] max-[760px]:min-h-[72vh]",
 
   "account-page": "grid gap-5",
   "account-card": "flex gap-4 rounded-[24px] border border-[#deddd6] bg-white p-5 shadow-[0_12px_30px_rgba(20,21,18,0.035)] md:p-6",
