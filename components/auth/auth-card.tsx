@@ -38,9 +38,14 @@ export function AuthCard({ eyebrow, title, subtitle, children }: AuthCardProps) 
         </div>
       </section>
 
-      <p className={tw("auth-footer")}>
-        <a href={"/"}>{BRAND.domain}</a>
-      </p>
+      <footer className={tw("auth-footer")}>
+        <span>© 2026 {BRAND.name}</span>
+        <span className="flex items-center gap-x-3 gap-y-1.5">
+          <a href="/" className="font-semibold transition-colors hover:text-[#171713]">{BRAND.domain}</a>
+          <a href="/privacy" className="transition-colors hover:text-[#171713]">Privacy</a>
+          <a href="/terms" className="transition-colors hover:text-[#171713]">Terms</a>
+        </span>
+      </footer>
     </main>
   );
 }
