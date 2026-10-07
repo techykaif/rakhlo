@@ -38,6 +38,12 @@ export function AuthForm({ mode }: AuthFormProps) {
   async function handleOAuth(provider: OAuthProvider) {
     setError("");
     setMessage("");
+
+    if (mode === "signup" && !termsAccepted) {
+      setError(t.termsConsentRequired);
+      return;
+    }
+
     setLoading(true);
 
     try {
