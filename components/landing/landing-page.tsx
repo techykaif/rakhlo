@@ -6,6 +6,7 @@ import { copy } from "@/lib/i18n";
 import { Icon } from "@/components/ui/icon";
 import { Logo } from "@/components/ui/logo";
 import { PublicHeader } from "@/components/public/public-header";
+import { PublicFooter } from "@/components/public/public-footer";
 import { useLanguage } from "@/components/ui/language-provider";
 
 type LandingCopy = (typeof copy)[keyof typeof copy]["landing"];
@@ -149,7 +150,8 @@ export default function LandingPage({ authenticated }: { authenticated: boolean 
 
 
   return (
-    <main className={"flex min-h-screen flex-col overflow-hidden bg-[#141512] font-sans text-[#F7F6F1]"} lang={language}>
+    <div className="flex min-h-screen flex-col bg-[#141512]">
+      <main className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[#141512] font-sans text-[#F7F6F1]" lang={language}>
       <div className="relative z-30">
         <PublicHeader authenticated={authenticated} isHome />
       </div>
@@ -344,39 +346,8 @@ export default function LandingPage({ authenticated }: { authenticated: boolean 
         </div>
       </section>
 
-      <footer className={"mt-auto border-t border-[#DAD8D0] bg-[#EEEDE7] text-[#141512]"}>
-        <div className={"mx-auto w-[min(1160px,calc(100%-32px))] flex items-start justify-between gap-12 py-12 max-[760px]:flex-col max-[760px]:gap-8"}>
-          <div className={"max-w-[420px] [&_p]:mt-3 [&_p]:text-[11px] [&_p]:leading-6 [&_p]:text-[#5F6059]"}>
-            <a className={"inline-flex items-center gap-2.5 font-extrabold tracking-[-0.02em] text-[#F7F6F1]"} href="#top">
-              <Logo size="md" variant="on-light" />
-            </a>
-            <p>{t.footerText}</p>
-          </div>
-
-          <div className={"grid grid-cols-2 gap-x-10 gap-y-3 pt-1 [&_a]:text-[11px] [&_a]:font-bold [&_a]:text-[#5F6059] [&_a]:transition-colors [&_a]:hover:text-[#141512]"}>
-            <Link href="/login">{t.login}</Link>
-            <Link href="/signup">{t.start}</Link>
-            <a href="#why">{t.navWhy}</a>
-            <a href="#how">{t.navHow}</a>
-            <a href="#features">{t.navFeatures}</a>
-            <Link href="/status">Status</Link>
-            <Link href="/support">Support</Link>
-            <Link href="/support#feedback">Feedback</Link>
-            <Link href="/guidelines">Guidelines</Link>
-            <Link href="/privacy">Privacy &amp; data</Link>
-            <Link href="/disclaimer">Disclaimer</Link>
-            <Link href="/terms">Terms</Link>
-          </div>
-        </div>
-
-        <div className={"mx-auto w-[min(1160px,calc(100%-32px))] flex min-h-[58px] items-center justify-between gap-5 border-t border-[#DAD8D0] text-[9px] text-[#7B7C74] max-[760px]:flex-col max-[760px]:items-start max-[760px]:justify-center max-[760px]:gap-1.5 max-[760px]:py-4"}>
-          <div className={"flex flex-wrap items-center gap-2"}>
-            <span>© 2026 {BRAND.name}</span>
-            <span className={"h-1 w-1 rounded-full bg-[#A7A8A0]"} />
-            <span>{t.footerMade}</span>
-          </div>
-        </div>
-      </footer>
-    </main>
+      </main>
+      <PublicFooter />
+    </div>
   );
 }
