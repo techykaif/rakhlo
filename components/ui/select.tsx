@@ -131,7 +131,7 @@ export function Select({
       {open ? (
         <div
           id={listboxId}
-          className="absolute left-0 top-[calc(100%+6px)] z-50 max-h-60 w-full overflow-y-auto rounded-xl border border-[#dfded7] bg-white p-1.5 shadow-[0_18px_40px_rgba(23,23,19,0.14)]"
+          className="absolute left-0 top-[calc(100%+6px)] z-50 max-h-52 w-full overflow-y-auto rounded-xl border border-[#dfded7] bg-white p-1 shadow-[0_18px_40px_rgba(23,23,19,0.14)]"
           role="listbox"
           aria-label={ariaLabel}
         >
@@ -142,7 +142,7 @@ export function Select({
               role="option"
               aria-selected={option.value === value}
               className={[
-                "flex w-full items-center justify-between gap-3 rounded-lg border-0 bg-transparent px-2.5 py-2 text-left text-[11px] text-[#4f5049] transition",
+                "!flex w-full !min-h-0 h-8 items-center justify-between gap-3 rounded-lg border-0 bg-transparent px-2.5 !py-1.5 text-left text-[11px] leading-4 text-[#4f5049] transition",
                 "hover:bg-[#f4f4ef] focus-visible:bg-[#f4f4ef] focus-visible:outline-none",
                 option.value === value ? "bg-[#eef5e8] font-bold text-[#171713]" : "",
               ].join(" ")}

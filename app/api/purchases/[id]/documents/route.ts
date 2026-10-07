@@ -7,6 +7,10 @@ import {
   isOwnedPurchaseDocumentPath,
   PURCHASE_DOCUMENTS_BUCKET,
 } from "@/lib/documents/storage";
+import {
+  DOCUMENT_MAX_COUNT,
+  DOCUMENT_MAX_TOTAL_BYTES,
+} from "@/lib/documents/validation";
 
 type Context = { params: Promise<{ id: string }> };
 
@@ -93,6 +97,36 @@ export async function POST(request: Request, context: Context) {
     return NextResponse.json({ error: "Purchase not found." }, { status: 404 });
   }
 
+  const { data: existingDocuments, error: documentsError } = await supabase
+    .from("documents")
+    .select("size_bytes")
+    .eq("purchase_id", purchaseId)
+    .eq("user_id", userId);
+
+  if (documentsError) {
+    return NextResponse.json({ error: "Unable to verify attachment limits." }, { status: 500 });
+  }
+
+  const documentCount = existingDocuments?.length ?? 0;
+  const documentBytes = (existingDocuments ?? []).reduce(
+    (total, document) => total + Number(document.size_bytes || 0),
+    0,
+  );
+
+  if (documentCount >= DOCUMENT_MAX_COUNT) {
+    return NextResponse.json(
+      { error: "A purchase can have at most 5 attachments." },
+      { status: 409 },
+    );
+  }
+
+  if (documentBytes + validation.data.size_bytes > DOCUMENT_MAX_TOTAL_BYTES) {
+    return NextResponse.json(
+      { error: "The total attachment size for a purchase cannot exceed 50 MB." },
+      { status: 409 },
+    );
+  }
+
   const basename = getDocumentBasename(path);
   const { data: objects, error: storageError } = await supabase.storage
     .from(PURCHASE_DOCUMENTS_BUCKET)
@@ -147,6 +181,20 @@ export async function POST(request: Request, context: Context) {
     .single();
 
   if (error) {
+    await supabase.storage.from(PURCHASE_DOCUMENTS_BUCKET).remove([path]);
+
+    const message = error.message?.toLowerCase() ?? "";
+    if (
+      message.includes("attachment limit") ||
+      message.includes("document limit") ||
+      message.includes("total attachment size")
+    ) {
+      return NextResponse.json(
+        { error: "A purchase can have at most 5 attachments and 50 MB total." },
+        { status: 409 },
+      );
+    }
+
     return NextResponse.json({ error: "Unable to save the document." }, { status: 400 });
   }
 

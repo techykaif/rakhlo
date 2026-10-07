@@ -9,6 +9,7 @@ import { Select } from "@/components/ui/select";
 import { Icon } from "@/components/ui/icon";
 import {
   DOCUMENT_MAX_BYTES,
+  DOCUMENT_MAX_COUNT,
   DOCUMENT_TYPES,
   type DocumentType,
 } from "@/lib/documents/validation";
@@ -79,6 +80,16 @@ export function PurchaseDocuments({
     setStatus("");
     setError("");
 
+    if (documents.length >= DOCUMENT_MAX_COUNT) {
+      setSelectedFile(null);
+      setError(
+        language === "hi"
+          ? "एक खरीदारी में अधिकतम 5 अटैचमेंट जोड़े जा सकते हैं।"
+          : "A purchase can have at most 5 attachments.",
+      );
+      return;
+    }
+
     if (!file) {
       setSelectedFile(null);
       return;
@@ -107,6 +118,15 @@ export function PurchaseDocuments({
   }
 
   async function upload() {
+    if (documents.length >= DOCUMENT_MAX_COUNT) {
+      setError(
+        language === "hi"
+          ? "एक खरीदारी में अधिकतम 5 अटैचमेंट जोड़े जा सकते हैं।"
+          : "A purchase can have at most 5 attachments.",
+      );
+      return;
+    }
+
     if (!selectedFile) {
       setError(t.chooseFileFirst);
       return;
@@ -188,10 +208,15 @@ export function PurchaseDocuments({
       }
 
       if (finalizePayload.document) {
-        setDocuments((current) => [
+        const nextDocuments = [
           finalizePayload.document as DocumentItem,
-          ...current,
-        ]);
+          ...documents,
+        ];
+        setDocuments(nextDocuments);
+
+        if (nextDocuments.length >= DOCUMENT_MAX_COUNT) {
+          setShowUploader(false);
+        }
       }
 
       setSelectedFile(null);
@@ -249,7 +274,7 @@ export function PurchaseDocuments({
           <span className={tw("panel-kicker")}>{t.documentsTitle}</span>
           <p>{t.documentsText}</p>
         </div>
-        {!showUploader ? (
+        {!showUploader && documents.length < DOCUMENT_MAX_COUNT ? (
           <button
             type="button"
             className={tw("purchase-documents__add")}
@@ -271,7 +296,15 @@ export function PurchaseDocuments({
         </p>
       ) : null}
 
-      {showUploader ? (
+      {documents.length >= DOCUMENT_MAX_COUNT ? (
+        <p className="mt-3 rounded-lg bg-[#f4f4ef] px-3 py-2 text-[10px] leading-5 text-[#6f7068]" role="status">
+          {language === "hi"
+            ? "5 में से 5 अटैचमेंट जुड़े हैं। प्रत्येक फाइल अधिकतम 10 MB की हो सकती है।"
+            : "5 of 5 attachments are added. Each file can be up to 10 MB."}
+        </p>
+      ) : null}
+
+      {showUploader && documents.length < DOCUMENT_MAX_COUNT ? (
         <div className={tw("purchase-documents__uploader")}>
           <div className={tw("purchase-documents__controls")}>
             <label>
@@ -307,7 +340,7 @@ export function PurchaseDocuments({
                   <small>
                     {selectedFile
                       ? formatSize(selectedFile.size)
-                      : t.supportedFiles}
+                      : t.supportedFiles + " • " + (language === "hi" ? "अधिकतम 5 फाइल" : "5 files max")}
                   </small>
                 </span>
                 <Icon name="file" size={16} />

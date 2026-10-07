@@ -7,6 +7,7 @@ import { Select } from "@/components/ui/select";
 import { Icon } from "@/components/ui/icon";
 import { FloatingField } from "@/components/ui/floating-field";
 import { addOneCalendarYear } from "@/lib/purchases/warranty";
+import { formatIndiaDateTime, formatIndiaDateTimeInput, todayInIndia } from "@/lib/purchases/payment-time";
 
 type Item = {
   id: string;
@@ -222,13 +223,6 @@ export function PurchaseExtras({
     year: "numeric",
     timeZone: "UTC",
   });
-  const dateTimeFormatter = new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
   const moneyFormatter = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "INR",
@@ -240,13 +234,11 @@ export function PurchaseExtras({
   }
 
   function formatDateTime(value: string) {
-    return dateTimeFormatter.format(new Date(value));
+    return formatIndiaDateTime(value, locale);
   }
 
   function todayInput() {
-    const now = new Date();
-    const pad = (value: number) => String(value).padStart(2, "0");
-    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    return todayInIndia();
   }
 
   async function load() {
@@ -346,7 +338,7 @@ export function PurchaseExtras({
       setPayment({
         amount: String(value.amount),
         method: value.method,
-        paid_at: value.paid_at ? value.paid_at.slice(0, 16) : "",
+        paid_at: formatIndiaDateTimeInput(value.paid_at),
         reference: value.reference ?? "",
       });
       return;

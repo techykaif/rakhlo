@@ -1,4 +1,5 @@
-const CACHE = "rakhlo-static-v6";
+const CACHE = "rakhlo-static-v7";
+const MAX_IMMUTABLE_ENTRIES = 80;
 const OFFLINE_URL = "/offline.html";
 const PRECACHE = [OFFLINE_URL, "/icon", "/icon1", "/apple-icon"];
 
@@ -44,7 +45,7 @@ self.addEventListener("push", (event) => {
   const options = {
     body: payload.body || "You have something to remember.",
     icon: "/icon",
-    badge: "/icon1",
+    badge: "/notification-badge.svg",
     tag: "rakhlo-reminder",
     data: { url: payload.url || "/reminders" },
     renotify: true,
@@ -68,6 +69,20 @@ self.addEventListener("notificationclick", (event) => {
     }),
   );
 });
+
+async function cacheImmutable(request, response) {
+  const cache = await caches.open(CACHE);
+  await cache.put(request, response);
+
+  const staticKeys = (await cache.keys()).filter((key) =>
+    new URL(key.url).pathname.startsWith("/_next/static/"),
+  );
+
+  const overflow = staticKeys.length - MAX_IMMUTABLE_ENTRIES;
+  if (overflow > 0) {
+    await Promise.all(staticKeys.slice(0, overflow).map((key) => cache.delete(key)));
+  }
+}
 
 self.addEventListener("fetch", (event) => {
   const request = event.request;
@@ -107,9 +122,7 @@ self.addEventListener("fetch", (event) => {
         return fetch(request)
           .then((response) => {
             if (!response.ok) return response;
-            event.waitUntil(
-              caches.open(CACHE).then((cache) => cache.put(request, response.clone())),
-            );
+            event.waitUntil(cacheImmutable(request, response.clone()));
             return response;
           })
           .catch(() => Response.error());
