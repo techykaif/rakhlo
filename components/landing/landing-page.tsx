@@ -120,7 +120,7 @@ function ProductPreview({
         </div>
       </div>
 
-      <div className={"absolute z-20 flex items-center gap-2.5 rounded-2xl border border-black/6 bg-white/96 p-2.5 text-[#141512] shadow-[0_18px_44px_rgba(0,0,0,0.16)] backdrop-blur-[8px] right-[-8px] top-6 max-[620px]:right-0"}>
+      <div className={"absolute z-20 flex items-center gap-2.5 glass-light-strong rounded-2xl p-2.5 text-[#141512] right-[-8px] top-6 max-[620px]:right-0"}>
         <span className={"grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#F2F1EB]"}>
           <Icon name="calendar" size={16} />
         </span>
@@ -130,7 +130,7 @@ function ProductPreview({
         </span>
       </div>
 
-      <div className={"absolute z-20 flex items-center gap-2.5 rounded-2xl border border-black/6 bg-white/96 p-2.5 text-[#141512] shadow-[0_18px_44px_rgba(0,0,0,0.16)] backdrop-blur-[8px] bottom-5 left-[-10px] max-[620px]:left-0"}>
+      <div className={"absolute z-20 flex items-center gap-2.5 glass-light-strong rounded-2xl p-2.5 text-[#141512] bottom-5 left-[-10px] max-[620px]:left-0"}>
         <span className={"grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#F2F1EB]"}>
           <Icon name="file" size={16} />
         </span>
@@ -173,7 +173,7 @@ export default function LandingPage({ authenticated }: { authenticated: boolean 
               <Link href={authenticated ? "/dashboard" : "/signup"} className={"inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-[11px] font-extrabold transition duration-150 hover:-translate-y-0.5 bg-[#F7F6F1] text-[#141512] shadow-[0_12px_28px_rgba(0,0,0,0.18)] hover:bg-white"}>
                 {authenticated ? t.openDashboard : t.heroPrimary}<Icon name="arrow-right" size={16} />
               </Link>
-              <a href="#how" className={"inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-[11px] font-extrabold transition duration-150 hover:-translate-y-0.5 border border-white/12 bg-white/5 text-[#F7F6F1] hover:bg-white/8"}>
+              <a href="#how" className={"inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-[11px] font-extrabold transition duration-150 hover:-translate-y-0.5 glass-control text-[#F7F6F1]"}>
                 {t.heroSecondary}
               </a>
             </div>
