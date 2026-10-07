@@ -25,7 +25,7 @@ export function PublicHeader({ authenticated, isHome = false }: { authenticated:
       <div className="glass-dark mx-auto flex min-h-[68px] w-[min(1160px,calc(100%-32px))] items-center justify-between gap-4 rounded-[20px] px-4 sm:px-5 md:min-h-[72px] md:px-5">
         <Link
           href="/"
-          className="inline-flex min-w-0 shrink-0 items-center [&>span:last-child]:max-[520px]:hidden"
+          className="inline-flex min-w-0 shrink-0 items-center max-[520px]:[&>span>span:last-child]:hidden"
           aria-label={BRAND.name}
         >
           <Logo size="md" variant="on-dark" />
