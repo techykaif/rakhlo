@@ -46,6 +46,7 @@ function responseFilename(response: Response) {
 
 export function PurchasePdfPreview({
   purchase,
+  documentCount,
 }: {
   purchase: PurchasePreview;
   documentCount: number;
