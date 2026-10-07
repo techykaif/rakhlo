@@ -18,6 +18,11 @@ describe("purchase PDF preview", () => {
       }),
     );
     vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("URL", {
+      ...URL,
+      createObjectURL: vi.fn(() => "blob:pdf-preview"),
+      revokeObjectURL: vi.fn(),
+    });
 
     render(
       <LanguageProvider>
