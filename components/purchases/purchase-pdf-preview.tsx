@@ -39,6 +39,38 @@ export function PurchasePdfPreview({
     timeZone: "UTC",
   }).format(new Date(purchase.purchase_date + "T00:00:00Z"));
 
+  async function downloadPdf() {
+    const response = await fetch(pdfUrl + "?download=1", {
+      credentials: "same-origin",
+      headers: { Accept: "application/pdf" },
+    });
+
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!response.ok || !contentType.toLowerCase().includes("application/pdf")) {
+      let message = hi ? "PDF डाउनलोड नहीं हो सकी।" : "The PDF could not be downloaded.";
+      try {
+        const payload = await response.json();
+        if (typeof payload?.error === "string") message = payload.error;
+      } catch {
+        // Keep the safe generic message when the server response is not JSON.
+      }
+      throw new Error(message);
+    }
+
+    const blob = await response.blob();
+    const disposition = response.headers.get("content-disposition") ?? "";
+    const match = disposition.match(/filename="([^"]+)"/i);
+    const filename = match?.[1] || "purchase-rakhlo.pdf";
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  }
+
   function printPdf() {
     window.open(pdfUrl, "_blank", "noopener,noreferrer");
   }
@@ -60,19 +92,33 @@ export function PurchasePdfPreview({
             <Icon name="file" size={15} />
             {hi ? "प्रिंट" : "Print"}
           </button>
-          <a
-            href={pdfUrl + "?download=1"}
-            download
+          <button
+            type="button"
             className={tw("button button-dark")}
+            onClick={() => {
+              void downloadPdf().catch((error: unknown) => {
+                window.alert(error instanceof Error ? error.message : (hi ? "PDF डाउनलोड नहीं हो सकी।" : "The PDF could not be downloaded."));
+              });
+            }}
           >
             <Icon name="file" size={15} />
             {hi ? "PDF डाउनलोड करें" : "Download PDF"}
-          </a>
+          </button>
         </div>
       </div>
 
       <div className={tw("pdf-preview__frame")}>
-        <article className="mx-auto min-h-[620px] w-full max-w-[760px] bg-white px-6 py-8 shadow-[0_10px_35px_rgba(23,23,19,0.06)] max-[640px]:min-h-[560px] max-[640px]:px-5 max-[640px]:py-6">
+        <iframe
+          title={hi ? "PDF पूर्वावलोकन" : "Generated PDF preview"}
+          src={pdfUrl}
+          className={tw("pdf-preview__iframe")}
+        />
+        <noscript>
+          <p className="p-6 text-[11px] text-[#6f7068]">
+            {hi ? "PDF देखने के लिए JavaScript सक्षम करें।" : "Enable JavaScript to view the generated PDF."}
+          </p>
+        </noscript>
+        <article className="hidden"> className="mx-auto min-h-[620px] w-full max-w-[760px] bg-white px-6 py-8 shadow-[0_10px_35px_rgba(23,23,19,0.06)] max-[640px]:min-h-[560px] max-[640px]:px-5 max-[640px]:py-6">
           <div className="flex items-start justify-between gap-4 border-b border-[#e4e3dc] pb-5">
             <div>
               <p className="m-0 text-[9px] font-extrabold tracking-[0.13em] text-[#6f7068]">RAKHLO</p>
