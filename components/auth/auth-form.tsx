@@ -30,6 +30,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -75,6 +76,11 @@ export function AuthForm({ mode }: AuthFormProps) {
     event.preventDefault();
     setError("");
     setMessage("");
+
+    if (mode === "signup" && !termsAccepted) {
+      setError(t.termsConsentRequired);
+      return;
+    }
 
     const validation = validateAuthInput(
       { email, password, confirmation },
@@ -234,6 +240,28 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       {error ? <div className={tw("auth-message auth-message--error")} role="alert">{error}</div> : null}
       {message ? <div className={tw("auth-message auth-message--success")} role="status">{message}</div> : null}
+
+      {mode === "signup" ? (
+        <label className="flex items-start gap-2.5 text-[10px] leading-4 text-[#6f7068]">
+          <input
+            type="checkbox"
+            checked={termsAccepted}
+            onChange={(event) => setTermsAccepted(event.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 accent-[#171713] focus-visible:outline-2 focus-visible:outline-[#c8f76a] focus-visible:outline-offset-2"
+            required
+          />
+          <span>
+            {t.termsConsentPrefix}{" "}
+            <Link className="font-bold text-[#171713] underline underline-offset-2" href="/terms">
+              {t.termsConsentTerms}
+            </Link>{" "}
+            {t.termsConsentAnd}{" "}
+            <Link className="font-bold text-[#171713] underline underline-offset-2" href="/privacy">
+              {t.termsConsentPrivacy}
+            </Link>
+          </span>
+        </label>
+      ) : null}
 
       <button className={tw("button button-dark auth-submit")} type="submit" disabled={loading}>
         {loading ? copy[language].common.loading : mode === "signin" ? t.signInButton : t.signUpButton}
