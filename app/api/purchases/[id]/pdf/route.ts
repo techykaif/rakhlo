@@ -465,9 +465,6 @@ export async function GET(
       "Content-Type": "application/pdf",
       "Content-Disposition": (download ? "attachment" : "inline") + '; filename="' + filename + '-rakhlo.pdf"',
       "Cache-Control": "private, no-store",
-      "X-Content-Type-Options": "nosniff",
-      "X-Frame-Options": "SAMEORIGIN",
-      "Content-Security-Policy": "default-src 'none'; frame-ancestors 'self';",
 
     },
   });
