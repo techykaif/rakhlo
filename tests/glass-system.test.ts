@@ -10,7 +10,20 @@ describe("glass visual system", () => {
     expect(css).toContain("backdrop-filter: blur(var(--glass-blur))");
     expect(css).toContain("@supports not (backdrop-filter: blur(1px))");
     expect(css).toContain("prefers-reduced-transparency");
-    expect(css).toContain("focus-visible");
+  });
+
+  it("keeps accessible focus treatment in the shared UI layer", () => {
+    const styles = fs.readFileSync(
+      path.join(process.cwd(), "components/ui/styles.ts"),
+      "utf8",
+    );
+    const languageToggle = fs.readFileSync(
+      path.join(process.cwd(), "components/ui/language-toggle.tsx"),
+      "utf8",
+    );
+
+    expect(styles).toContain("focus-visible:");
+    expect(languageToggle).toContain("focus-visible:outline-2");
   });
 
   it("uses the material on high-value surfaces rather than every content card", () => {
