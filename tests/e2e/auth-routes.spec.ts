@@ -5,6 +5,9 @@ test("sign up page renders", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /create your rakhlo account/i })).toBeVisible();
   await expect(page.getByLabel(/email address|ईमेल पता/i)).toBeVisible();
   await expect(page.getByLabel(/^password$|^पासवर्ड$/i)).toBeVisible();
+  await expect(page.getByRole("checkbox")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Terms" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Privacy Policy" })).toBeVisible();
 });
 
 test("sign in page renders", async ({ page }) => {
