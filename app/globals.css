@@ -220,6 +220,11 @@
   }
 }
 
+@keyframes search-skeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @keyframes search-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .command-search-loading__spinner { animation: none !important; } }
 

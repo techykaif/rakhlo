@@ -15,25 +15,45 @@ type PurchasePreview = {
   category_name: string | null;
 };
 
+type LoadingStage = "starting" | "working" | "taking-longer";
+
 async function fetchPdf(url: string, language: "en" | "hi") {
-  const response = await fetch(url, {
-    credentials: "same-origin",
-    headers: { Accept: "application/pdf" },
-  });
-  const contentType = response.headers.get("content-type") ?? "";
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 30000);
 
-  if (!response.ok || !contentType.toLowerCase().includes("application/pdf")) {
-    let message = language === "hi" ? "PDF तैयार नहीं हो सकी।" : "The PDF could not be generated.";
-    try {
-      const payload = await response.json();
-      if (typeof payload?.error === "string") message = payload.error;
-    } catch {
-      // Keep the generic message when the server response is not JSON.
+  try {
+    const response = await fetch(url, {
+      credentials: "same-origin",
+      headers: { Accept: "application/pdf" },
+      signal: controller.signal,
+      cache: "no-store",
+    });
+    const contentType = response.headers.get("content-type") ?? "";
+
+    if (!response.ok || !contentType.toLowerCase().includes("application/pdf")) {
+      let message = language === "hi" ? "PDF तैयार नहीं हो सकी।" : "The PDF could not be generated.";
+      try {
+        const payload = await response.json();
+        if (typeof payload?.error === "string") message = payload.error;
+      } catch {
+        // Keep the generic message when the server response is not JSON.
+      }
+      throw new Error(message);
     }
-    throw new Error(message);
-  }
 
-  return response;
+    return response;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error(
+        language === "hi"
+          ? "PDF बनने में सामान्य से अधिक समय लग रहा है। कृपया फिर से कोशिश करें।"
+          : "The PDF is taking longer than expected. Please try again.",
+      );
+    }
+    throw error;
+  } finally {
+    window.clearTimeout(timeout);
+  }
 }
 
 function responseFilename(response: Response) {
@@ -53,8 +73,12 @@ export function PurchasePdfPreview({
 }) {
   const { language } = useLanguage();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
+  const [previewFilename, setPreviewFilename] = useState("purchase-rakhlo.pdf");
   const [downloading, setDownloading] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(true);
+  const [loadingStage, setLoadingStage] = useState<LoadingStage>("starting");
+  const [retryNonce, setRetryNonce] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const hi = language === "hi";
   const pdfUrl = "/api/purchases/" + purchase.id + "/pdf";
@@ -76,16 +100,22 @@ export function PurchasePdfPreview({
   useEffect(() => {
     let active = true;
     let objectUrl: string | null = null;
+    const workingTimer = window.setTimeout(() => setLoadingStage("working"), 1200);
+    const slowTimer = window.setTimeout(() => setLoadingStage("taking-longer"), 6500);
 
     async function loadPreview() {
       setLoadingPreview(true);
+      setLoadingStage("starting");
       setError(null);
 
       try {
         const response = await fetchPdf(pdfUrl, language);
         const blob = await response.blob();
+
         if (!active) return;
         objectUrl = URL.createObjectURL(blob);
+        setPreviewBlob(blob);
+        setPreviewFilename(responseFilename(response));
         setPreviewUrl(objectUrl);
       } catch (previewError) {
         if (!active) return;
@@ -103,21 +133,31 @@ export function PurchasePdfPreview({
 
     return () => {
       active = false;
+      window.clearTimeout(workingTimer);
+      window.clearTimeout(slowTimer);
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [pdfUrl, language, hi]);
+  }, [pdfUrl, language, hi, retryNonce]);
 
   async function downloadPdf() {
+    if (downloading) return;
     setError(null);
     setDownloading(true);
 
     try {
-      const response = await fetchPdf(pdfUrl + "?download=1", language);
-      const blob = await response.blob();
+      let blob = previewBlob;
+      let filename = previewFilename;
+
+      if (!blob) {
+        const response = await fetchPdf(pdfUrl + "?download=1", language);
+        blob = await response.blob();
+        filename = responseFilename(response);
+      }
+
       const objectUrl = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = objectUrl;
-      anchor.download = responseFilename(response);
+      anchor.download = filename;
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
@@ -136,13 +176,22 @@ export function PurchasePdfPreview({
   async function printPdf() {
     setError(null);
     const printWindow = window.open("", "_blank", "noopener,noreferrer");
+
     if (!printWindow) {
-      setError(hi ? "पॉप-अप ब्लॉक है। पहले इसकी अनुमति दें।" : "The print window was blocked. Please allow pop-ups and try again.");
+      setError(
+        hi
+          ? "पॉप-अप ब्लॉक है। पहले इसकी अनुमति दें।"
+          : "The print window was blocked. Please allow pop-ups and try again.",
+      );
       return;
     }
 
     try {
-      printWindow.document.title = hi ? "Rakhlo PDF" : "Rakhlo PDF";
+      if (previewUrl) {
+        printWindow.location.href = previewUrl;
+        return;
+      }
+
       const response = await fetchPdf(pdfUrl, language);
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
@@ -158,6 +207,13 @@ export function PurchasePdfPreview({
     }
   }
 
+  const loadingCopy =
+    loadingStage === "starting"
+      ? (hi ? "PDF तैयार करना शुरू कर रहे हैं…" : "Starting your PDF…")
+      : loadingStage === "working"
+        ? (hi ? "आपका पूरा PDF रिकॉर्ड तैयार हो रहा है…" : "Preparing your complete PDF record…")
+        : (hi ? "थोड़ा समय लग रहा है, लेकिन हम अभी भी तैयार कर रहे हैं…" : "This is taking a little longer, but we’re still working on it…");
+
   return (
     <main className={tw("pdf-preview")}>
       <div className={tw("pdf-preview__header")}>
@@ -172,7 +228,12 @@ export function PurchasePdfPreview({
         </div>
 
         <div className={tw("pdf-preview__actions")}>
-          <button type="button" className={tw("button button-light")} onClick={() => void printPdf()}>
+          <button
+            type="button"
+            className={tw("button button-light")}
+            onClick={() => void printPdf()}
+            disabled={loadingPreview && !previewUrl}
+          >
             <Icon name="file" size={15} />
             {hi ? "प्रिंट" : "Print"}
           </button>
@@ -180,18 +241,31 @@ export function PurchasePdfPreview({
             type="button"
             className={tw("button button-dark")}
             onClick={() => void downloadPdf()}
-            disabled={downloading || loadingPreview}
+            disabled={downloading}
             aria-busy={downloading}
           >
             <Icon name="file" size={15} />
-            {downloading ? (hi ? "तैयार हो रही है…" : "Preparing PDF…") : (hi ? "PDF डाउनलोड करें" : "Download PDF")}
+            {downloading
+              ? (hi ? "तैयार हो रही है…" : "Preparing PDF…")
+              : (hi ? "PDF डाउनलोड करें" : "Download PDF")}
           </button>
         </div>
       </div>
 
       {error ? (
-        <div className="rounded-xl border border-[#ead8d8] bg-[#faf1f1] px-3.5 py-3 text-[11px] leading-5 text-[#7d4d4d]" role="alert">
-          {error}
+        <div
+          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#ead8d8] bg-[#faf1f1] px-3.5 py-3 text-[11px] leading-5 text-[#7d4d4d]"
+          role="alert"
+        >
+          <span>{error}</span>
+          <button
+            type="button"
+            className={tw("button button-light min-h-9 text-[10px]")}
+            onClick={() => setRetryNonce((current) => current + 1)}
+            disabled={loadingPreview}
+          >
+            {hi ? "फिर कोशिश करें" : "Try again"}
+          </button>
         </div>
       ) : null}
 
@@ -203,9 +277,25 @@ export function PurchasePdfPreview({
             className={tw("pdf-preview__iframe")}
           />
         ) : (
-          <div className={tw("pdf-preview__loading")}>
-            <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#d7d6ce] border-t-[#171713]" />
-            <span>{hi ? "PDF तैयार हो रही है…" : "Preparing PDF preview…"}</span>
+          <div className={tw("pdf-preview__loading")} role="status" aria-live="polite">
+            <div className={tw("pdf-preview__loading-sheet")} aria-hidden="true">
+              <div className={tw("pdf-preview__loading-kicker")} />
+              <div className={tw("pdf-preview__loading-title")} />
+              <div className={tw("pdf-preview__loading-line")} />
+              <div className={tw("pdf-preview__loading-grid")}>
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-2.5">
+              <span
+                className="h-5 w-5 animate-spin rounded-full border-2 border-[#d7d6ce] border-t-[#171713]"
+                aria-hidden="true"
+              />
+              <span>{loadingCopy}</span>
+            </div>
           </div>
         )}
       </div>

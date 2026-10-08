@@ -41,7 +41,7 @@ describe("purchase PDF preview", () => {
       </LanguageProvider>,
     );
 
-    expect(screen.getByText("Preparing PDF preview…")).toBeTruthy();
+    expect(screen.getByRole("status")).toBeTruthy();
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/purchases/purchase-1/pdf",
       expect.objectContaining({
