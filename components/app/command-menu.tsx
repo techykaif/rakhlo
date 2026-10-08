@@ -44,6 +44,9 @@ export function CommandMenu({ language }: { language: Language }) {
       return;
     }
 
+    setPurchaseResults([]);
+    setSearchingPurchases(true);
+
     const controller = new AbortController();
     const timeout = window.setTimeout(async () => {
       setSearchingPurchases(true);
@@ -253,8 +256,15 @@ export function CommandMenu({ language }: { language: Language }) {
             <div className={tw("command-list")}>
               {searchingPurchases ? (
                 <div className={tw("command-search-loading")} aria-live="polite">
-                  <span className={tw("command-search-loading__spinner")} aria-hidden="true" />
-                  <span>{language === "hi" ? "आपकी खरीदारी खोज रहे हैं…" : "Searching your purchases…"}</span>
+                  <div className={tw("command-search-skeleton")} aria-hidden="true">
+                    <span className={tw("command-search-skeleton__row")} />
+                    <span className={tw("command-search-skeleton__row")} />
+                    <span className={tw("command-search-skeleton__row")} />
+                  </div>
+                  <div className="flex items-center justify-center gap-2.5">
+                    <span className={tw("command-search-loading__spinner")} aria-hidden="true" />
+                    <span>{language === "hi" ? "आपकी खरीदारी खोज रहे हैं…" : "Searching your purchases…"}</span>
+                  </div>
                 </div>
               ) : results.length ? (
                 results.map((item, index) => (
