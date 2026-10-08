@@ -7,6 +7,7 @@ import { copy } from "@/lib/i18n";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Select } from "@/components/ui/select";
 import { Icon } from "@/components/ui/icon";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import {
   DOCUMENT_MAX_BYTES,
   DOCUMENT_MAX_COUNT,
@@ -75,6 +76,7 @@ export function PurchaseDocuments({
   const [uploadPhase, setUploadPhase] = useState<"idle" | "uploading" | "success">("idle");
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [showUploader, setShowUploader] = useState(initialDocuments.length === 0);
+  const [removeTarget, setRemoveTarget] = useState<string | null>(null);
 
   function selectFile(file: File | undefined) {
     setStatus("");
@@ -236,9 +238,9 @@ export function PurchaseDocuments({
   }
 
   async function remove(id: string) {
-    if (!window.confirm(t.deleteDocumentConfirm)) return;
-
+    if (removingId) return;
     setRemovingId(id);
+    setRemoveTarget(null);
     setError("");
     setStatus("");
 
@@ -414,6 +416,21 @@ export function PurchaseDocuments({
         </div>
       ) : null}
 
+      <ConfirmDialog
+        open={Boolean(removeTarget)}
+        eyebrow={t.deleteDocumentDialogEyebrow}
+        title={t.deleteDocumentDialogTitle}
+        description={t.deleteDocumentDialogDescription}
+        detail={t.deleteDocumentDialogDetail}
+        cancelLabel={copy[language].common.cancel}
+        confirmLabel={t.removeDocument}
+        onCancel={() => { if (!removingId) setRemoveTarget(null); }}
+        onConfirm={() => { if (removeTarget && !removingId) void remove(removeTarget); }}
+        busy={Boolean(removingId)}
+        icon="trash"
+        detailIcon="info"
+      />
+
       {documents.length ? (
         <div className={tw("purchase-document-list")}>
           {documents.map((document) => (
@@ -440,7 +457,7 @@ export function PurchaseDocuments({
                 <button
                   type="button"
                   className={tw("button button-danger")}
-                  onClick={() => remove(document.id)}
+                  onClick={() => setRemoveTarget(document.id)}
                   disabled={removingId === document.id}
                 >
                   {removingId === document.id
