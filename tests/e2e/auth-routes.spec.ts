@@ -6,8 +6,26 @@ test("sign up page renders", async ({ page }) => {
   await expect(page.getByLabel(/email address|ईमेल पता/i)).toBeVisible();
   await expect(page.getByLabel(/^password$|^पासवर्ड$/i)).toBeVisible();
   await expect(page.getByRole("checkbox")).toBeVisible();
-  await expect(page.locator("form").getByRole("link", { name: "Terms" })).toBeVisible();
-  await expect(page.locator("form").getByRole("link", { name: "Privacy Policy" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Terms" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Privacy Policy" })).toBeVisible();
+});
+
+test("signup keeps Terms and Privacy inside an accessible dialog", async ({ page }) => {
+  await page.goto("/signup");
+
+  await page.getByRole("button", { name: "Terms" }).click();
+  const termsDialog = page.getByRole("dialog");
+  await expect(termsDialog).toBeVisible();
+  await expect(termsDialog.getByRole("heading")).toContainText(/simple baseline/i);
+  await termsDialog.getByRole("button", { name: /close document/i }).click();
+  await expect(termsDialog).toBeHidden();
+
+  await page.getByRole("button", { name: "Privacy Policy" }).click();
+  const privacyDialog = page.getByRole("dialog");
+  await expect(privacyDialog).toBeVisible();
+  await expect(privacyDialog.getByRole("heading")).toContainText(/what rakhlo stores/i);
+  await privacyDialog.getByRole("button", { name: /close document/i }).click();
+  await expect(privacyDialog).toBeHidden();
 });
 
 
