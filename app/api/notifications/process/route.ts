@@ -1,14 +1,18 @@
+import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import { sendWebPush } from "@/lib/notifications/web-push";
-
+import { REMINDER_MAX_OFFSET_DAYS } from "@/lib/reminders/validation";
 import { BRAND } from "@/lib/brand";
 
-const DELIVERY_LOOKBACK_MS = 24 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+const DELIVERY_LOOKBACK_MS = 7 * DAY_MS;
 const DELIVERY_LOOKAHEAD_MS = 15 * 60 * 1000;
 const DELIVERY_CLAIM_STALE_MS = 15 * 60 * 1000;
 const DELETION_CLAIM_STALE_MS = 30 * 60 * 1000;
+const REMINDER_PAGE_SIZE = 500;
+const ORPHAN_CLEANUP_LIMIT = 500;
 const PURCHASE_DOCUMENTS_BUCKET = "purchase-documents";
 
 type AdminClient = SupabaseClient<Database>;
@@ -23,8 +27,15 @@ function getAdminClient(): AdminClient {
 function isAuthorized(request: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret) return false;
-  const authorization = request.headers.get("authorization");
-  return authorization === `Bearer ${secret}`;
+
+  const provided = request.headers.get("authorization") ?? "";
+  const expected = `Bearer ${secret}`;
+  const providedBytes = Buffer.from(provided);
+  const expectedBytes = Buffer.from(expected);
+
+  if (providedBytes.length !== expectedBytes.length) return false;
+
+  return timingSafeEqual(providedBytes, expectedBytes);
 }
 
 export function shouldProcessScheduledTime(scheduledFor: Date, now: Date) {
@@ -32,23 +43,47 @@ export function shouldProcessScheduledTime(scheduledFor: Date, now: Date) {
   return difference >= -DELIVERY_LOOKAHEAD_MS && difference <= DELIVERY_LOOKBACK_MS;
 }
 
+export function getReminderProcessingBounds(now: Date) {
+  return {
+    earliestDueAt: new Date(now.getTime() - DELIVERY_LOOKBACK_MS).toISOString(),
+    latestDueAt: new Date(
+      now.getTime() +
+        DELIVERY_LOOKAHEAD_MS +
+        REMINDER_MAX_OFFSET_DAYS * DAY_MS,
+    ).toISOString(),
+  };
+}
+
 async function deleteUserStorage(supabase: AdminClient, userId: string) {
   const paths: string[] = [];
 
   async function collect(prefix: string, depth: number) {
-    const { data, error } = await supabase.storage
-      .from(PURCHASE_DOCUMENTS_BUCKET)
-      .list(prefix, { limit: 1000, sortBy: { column: "name", order: "asc" } });
+    let offset = 0;
 
-    if (error) throw error;
+    while (true) {
+      const { data, error } = await supabase.storage
+        .from(PURCHASE_DOCUMENTS_BUCKET)
+        .list(prefix, {
+          limit: 1000,
+          offset,
+          sortBy: { column: "name", order: "asc" },
+        });
 
-    for (const entry of data ?? []) {
-      const path = prefix ? `${prefix}/${entry.name}` : entry.name;
-      if (entry.id === null && depth < 4) {
-        await collect(path, depth + 1);
-      } else if (entry.id !== null) {
-        paths.push(path);
+      if (error) throw error;
+
+      const entries = data ?? [];
+      for (const entry of entries) {
+        const path = prefix ? `${prefix}/${entry.name}` : entry.name;
+
+        if (entry.id === null && depth < 4) {
+          await collect(path, depth + 1);
+        } else if (entry.id !== null) {
+          paths.push(path);
+        }
       }
+
+      if (entries.length < 1000) break;
+      offset += 1000;
     }
   }
 
@@ -57,11 +92,49 @@ async function deleteUserStorage(supabase: AdminClient, userId: string) {
   for (let index = 0; index < paths.length; index += 1000) {
     const chunk = paths.slice(index, index + 1000);
     if (!chunk.length) continue;
+
     const { error } = await supabase.storage
       .from(PURCHASE_DOCUMENTS_BUCKET)
       .remove(chunk);
+
     if (error) throw error;
   }
+}
+
+async function cleanupOrphanedDocumentStorage(supabase: AdminClient) {
+  const { data, error } = await supabase.rpc(
+    "list_orphaned_purchase_document_paths",
+    { p_limit: ORPHAN_CLEANUP_LIMIT },
+  );
+
+  if (error) {
+    console.error("orphan document cleanup failed", { error });
+    return 0;
+  }
+
+  const paths = (data ?? []).map((row) => row.storage_path).filter(Boolean);
+  let removed = 0;
+
+  for (let index = 0; index < paths.length; index += 1000) {
+    const chunk = paths.slice(index, index + 1000);
+    if (!chunk.length) continue;
+
+    const { error: removeError } = await supabase.storage
+      .from(PURCHASE_DOCUMENTS_BUCKET)
+      .remove(chunk);
+
+    if (removeError) {
+      console.error("orphan document removal failed", {
+        error: removeError,
+        count: chunk.length,
+      });
+      continue;
+    }
+
+    removed += chunk.length;
+  }
+
+  return removed;
 }
 
 async function processAccountDeletions(
@@ -127,144 +200,186 @@ export async function GET(request: Request) {
     const now = new Date();
     const nowIso = now.toISOString();
     const staleClaimIso = new Date(now.getTime() - DELIVERY_CLAIM_STALE_MS).toISOString();
+    const { earliestDueAt, latestDueAt } = getReminderProcessingBounds(now);
 
     const deletedAccounts = await processAccountDeletions(supabase, now);
 
-    const { data: reminders, error } = await supabase
-      .from("reminders")
-      .select("id,user_id,purchase_id,title,due_at,reminder_offsets,enabled,completed_at")
-      .eq("enabled", true)
-      .is("completed_at", null)
-      .lte("due_at", new Date(now.getTime() + 3650 * 24 * 60 * 60 * 1000).toISOString())
-      .limit(500);
+    const { data: deletionRequests, error: deletionError } = await supabase
+      .from("account_deletion_requests")
+      .select("user_id");
 
-    if (error) throw error;
+    if (deletionError) throw deletionError;
+
+    const pendingDeletionUsers = new Set(
+      (deletionRequests ?? []).map((request) => request.user_id),
+    );
 
     let sent = 0;
     let failed = 0;
     let claimedCount = 0;
+    let processedReminders = 0;
+    let pageStart = 0;
 
-    for (const reminder of reminders ?? []) {
-      const offsets = Array.isArray(reminder.reminder_offsets) ? reminder.reminder_offsets : [];
+    while (true) {
+      const { data: reminders, error } = await supabase
+        .from("reminders")
+        .select("id,user_id,purchase_id,title,due_at,reminder_offsets,enabled,completed_at")
+        .eq("enabled", true)
+        .is("completed_at", null)
+        .gte("due_at", earliestDueAt)
+        .lte("due_at", latestDueAt)
+        .order("due_at", { ascending: true })
+        .order("id", { ascending: true })
+        .range(pageStart, pageStart + REMINDER_PAGE_SIZE - 1);
 
-      for (const offset of offsets) {
-        const scheduledFor = new Date(
-          new Date(reminder.due_at).getTime() - Number(offset) * 86400000,
-        );
+      if (error) throw error;
 
-        if (!shouldProcessScheduledTime(scheduledFor, now)) continue;
+      const page = reminders ?? [];
+      processedReminders += page.length;
 
-        const { data: delivery, error: deliveryError } = await supabase
-          .from("reminder_deliveries")
-          .upsert(
-            {
-              reminder_id: reminder.id,
-              user_id: reminder.user_id,
-              due_at: reminder.due_at,
-              offset_days: Number(offset),
-              scheduled_for: scheduledFor.toISOString(),
-            },
-            { onConflict: "reminder_id,due_at,offset_days", ignoreDuplicates: false },
-          )
-          .select("id,delivered_at,claimed_at")
-          .single();
+      for (const reminder of page) {
+        if (pendingDeletionUsers.has(reminder.user_id)) continue;
 
-        if (deliveryError || !delivery || delivery.delivered_at) continue;
+        const offsets = Array.isArray(reminder.reminder_offsets)
+          ? reminder.reminder_offsets
+          : [];
 
-        const { data: claimed, error: claimError } = await supabase
-          .from("reminder_deliveries")
-          .update({ claimed_at: nowIso })
-          .eq("id", delivery.id)
-          .is("delivered_at", null)
-          .or(`claimed_at.is.null,claimed_at.lt.${staleClaimIso}`)
-          .select("id")
-          .maybeSingle();
+        for (const offset of offsets) {
+          const scheduledFor = new Date(
+            new Date(reminder.due_at).getTime() - Number(offset) * DAY_MS,
+          );
 
-        if (claimError || !claimed) continue;
-        claimedCount += 1;
+          if (!shouldProcessScheduledTime(scheduledFor, now)) continue;
 
-        const { data: preferences } = await supabase
-          .from("notification_preferences")
-          .select("enabled,quiet_start,quiet_end")
-          .eq("user_id", reminder.user_id)
-          .maybeSingle();
+          const { data: delivery, error: deliveryError } = await supabase
+            .from("reminder_deliveries")
+            .upsert(
+              {
+                reminder_id: reminder.id,
+                user_id: reminder.user_id,
+                due_at: reminder.due_at,
+                offset_days: Number(offset),
+                scheduled_for: scheduledFor.toISOString(),
+              },
+              {
+                onConflict: "reminder_id,due_at,offset_days",
+                ignoreDuplicates: false,
+              },
+            )
+            .select("id,delivered_at,claimed_at")
+            .single();
 
-        if (preferences?.enabled === false) {
-          await supabase.from("reminder_deliveries").update({ claimed_at: null }).eq("id", delivery.id);
-          continue;
-        }
+          if (deliveryError || !delivery || delivery.delivered_at) continue;
 
-        const { data: subscriptions } = await supabase
-          .from("notification_subscriptions")
-          .select("id,endpoint,p256dh,auth")
-          .eq("user_id", reminder.user_id);
+          const { data: claimed, error: claimError } = await supabase
+            .from("reminder_deliveries")
+            .update({ claimed_at: nowIso })
+            .eq("id", delivery.id)
+            .is("delivered_at", null)
+            .or(`claimed_at.is.null,claimed_at.lt.${staleClaimIso}`)
+            .select("id")
+            .maybeSingle();
 
-        if (!subscriptions?.length) {
-          await supabase.from("reminder_deliveries").update({ claimed_at: null }).eq("id", delivery.id);
-          continue;
-        }
+          if (claimError || !claimed) continue;
+          claimedCount += 1;
 
-        const { data: purchase } = await supabase
-          .from("purchases")
-          .select("title")
-          .eq("id", reminder.purchase_id)
-          .maybeSingle();
+          const { data: preferences } = await supabase
+            .from("notification_preferences")
+            .select("enabled")
+            .eq("user_id", reminder.user_id)
+            .maybeSingle();
 
-        const body = `${purchase?.title ?? "Purchase"} · ${reminder.title}`;
-        let deliverySucceeded = false;
+          if (preferences?.enabled === false) {
+            await supabase
+              .from("reminder_deliveries")
+              .update({ claimed_at: null })
+              .eq("id", delivery.id);
+            continue;
+          }
 
-        for (const subscription of subscriptions) {
-          try {
-            await sendWebPush(subscription, {
-              title: `${BRAND.name} reminder`,
-              body,
-              url: `/purchases/${reminder.purchase_id}`,
-            });
-            sent += 1;
-            deliverySucceeded = true;
-          } catch (pushError) {
-            failed += 1;
-            const statusCode =
-              pushError &&
-              typeof pushError === "object" &&
-              "statusCode" in pushError
-                ? String((pushError as { statusCode?: unknown }).statusCode)
-                : "";
+          const { data: subscriptions } = await supabase
+            .from("notification_subscriptions")
+            .select("id,endpoint,p256dh,auth")
+            .eq("user_id", reminder.user_id);
 
-            if (statusCode === "404" || statusCode === "410") {
-              await supabase
-                .from("notification_subscriptions")
-                .delete()
-                .eq("id", subscription.id);
+          if (!subscriptions?.length) {
+            await supabase
+              .from("reminder_deliveries")
+              .update({ claimed_at: null })
+              .eq("id", delivery.id);
+            continue;
+          }
+
+          const { data: purchase } = await supabase
+            .from("purchases")
+            .select("title")
+            .eq("id", reminder.purchase_id)
+            .maybeSingle();
+
+          const body = `${purchase?.title ?? "Purchase"} · ${reminder.title}`;
+          let deliverySucceeded = false;
+
+          for (const subscription of subscriptions) {
+            try {
+              await sendWebPush(subscription, {
+                title: `${BRAND.name} reminder`,
+                body,
+                url: `/purchases/${reminder.purchase_id}`,
+              });
+              sent += 1;
+              deliverySucceeded = true;
+            } catch (pushError) {
+              failed += 1;
+              const statusCode =
+                pushError &&
+                typeof pushError === "object" &&
+                "statusCode" in pushError
+                  ? String((pushError as { statusCode?: unknown }).statusCode)
+                  : "";
+
+              if (statusCode === "404" || statusCode === "410") {
+                await supabase
+                  .from("notification_subscriptions")
+                  .delete()
+                  .eq("id", subscription.id);
+              }
             }
           }
-        }
 
-        if (deliverySucceeded) {
-          const deliveredAt = new Date().toISOString();
-          await supabase
-            .from("reminder_deliveries")
-            .update({ delivered_at: deliveredAt, claimed_at: null })
-            .eq("id", delivery.id);
+          if (deliverySucceeded) {
+            const deliveredAt = new Date().toISOString();
 
-          await supabase
-            .from("reminders")
-            .update({ last_notified_at: deliveredAt })
-            .eq("id", reminder.id);
-        } else {
-          await supabase
-            .from("reminder_deliveries")
-            .update({ claimed_at: null })
-            .eq("id", delivery.id);
+            await supabase
+              .from("reminder_deliveries")
+              .update({ delivered_at: deliveredAt, claimed_at: null })
+              .eq("id", delivery.id);
+
+            await supabase
+              .from("reminders")
+              .update({ last_notified_at: deliveredAt })
+              .eq("id", reminder.id);
+          } else {
+            await supabase
+              .from("reminder_deliveries")
+              .update({ claimed_at: null })
+              .eq("id", delivery.id);
+          }
         }
       }
+
+      if (page.length < REMINDER_PAGE_SIZE) break;
+      pageStart += REMINDER_PAGE_SIZE;
     }
+
+    const orphansCleaned = await cleanupOrphanedDocumentStorage(supabase);
 
     return NextResponse.json({
       sent,
       failed,
       claimed: claimedCount,
       deletedAccounts,
+      processedReminders,
+      orphansCleaned,
     });
   } catch (error) {
     console.error("notification processing failed", error);
