@@ -13,6 +13,19 @@ for (const width of narrowViewports) {
         .toBeLessThanOrEqual(1);
     });
 
+    test("auth fields keep readable sizing and spacing", async ({ page }) => {
+      for (const route of ["/login", "/signup"]) {
+        await page.goto(route);
+        const email = page.getByLabel(/email address|ईमेल पता/i);
+        const box = await email.boundingBox();
+        expect(box).not.toBeNull();
+        expect(box!.height).toBeGreaterThanOrEqual(48);
+
+        const field = email.locator("..");
+        await expect(field).toHaveCSS("gap", "6px");
+      }
+    });
+
     test("sign-in card stays inside the viewport", async ({ page }) => {
       await page.goto("/login");
       const card = page.locator("main > section > div").first();

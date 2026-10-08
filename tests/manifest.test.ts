@@ -7,7 +7,7 @@ describe("PWA manifest", () => {
     expect(value.name).toBe("Rakhlo");
     expect(value.short_name).toBe("Rakhlo");
     expect(value.display).toBe("standalone");
-    expect(value.start_url).toBe("/");
+    expect(value.start_url).toBe("/dashboard");
     expect(value.scope).toBe("/");
     expect(value.orientation).toBe("portrait");
 
