@@ -10,6 +10,7 @@ import type { ReminderType } from "@/lib/reminders/validation";
 import { ReminderForm } from "@/components/reminders/reminder-form";
 import { ReminderList } from "@/components/reminders/reminder-list";
 import { NotificationSettings } from "@/components/reminders/notification-settings";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 type PurchaseOption = { id: string; title: string };
 type ReminderPageProps = { initialReminders: ReminderWithPurchase[]; purchases: PurchaseOption[] };
@@ -34,6 +35,8 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
   const [reminders, setReminders] = useState(initialReminders);
   const [editing, setEditing] = useState<ReminderWithPurchase | null>(null);
   const [message, setMessage] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<ReminderWithPurchase | null>(null);
+  const [deleteBusy, setDeleteBusy] = useState(false);
 
   function handleSaved(reminder: ReminderWithPurchase) {
     setReminders((current) => {
@@ -64,7 +67,7 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
   }
 
   async function deleteReminder(reminder: ReminderWithPurchase) {
-    if (!window.confirm(t.deleteConfirm)) return;
+    setDeleteBusy(true);
     try {
       const response = await fetch(`/api/reminders/${reminder.id}`, { method: "DELETE" });
       if (!response.ok) throw new Error();
@@ -73,6 +76,9 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
       setMessage(t.deleted);
     } catch {
       setMessage(t.errors.delete);
+    } finally {
+      setDeleteBusy(false);
+      setDeleteTarget(null);
     }
   }
 
@@ -95,7 +101,7 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
           reminders={reminders}
           onEdit={setEditing}
           onCompleted={completeReminder}
-          onDeleted={deleteReminder}
+          onDeleted={(reminder) => setDeleteTarget(reminder)}
         />
         <ReminderForm
           purchases={purchases}
@@ -104,6 +110,20 @@ export function RemindersPage({ initialReminders, purchases }: ReminderPageProps
           onCancel={() => setEditing(null)}
         />
       </div>
+    <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        eyebrow={t.deleteDialogEyebrow}
+        title={t.deleteDialogTitle}
+        description={t.deleteDialogDescription}
+        detail={t.deleteDialogDetail}
+        cancelLabel={t.cancel}
+        confirmLabel={t.delete}
+        onCancel={() => { if (!deleteBusy) setDeleteTarget(null); }}
+        onConfirm={() => { if (deleteTarget && !deleteBusy) void deleteReminder(deleteTarget); }}
+        busy={deleteBusy}
+        icon="trash"
+        detailIcon="info"
+      />
     </>
   );
 }

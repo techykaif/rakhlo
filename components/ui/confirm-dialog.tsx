@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Icon } from "@/components/ui/icon";
+import { Icon, type IconName } from "@/components/ui/icon";
 import { tw } from "@/components/ui/styles";
 
 type ConfirmDialogProps = {
@@ -15,6 +15,8 @@ type ConfirmDialogProps = {
   onCancel: () => void;
   onConfirm: () => void;
   busy?: boolean;
+  icon?: IconName;
+  detailIcon?: IconName;
 };
 
 export function ConfirmDialog({
@@ -28,6 +30,8 @@ export function ConfirmDialog({
   onCancel,
   onConfirm,
   busy = false,
+  icon = "trash",
+  detailIcon = "info",
 }: ConfirmDialogProps) {
   const cancelRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -110,7 +114,7 @@ export function ConfirmDialog({
 
         <div className={tw("confirm-dialog__body")}>
           <div className={tw("confirm-dialog__icon")} aria-hidden="true">
-            <Icon name="trash" size={19} />
+            <Icon name={icon} size={19} />
           </div>
 
           <div className={tw("confirm-dialog__copy")}>
@@ -121,7 +125,7 @@ export function ConfirmDialog({
 
           <div className={tw("confirm-dialog__detail")}>
             <span className={tw("confirm-dialog__detail-mark")} aria-hidden="true">
-              <Icon name="calendar" size={14} />
+              <Icon name={detailIcon} size={14} />
             </span>
             <span>{detail}</span>
           </div>
