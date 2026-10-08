@@ -16,6 +16,7 @@ export default async function LoginPage() {
       eyebrow={{ en: BRAND.name, hi: BRAND.name }}
       title={{ en: copy.en.auth.signInTitle, hi: copy.hi.auth.signInTitle }}
       subtitle={{ en: copy.en.auth.signInSubtitle, hi: copy.hi.auth.signInSubtitle }}
+      mode="signin"
     >
       <AuthForm mode="signin" />
     </AuthCard>
