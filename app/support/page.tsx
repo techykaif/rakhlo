@@ -7,7 +7,7 @@ export default function SupportPage() {
     <PublicSiteShell
       eyebrow="Support & feedback"
       title="Tell us what’s wrong, confusing or worth improving."
-      description="Use the form below for support questions and feedback. This is the single place for support and feedback. Email delivery is intentionally not connected yet; no direct email links are shown here."
+      description="Use the form below for support questions and feedback. Submissions are saved securely so they can be reviewed from the support queue."
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
         <ContactForm />
