@@ -45,6 +45,25 @@ describe("UI layout regressions", () => {
     expect(styles).toContain('"pdf-preview__loading-title":');
   });
 
+  it("keeps the auth experience expressive and the signup legal links in-dialog", () => {
+    const authCard = read("components/auth/auth-card.tsx");
+    const authForm = read("components/auth/auth-form.tsx");
+    const login = read("app/(auth)/login/page.tsx");
+    const signup = read("app/(auth)/signup/page.tsx");
+    const legal = read("components/auth/legal-dialog.tsx");
+    
+    expect(authCard).toContain('"auth-visual":');
+    expect(login).toContain('variant="signin"');
+    expect(signup).toContain('variant="signup"');
+    expect(authForm).toContain('import { LegalDialog } from "@/components/auth/legal-dialog";');
+    expect(authForm).toContain('onClick={() => setLegalDocument("terms")}');
+    expect(authForm).toContain('onClick={() => setLegalDocument("privacy")}');
+    expect(authForm).not.toContain('href="/terms"');
+    expect(authForm).not.toContain('href="/privacy"');
+    expect(legal).toContain('role="dialog"');
+    expect(legal).toContain('role="tablist"');
+  });
+
   it("uses the shared confirmation dialog for destructive purchase actions", () => {
     const purchase = read("components/purchases/delete-purchase-button.tsx");
     const reminders = read("components/reminders/reminders-page.tsx");
