@@ -237,6 +237,11 @@ export function CommandMenu({ language }: { language: Language }) {
 
       {open ? (
         <>
+          <div
+            className={tw("command-backdrop")}
+            aria-hidden="true"
+            onPointerDown={() => setOpen(false)}
+          />
 
           <div
             ref={dialogRef}
