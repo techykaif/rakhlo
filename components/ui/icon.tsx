@@ -18,6 +18,7 @@ export type IconName =
   | "github"
   | "chevron-right"
   | "chevron-down"
+  | "close"
   | "info"
   | "trash";
 
