@@ -13,6 +13,7 @@ import {
   type OAuthProvider,
 } from "@/lib/auth/oauth";
 import { Icon } from "@/components/ui/icon";
+import { AuthLegalDialog } from "@/components/auth/auth-legal-dialog";
 import {
   getReturnedAuthErrorMessage,
   getUnexpectedAuthErrorMessage,
@@ -34,6 +35,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [legalDocument, setLegalDocument] = useState<"terms" | "privacy" | null>(null);
 
   async function handleOAuth(provider: OAuthProvider) {
     setError("");
@@ -248,25 +250,35 @@ export function AuthForm({ mode }: AuthFormProps) {
       {message ? <div className={tw("auth-message auth-message--success")} role="status">{message}</div> : null}
 
       {mode === "signup" ? (
-        <label className="flex items-start gap-2.5 text-[10px] leading-4 text-[#6f7068]">
+        <div className={tw("auth-consent")}>
           <input
+            id="terms-consent"
             type="checkbox"
             checked={termsAccepted}
             onChange={(event) => setTermsAccepted(event.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 accent-[#171713] focus-visible:outline-2 focus-visible:outline-[#c8f76a] focus-visible:outline-offset-2"
+            className={tw("auth-consent__checkbox")}
             required
+            aria-describedby="terms-consent-copy"
           />
-          <span>
-            {t.termsConsentPrefix}{" "}
-            <Link className="font-bold text-[#171713] underline underline-offset-2" href="/terms">
+          <div id="terms-consent-copy" className={tw("auth-consent__copy")}>
+            <label htmlFor="terms-consent">{t.termsConsentPrefix}</label>
+            <button
+              type="button"
+              className={tw("auth-legal-trigger")}
+              onClick={() => setLegalDocument("terms")}
+            >
               {t.termsConsentTerms}
-            </Link>{" "}
-            {t.termsConsentAnd}{" "}
-            <Link className="font-bold text-[#171713] underline underline-offset-2" href="/privacy">
+            </button>
+            <span>{t.termsConsentAnd}</span>
+            <button
+              type="button"
+              className={tw("auth-legal-trigger")}
+              onClick={() => setLegalDocument("privacy")}
+            >
               {t.termsConsentPrivacy}
-            </Link>
-          </span>
-        </label>
+            </button>
+          </div>
+        </div>
       ) : null}
 
       <button className={tw("button button-dark auth-submit")} type="submit" disabled={loading}>
@@ -285,6 +297,13 @@ export function AuthForm({ mode }: AuthFormProps) {
           {mode === "signin" ? t.createAccount : t.signIn}
         </Link>
       </div>
+
+      {mode === "signup" ? (
+        <AuthLegalDialog
+          legalDocument={legalDocument}
+          onClose={() => setLegalDocument(null)}
+        />
+      ) : null}
     </form>
   );
 }

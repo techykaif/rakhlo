@@ -14,6 +14,7 @@ export default function ForgotPasswordPage() {
       eyebrow={{ en: BRAND.name, hi: BRAND.name }}
       title={{ en: copy.en.auth.forgotTitle, hi: copy.hi.auth.forgotTitle }}
       subtitle={{ en: copy.en.auth.forgotSubtitle, hi: copy.hi.auth.forgotSubtitle }}
+      mode="signin"
     >
       <RecoveryForm />
     </AuthCard>
