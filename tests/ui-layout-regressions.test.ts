@@ -41,7 +41,7 @@ describe("UI layout regressions", () => {
     expect(legal).toContain('aria-modal="true"');
     expect(legal).toContain('role="tablist"');
     expect(legal).toContain('role="tab"');
-    expect(legal).toContain('onDocumentChange={setLegalDocument}');
+    expect(form).toContain('onDocumentChange={setLegalDocument}');
   });
 
   it("keeps auth styling split between the creative panel and form surface", () => {
