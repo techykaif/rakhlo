@@ -25,7 +25,9 @@ describe("PDF font assets", () => {
     pdf.registerFontkit(fontkit);
 
     for (const fontPath of fontPaths) {
-      const bytes = await readFile(require.resolve(fontPath));
+      const file = await readFile(require.resolve(fontPath));
+      const bytes = new Uint8Array(file);
+      expect(bytes.byteLength).toBeGreaterThan(0);
       await expect(pdf.embedFont(bytes)).resolves.toBeTruthy();
     }
   });
