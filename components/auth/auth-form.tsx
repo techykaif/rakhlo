@@ -300,7 +300,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       {mode === "signup" ? (
         <AuthLegalDialog
-          document={legalDocument}
+          legalDocument={legalDocument}
           onClose={() => setLegalDocument(null)}
         />
       ) : null}
