@@ -185,7 +185,8 @@ export function AccountManagement({
   }
 
   return (
-    <div className={tw("account-page")}>
+    <>
+      <div className={tw("account-page")}>
       <header className={tw("app-header")}>
         <div>
           <span className={tw("app-kicker")}>{t.eyebrow}</span>
@@ -282,7 +283,7 @@ export function AccountManagement({
           )}
         </div>
       </section>
-    </div>
+      </div>
       <ConfirmDialog
         open={deleteDialogOpen}
         eyebrow={t.deleteDialogEyebrow}
@@ -295,6 +296,7 @@ export function AccountManagement({
         onConfirm={scheduleDeletion}
         busy={deletionBusy}
       />
+    </>
   );
 }
 
