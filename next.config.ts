@@ -5,10 +5,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   outputFileTracingIncludes: {
     "/api/purchases/[id]/pdf": [
-      "./node_modules/@fontsource/noto-sans/files/noto-sans-devanagari-400-normal.woff2",
-      "./node_modules/@fontsource/noto-sans/files/noto-sans-devanagari-700-normal.woff2",
-      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2",
-      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2",
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-devanagari-400-normal.woff",
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-devanagari-700-normal.woff",
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff",
+      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff",
     ],
   },
   async headers() {
