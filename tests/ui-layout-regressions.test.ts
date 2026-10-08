@@ -45,6 +45,19 @@ describe("UI layout regressions", () => {
     expect(styles).toContain('"pdf-preview__loading-title":');
   });
 
+  it("uses the shared confirmation dialog for destructive purchase actions", () => {
+    const purchase = read("components/purchases/delete-purchase-button.tsx");
+    const reminders = read("components/reminders/reminders-page.tsx");
+    const documents = read("components/purchases/purchase-documents.tsx");
+
+    expect(purchase).toContain('import { ConfirmDialog } from "@/components/ui/confirm-dialog";');
+    expect(reminders).toContain('import { ConfirmDialog } from "@/components/ui/confirm-dialog";');
+    expect(documents).toContain('import { ConfirmDialog } from "@/components/ui/confirm-dialog";');
+    expect(purchase).not.toContain("window.confirm");
+    expect(reminders).not.toContain("window.confirm");
+    expect(documents).not.toContain("window.confirm");
+  });
+
   it("uses the Rakhlo confirmation dialog for account deletion instead of the browser prompt", () => {
     const account = read("components/account/account-management.tsx");
     const styles = read("components/ui/styles.ts");
