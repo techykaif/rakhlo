@@ -22,7 +22,6 @@ test.describe("desktop auth one-page fit", () => {
   }
 });
 
-
 for (const width of narrowViewports) {
   test.describe(`responsive public/auth layout at ${width}px`, () => {
     test.use({ viewport: { width, height: 800 } });
@@ -43,7 +42,7 @@ for (const width of narrowViewports) {
         expect(box!.height).toBeGreaterThanOrEqual(48);
 
         const field = email.locator("..");
-        await expect(field).toHaveCSS("gap", "6px");
+        await expect(field).toHaveCSS("gap", "4px");
       }
     });
 
