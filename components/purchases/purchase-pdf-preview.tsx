@@ -76,6 +76,7 @@ export function PurchasePdfPreview({
   const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
   const [previewFilename, setPreviewFilename] = useState("purchase-rakhlo.pdf");
   const [downloading, setDownloading] = useState(false);
+  const [printing, setPrinting] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(true);
   const [loadingStage, setLoadingStage] = useState<LoadingStage>("starting");
   const [retryNonce, setRetryNonce] = useState(0);
@@ -174,36 +175,122 @@ export function PurchasePdfPreview({
   }
 
   async function printPdf() {
+    if (printing) return;
     setError(null);
-    const printWindow = window.open("", "_blank", "noopener,noreferrer");
+    setPrinting(true);
 
-    if (!printWindow) {
-      setError(
-        hi
-          ? "पॉप-अप ब्लॉक है। पहले इसकी अनुमति दें।"
-          : "The print window was blocked. Please allow pop-ups and try again.",
-      );
-      return;
-    }
+    let objectUrl: string | null = null;
+    let frame: HTMLIFrameElement | null = null;
+    let settled = false;
+
+    const cleanup = () => {
+      if (frame?.isConnected) frame.remove();
+      if (objectUrl) window.setTimeout(() => URL.revokeObjectURL(objectUrl as string), 1500);
+      frame = null;
+      objectUrl = null;
+    };
 
     try {
-      if (previewUrl) {
-        printWindow.location.href = previewUrl;
-        return;
+      let blob = previewBlob;
+      if (!blob) {
+        const response = await fetchPdf(pdfUrl, language);
+        blob = await response.blob();
       }
 
-      const response = await fetchPdf(pdfUrl, language);
-      const blob = await response.blob();
-      const objectUrl = URL.createObjectURL(blob);
-      printWindow.location.href = objectUrl;
-      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60000);
+      if (blob.type !== "application/pdf") {
+        throw new Error(
+          hi ? "यह फ़ाइल PDF नहीं है। कृपया फिर से कोशिश करें।" : "The generated file is not a PDF. Please try again.",
+        );
+      }
+
+      objectUrl = URL.createObjectURL(blob);
+      frame = document.createElement("iframe");
+      frame.setAttribute("aria-hidden", "true");
+      frame.title = hi ? "प्रिंट प्रीव्यू" : "Print preview";
+      frame.style.position = "fixed";
+      frame.style.left = "0";
+      frame.style.bottom = "0";
+      frame.style.width = "1px";
+      frame.style.height = "1px";
+      frame.style.border = "0";
+      frame.style.opacity = "0.01";
+      frame.style.pointerEvents = "none";
+      frame.style.background = "transparent";
+
+      document.body.appendChild(frame);
+
+      await new Promise<void>((resolve, reject) => {
+        if (!frame || !objectUrl) {
+          reject(new Error("Unable to prepare print."));
+          return;
+        }
+
+        const printFrame = frame;
+        const printUrl = objectUrl;
+        const timer = window.setTimeout(() => {
+          if (settled) return;
+          settled = true;
+          reject(new Error(
+            hi ? "प्रिंट तैयार होने में बहुत समय लग रहा है।" : "Print preview is taking longer than expected.",
+          ));
+        }, 12000);
+
+        const fail = () => {
+          if (settled) return;
+          settled = true;
+          window.clearTimeout(timer);
+          reject(new Error(
+            hi ? "PDF प्रिंट के लिए नहीं खुल सकी।" : "The PDF could not be prepared for printing.",
+          ));
+        };
+
+        printFrame.onerror = fail;
+        printFrame.onload = () => {
+          window.setTimeout(() => {
+            if (settled) return;
+
+            try {
+              const printWindow = printFrame.contentWindow;
+              if (!printWindow) throw new Error("Print window unavailable.");
+              printWindow.focus();
+              printWindow.addEventListener("afterprint", () => {
+                cleanup();
+              }, { once: true });
+              printWindow.print();
+              settled = true;
+              window.clearTimeout(timer);
+              resolve();
+            } catch {
+              window.clearTimeout(timer);
+              settled = true;
+
+              // Safari and some embedded PDF viewers can deny scripted printing.
+              // Opening the same blob gives the user the native PDF viewer controls.
+              const fallback = window.open(printUrl, "_blank", "noopener,noreferrer");
+              if (!fallback) {
+                reject(new Error(
+                  hi ? "प्रिंट विंडो ब्लॉक है।" : "The print window was blocked. Please allow pop-ups and try again.",
+                ));
+                return;
+              }
+
+              cleanup();
+              resolve();
+            }
+          }, 700);
+        };
+
+        printFrame.src = printUrl;
+      });
     } catch (printError) {
-      printWindow.close();
+      cleanup();
       setError(
         printError instanceof Error
           ? printError.message
           : (hi ? "PDF प्रिंट के लिए नहीं खुल सकी।" : "The PDF could not be opened for printing."),
       );
+    } finally {
+      setPrinting(false);
     }
   }
 
@@ -232,10 +319,15 @@ export function PurchasePdfPreview({
             type="button"
             className={tw("button button-light")}
             onClick={() => void printPdf()}
-            disabled={loadingPreview && !previewUrl}
+            disabled={(loadingPreview && !previewUrl) || printing}
+            aria-busy={printing}
           >
             <Icon name="file" size={15} />
-            {hi ? "प्रिंट" : "Print"}
+            <span>
+              {printing
+                ? (hi ? "प्रिंट तैयार हो रहा है…" : "Preparing print…")
+                : (hi ? "प्रिंट" : "Print")}
+            </span>
           </button>
           <button
             type="button"
