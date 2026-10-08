@@ -73,11 +73,14 @@ export async function DELETE() {
   const current = await auth();
   if (!current) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
 
+  const nowIso = new Date().toISOString();
+
   const { data, error } = await current.supabase
     .from("account_deletion_requests")
     .delete()
     .eq("user_id", current.userId)
     .is("processing_at", null)
+    .gt("scheduled_for", nowIso)
     .select("user_id")
     .maybeSingle();
 
