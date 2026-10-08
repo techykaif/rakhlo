@@ -83,11 +83,6 @@ export function AuthForm({ mode }: AuthFormProps) {
     setError("");
     setMessage("");
 
-    if (mode === "signup" && !termsAccepted) {
-      setError(t.termsConsentRequired);
-      return;
-    }
-
     const validation = validateAuthInput(
       { email, password, confirmation },
       mode,
@@ -101,6 +96,11 @@ export function AuthForm({ mode }: AuthFormProps) {
 
     if (!validation.ok) {
       setError(validation.error);
+      return;
+    }
+
+    if (mode === "signup" && !termsAccepted) {
+      setError(t.termsConsentRequired);
       return;
     }
 
