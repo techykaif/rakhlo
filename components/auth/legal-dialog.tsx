@@ -153,7 +153,7 @@ export function LegalDialog({
             onClick={onClose}
             aria-label={language === "hi" ? "बंद करें" : "Close"}
           >
-            <Icon name="chevron-down" size={17} />
+            <Icon name="x" size={17} />
           </button>
         </header>
 
@@ -161,8 +161,8 @@ export function LegalDialog({
           <button
             type="button"
             role="tab"
-            aria-selected={document === "terms"}
-            className={tw(document === "terms" ? "legal-dialog__tab legal-dialog__tab--active" : "legal-dialog__tab")}
+            aria-selected={legalDocument === "terms"}
+            className={tw(legalDocument === "terms" ? "legal-dialog__tab legal-dialog__tab--active" : "legal-dialog__tab")}
             onClick={() => setDocument("terms")}
           >
             {language === "hi" ? "Terms" : "Terms"}
@@ -170,8 +170,8 @@ export function LegalDialog({
           <button
             type="button"
             role="tab"
-            aria-selected={document === "privacy"}
-            className={tw(document === "privacy" ? "legal-dialog__tab legal-dialog__tab--active" : "legal-dialog__tab")}
+            aria-selected={legalDocument === "privacy"}
+            className={tw(legalDocument === "privacy" ? "legal-dialog__tab legal-dialog__tab--active" : "legal-dialog__tab")}
             onClick={() => setDocument("privacy")}
           >
             {language === "hi" ? "Privacy" : "Privacy"}
