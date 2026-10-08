@@ -6,8 +6,8 @@ test("sign up page renders", async ({ page }) => {
   await expect(page.getByLabel(/email address|ईमेल पता/i)).toBeVisible();
   await expect(page.getByLabel(/^password$|^पासवर्ड$/i)).toBeVisible();
   await expect(page.getByRole("checkbox")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Terms" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Privacy Policy" })).toBeVisible();
+  await expect(page.locator("form").getByRole("link", { name: "Terms" })).toBeVisible();
+  await expect(page.locator("form").getByRole("link", { name: "Privacy Policy" })).toBeVisible();
 });
 
 
