@@ -250,7 +250,7 @@ export const copy = {
       },
       support: {
         eyebrow: "Support & feedback",
-        title: "Tell us what's wrong, confusing or worth improving.",
+        title: "Tell us what’s wrong, confusing or worth improving.",
         description: "Use the form below for support questions and feedback. Submissions are saved securely so they can be reviewed from the support queue.",
         beforeSendingTitle: "Before sending",
         beforeSendingText: "For account problems, include the email used for your Rakhlo account. Never include passwords, OTPs or payment-card details.",
