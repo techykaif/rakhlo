@@ -89,6 +89,12 @@ const paths: Record<IconName, ReactNode> = {
       <path d="M12 10.5v5M12 7.5h.01" />
     </>
   ),
+  trash: (
+    <>
+      <path d="M5 7h14M9 4h6l1 3H8l1-3Z" />
+      <path d="m8 7 .8 12h6.4L16 7M10 10.5v5M14 10.5v5" />
+    </>
+  ),
 };
 
 export function Icon({
