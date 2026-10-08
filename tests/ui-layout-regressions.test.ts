@@ -17,6 +17,13 @@ describe("UI layout regressions", () => {
     expect(styles).not.toContain('auth-card": "w-full rounded-[30px]');
   });
 
+  it("keeps the Google sign-in action centered between fixed side controls", () => {
+    const styles = read("components/ui/styles.ts");
+    expect(styles).toContain('grid-cols-[28px_minmax(0,1fr)_24px]');
+    expect(styles).toContain('"auth-google-button__copy": "flex min-w-0 items-center justify-center text-center');
+    expect(styles).toContain('"auth-google-button__arrow": "justify-self-end');
+  });
+
   it("uses the official Google mark and dialog-based signup legal actions", () => {
     const form = read("components/auth/auth-form.tsx");
     const google = read("components/ui/google-mark.tsx");
