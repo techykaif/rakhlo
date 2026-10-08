@@ -15,6 +15,23 @@ describe("UI layout regressions", () => {
     expect(styles).not.toContain('auth-card": "w-[min(100%,620px)] overflow-y-auto');
   });
 
+  it("keeps auth styling split between the creative panel and form surface", () => {
+    const styles = read("components/ui/styles.ts");
+    const authCard = read("components/auth/auth-card.tsx");
+    const form = read("components/auth/auth-form.tsx");
+    const legal = read("components/auth/auth-legal-dialog.tsx");
+
+    expect(styles).toContain('"auth-visual":');
+    expect(styles).toContain('"auth-memory-card":');
+    expect(styles).toContain('"auth-legal-dialog":');
+    expect(authCard).toContain('className={tw("auth-visual")}');
+    expect(authCard).toContain('className={tw("auth-memory-card")}');
+    expect(form).toContain('import { AuthLegalDialog } from "@/components/auth/auth-legal-dialog";');
+    expect(form).toContain('legalDocument={legalDocument}');
+    expect(legal).toContain('role="dialog"');
+    expect(legal).toContain('aria-modal="true"');
+  });
+
   it("keeps the active app navigation item visually distinct", () => {
     const styles = read("components/ui/styles.ts");
 
