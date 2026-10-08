@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { useRouter } from "next/navigation";
 import { copy, type Language } from "@/lib/i18n";
 import { Icon, type IconName } from "@/components/ui/icon";
@@ -275,7 +276,7 @@ export function CommandMenu({ language }: { language: Language }) {
                     type="button"
                     className={tw(index === selectedIndex ? "command-item selected" : "command-item")}
                     key={item.id}
-                    style={{ "--command-index": index } as React.CSSProperties}
+                    style={{ "--command-index": index } as CSSProperties}
                     onMouseEnter={() => setSelectedIndex(index)}
                     onClick={() => navigate(item.href)}
                   >
