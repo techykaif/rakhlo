@@ -67,7 +67,7 @@ export function LegalDialog({
   language,
   onClose,
 }: LegalDialogProps) {
-  const [document, setDocument] = useState<LegalDocument>(initialDocument);
+  const [legalDocument, setLegalDocument] = useState<LegalDocument>(initialDocument);
   const closeRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -75,12 +75,12 @@ export function LegalDialog({
   useEffect(() => {
     if (!open) return;
 
-    setDocument(initialDocument);
+    setLegalDocument(initialDocument);
     previousFocusRef.current =
-      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      window.document.activeElement instanceof HTMLElement ? window.document.activeElement : null;
 
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    window.document.body.style.overflow = "hidden";
     requestAnimationFrame(() => closeRef.current?.focus());
 
     function onKeyDown(event: KeyboardEvent) {
@@ -104,26 +104,26 @@ export function LegalDialog({
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
 
-      if (event.shiftKey && document.activeElement === first) {
+      if (event.shiftKey && window.document.activeElement === first) {
         event.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
+      } else if (!event.shiftKey && window.document.activeElement === last) {
         event.preventDefault();
         first.focus();
       }
     }
 
-    document.addEventListener("keydown", onKeyDown);
+    window.document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKeyDown);
+      window.document.body.style.overflow = previousOverflow;
+      window.document.removeEventListener("keydown", onKeyDown);
       requestAnimationFrame(() => previousFocusRef.current?.focus());
     };
   }, [initialDocument, onClose, open]);
 
   if (!open) return null;
 
-  const copy = legalCopy[language][document];
+  const copy = legalCopy[language][legalDocument];
 
   return (
     <div
