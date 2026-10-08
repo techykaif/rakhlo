@@ -257,6 +257,7 @@ export function PurchasePdfPreview({
                 cleanup();
               }, { once: true });
               printWindow.print();
+              window.setTimeout(cleanup, 60000);
               settled = true;
               window.clearTimeout(timer);
               resolve();
