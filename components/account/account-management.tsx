@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
 import { copy } from "@/lib/i18n";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Icon } from "@/components/ui/icon";
 import { tw } from "@/components/ui/styles";
 
@@ -38,6 +39,7 @@ export function AccountManagement({
   const [passwordMessage, setPasswordMessage] = useState("");
   const [deletionState, setDeletionState] = useState<Deletion | null>(deletion);
   const [deletionBusy, setDeletionBusy] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [exportBusy, setExportBusy] = useState(false);
   const [exportMessage, setExportMessage] = useState("");
   const [signingOut, setSigningOut] = useState(false);
@@ -79,8 +81,7 @@ export function AccountManagement({
   }
 
   async function scheduleDeletion() {
-    if (!window.confirm(t.deleteConfirm)) return;
-
+    setDeleteDialogOpen(false);
     setDeletionBusy(true);
     try {
       const response = await fetch("/api/account/deletion", {
@@ -270,13 +271,30 @@ export function AccountManagement({
               {deletionBusy ? t.working : t.cancelDeletion}
             </button>
           ) : (
-            <button type="button" className={tw("button button-danger")} disabled={deletionBusy} onClick={scheduleDeletion}>
+            <button
+              type="button"
+              className={tw("button button-danger")}
+              disabled={deletionBusy}
+              onClick={() => setDeleteDialogOpen(true)}
+            >
               {deletionBusy ? t.working : t.deleteAccount}
             </button>
           )}
         </div>
       </section>
     </div>
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        eyebrow={t.deleteDialogEyebrow}
+        title={t.deleteDialogTitle}
+        description={t.deleteDialogDescription}
+        detail={t.deleteDialogDetail}
+        cancelLabel={t.deleteDialogCancel}
+        confirmLabel={t.deleteDialogConfirm}
+        onCancel={() => setDeleteDialogOpen(false)}
+        onConfirm={scheduleDeletion}
+        busy={deletionBusy}
+      />
   );
 }
 
