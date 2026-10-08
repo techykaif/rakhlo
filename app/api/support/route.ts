@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
-import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
+import { createClient as createSupabaseAdminClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 import { validateSupportSubmission } from "@/lib/support/validation";
 
 const RATE_LIMIT_PER_EMAIL = 5;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
 
-type AdminClient = ReturnType<typeof createSupabaseAdminClient<Database>>;
+type AdminClient = SupabaseClient<Database>;
 
 function getAdminClient(): AdminClient {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -49,13 +49,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
-  if (
+  const website =
     body &&
     typeof body === "object" &&
     !Array.isArray(body) &&
-    typeof (body as Record<string, unknown>).website === "string" &&
-    (body as Record<string, unknown>).website?.trim()
-  ) {
+    typeof (body as Record<string, unknown>).website === "string"
+      ? (body as Record<string, unknown>).website as string
+      : "";
+
+  if (website.trim()) {
     return NextResponse.json({ submitted: true }, { status: 201 });
   }
 
@@ -67,8 +69,7 @@ export async function POST(request: Request) {
 
   try {
     const admin = getAdminClient();
-    const now = Date.now();
-    const since = new Date(now - RATE_LIMIT_WINDOW_MS).toISOString();
+    const since = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
 
     const { count, error: rateLimitError } = await admin
       .from("support_requests")
