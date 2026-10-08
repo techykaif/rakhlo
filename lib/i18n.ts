@@ -203,6 +203,145 @@ export const copy = {
       showcaseCaption: "Keep the purchase. Keep the context. Remember when it matters.",
 
     },
+    publicPages: {
+      privacy: {
+        eyebrow: "Privacy & data",
+        title: "What Rakhlo stores and how it is protected.",
+        sections: {
+          accountData: {
+            title: "Account data",
+            text: "Rakhlo uses Supabase Auth for account authentication. Session cookies are handled server-side through the Supabase SSR integration.",
+          },
+          purchaseData: {
+            title: "Your purchase data",
+            text: "Purchases, reminders, warranty information, payment records and document metadata are stored in Supabase Postgres. The application's tables use Row Level Security with ownership rules based on the authenticated user.",
+          },
+          uploadedFiles: {
+            title: "Uploaded files",
+            text: "Purchase documents are stored in a private Supabase Storage bucket. Upload and download access uses signed URLs. Rakhlo accepts only purchase-proof document categories (such as receipts, invoices, warranty cards and payment proofs), limited to PDF, JPEG, PNG and WebP files up to 10 MB with basic file-signature validation. Rakhlo is not intended to be a general-purpose image or file host and prohibits sexually explicit content.",
+          },
+          notificationsOffline: {
+            title: "Notifications and offline data",
+            text: "When browser notifications are enabled, a web-push subscription is stored so scheduled reminders can be delivered. Rakhlo also keeps queued purchase drafts in your browser's local storage so they can be submitted when connectivity returns. The public Purchase Print Tool is different: its working data stays in the current page and is never sent to or stored by Rakhlo.",
+          },
+          deletionRequests: {
+            title: "Deletion and requests",
+            text: "For privacy questions or a request to review or delete information, contact us through the Support form. The exact retention of provider-level authentication records may be subject to the underlying service provider's infrastructure and policies.",
+          },
+        },
+      },
+      terms: {
+        eyebrow: "Terms",
+        title: "A simple baseline for using Rakhlo.",
+        sections: {
+          lawfulUse: {
+            title: "Use the service lawfully",
+            text: "You are responsible for the content you upload and the way you use Rakhlo. Do not use the service to violate another person's privacy or rights, bypass access controls, distribute malicious content, or abuse service resources.",
+          },
+          account: {
+            title: "Your account",
+            text: "Keep your account credentials secure and tell us through the Support form if you believe your account has been compromised.",
+          },
+          serviceChanges: {
+            title: "Service changes",
+            text: "Rakhlo may change, improve, suspend or discontinue features as the product evolves. These pages are intended to explain the current service clearly and are not a substitute for legal advice.",
+          },
+        },
+      },
+      support: {
+        eyebrow: "Support & feedback",
+        title: "Tell us what's wrong, confusing or worth improving.",
+        description: "Use the form below for support questions and feedback. Submissions are saved securely so they can be reviewed from the support queue.",
+        beforeSendingTitle: "Before sending",
+        beforeSendingText: "For account problems, include the email used for your Rakhlo account. Never include passwords, OTPs or payment-card details.",
+        incidentTitle: "Need incident information?",
+        incidentText: "See the status page for the latest service checks.",
+      },
+      guidelines: {
+        eyebrow: "Guidelines",
+        title: "Keep Rakhlo safe, private and useful.",
+        description: "These guidelines explain the kind of content and behavior that keeps Rakhlo reliable for everyone. They are practical product rules, not legal advice.",
+        sections: {
+          data: {
+            label: "01 · Your data",
+            title: "Store only what you are allowed to keep",
+            text: "Upload only purchase-related proof such as receipts, invoices, warranty cards and payment proofs that you have the right to store. Rakhlo is not a general-purpose photo or file hosting service. Keep unnecessary sensitive information out of documents whenever possible.",
+          },
+          accountSafety: {
+            label: "02 · Account safety",
+            title: "Protect your account and sessions",
+            text: "Use a password you do not reuse elsewhere, keep access to your email secure, and sign out of shared devices. Never share a password, one-time code, recovery code or session token with another person.",
+          },
+          support: {
+            label: "03 · Support",
+            title: "Keep support messages safe to review",
+            text: "Describe the page, action and result. Include only the minimum information needed to reproduce the problem. Never include passwords, OTPs, full payment-card numbers, private keys or other secrets.",
+          },
+          fairUse: {
+            label: "04 · Fair use",
+            title: "Do not abuse or bypass the service",
+            text: "Do not attempt to access another user's records, bypass authentication or storage controls, probe private endpoints, upload malicious or sexually explicit content, submit spam, use Rakhlo as general-purpose file hosting, or intentionally generate harmful traffic.",
+          },
+          security: {
+            label: "05 · Security",
+            title: "Found a security issue?",
+            text: "Use the Support form and describe the smallest reproducible detail you can share safely. Do not publish credentials, secrets or another user's private data in a report.",
+          },
+          updates: {
+            title: "We may update these guidelines",
+            text: "Rakhlo may adjust these guidelines as the product and its abuse patterns evolve. The latest version is always published on this page.",
+          },
+        },
+      },
+      disclaimer: {
+        eyebrow: "Disclaimer",
+        title: "Rakhlo is a memory and organization tool, not your source of truth.",
+        sections: {
+          dates: {
+            title: "Dates and reminders",
+            text: "Reminder notifications are convenience features. Always verify return windows, warranty terms, renewal dates and seller policies against your original documents and the seller's current terms.",
+          },
+          documents: {
+            title: "Documents",
+            text: "Rakhlo helps organize files; it does not verify that a receipt, invoice, warranty card or payment proof is authentic, complete or accepted by a seller.",
+          },
+          availability: {
+            title: "Service availability",
+            text: "No online service can guarantee uninterrupted availability, delivery of every notification, or recovery from every failure. Keep critical records backed up elsewhere when the stakes are high.",
+          },
+        },
+      },
+      status: {
+        eyebrow: "Rakhlo status",
+        operationalTitle: "Everything looks operational.",
+        attentionTitle: "Some services need attention.",
+        description: "A lightweight live signal from the Rakhlo server. It helps distinguish a broad service problem from an account-specific issue, but it is not a guarantee that every browser or user is unaffected.",
+        currentSignal: "Current signal",
+        allResponding: "All checked systems are responding.",
+        authAttention: "Authentication needs attention.",
+        webAppDescription: "The web application is responding. Authentication is the only external dependency checked live on this page.",
+        operational: "Operational",
+        needsAttention: "Needs attention",
+        webApp: "Rakhlo web app",
+        webAppStatusText: "The page itself is responding and serving the public site.",
+        authService: "Authentication service",
+        authStatusText: "Live health check against the configured Supabase Auth service.",
+        howToRead: "How to read this",
+        greenSignalTitle: "A green signal is useful, not absolute.",
+        greenSignalText: "This page checks a small set of service paths. A browser, network, cached session or account can still have a problem while these checks are green. Check the original action and contact Support for account-specific issues.",
+        needHelp: "Need help?",
+        supportTitle: "Tell us what is actually failing.",
+        supportText: "Include the page, approximate time and a short description. Never share passwords, OTPs, card numbers or other secrets.",
+        openSupport: "Open Support",
+        builtBy: "Built by",
+        builtTitle: "A small product, built deliberately.",
+        builtText: "Rakhlo is independently designed, developed and maintained by Kaif Ansari. The goal is simple: make the details that matter after a purchase easy to keep, find and act on without turning everyday life into paperwork.",
+        developerPortfolio: "Developer portfolio",
+        lastChecked: "Last checked",
+        checkedDescription: "Checks run when this page is requested; this is not a live incident monitor.",
+      },
+    },
+
     dashboard: {
       greetingMorning: "Good morning",
       greetingAfternoon: "Good afternoon",
@@ -670,6 +809,145 @@ export const copy = {
       showcaseCaption: "खरीदारी रखें। संदर्भ रखें। ज़रूरत के समय याद रखें।",
 
     },
+    publicPages: {
+      privacy: {
+        eyebrow: "प्राइवेसी और डेटा",
+        title: "Rakhlo क्या सेव करता है और उसे कैसे सुरक्षित रखा जाता है।",
+        sections: {
+          accountData: {
+            title: "खाते का डेटा",
+            text: "Rakhlo खाते की authentication के लिए Supabase Auth का उपयोग करता है। Session cookies को Supabase SSR integration के ज़रिए server-side संभाला जाता है।",
+          },
+          purchaseData: {
+            title: "आपकी खरीदारी का डेटा",
+            text: "खरीदारियाँ, रिमाइंडर, वारंटी की जानकारी, भुगतान रिकॉर्ड और दस्तावेज़ का metadata Supabase Postgres में सेव होता है। Application की tables में authenticated user के आधार पर ownership rules के साथ Row Level Security लागू है।",
+          },
+          uploadedFiles: {
+            title: "अपलोड की गई फाइलें",
+            text: "खरीदारी के दस्तावेज़ private Supabase Storage bucket में रखे जाते हैं। Upload और download access signed URLs से दिया जाता है। Rakhlo केवल खरीदारी से जुड़े प्रमाण (जैसे रसीद, बिल, वारंटी कार्ड और payment proof) स्वीकार करता है, PDF, JPEG, PNG और WebP फाइलों को अधिकतम 10 MB तक सीमित करता है और basic file-signature validation करता है। Rakhlo सामान्य image या file hosting के लिए नहीं है और sexually explicit content की अनुमति नहीं देता।",
+          },
+          notificationsOffline: {
+            title: "नोटिफिकेशन और ऑफलाइन डेटा",
+            text: "जब browser notifications चालू होते हैं, तो scheduled reminders भेजने के लिए web-push subscription सेव की जाती है। Rakhlo connectivity लौटने तक queued purchase drafts को browser के local storage में भी रखता है। Public Purchase Print Tool अलग है: उसका working data इसी page तक रहता है और Rakhlo को भेजा या यहाँ सेव नहीं किया जाता।",
+          },
+          deletionRequests: {
+            title: "हटाने और अनुरोध",
+            text: "Privacy से जुड़े सवाल या जानकारी देखने अथवा हटाने के अनुरोध के लिए Support form से संपर्क करें। Provider-level authentication records की exact retention, संबंधित service provider की infrastructure और policies के अधीन हो सकती है।",
+          },
+        },
+      },
+      terms: {
+        eyebrow: "Terms",
+        title: "Rakhlo इस्तेमाल करने के लिए एक सरल आधार।",
+        sections: {
+          lawfulUse: {
+            title: "सेवा का कानूनी तरीके से उपयोग करें",
+            text: "आप जो content upload करते हैं और Rakhlo को जिस तरह इस्तेमाल करते हैं, उसकी जिम्मेदारी आपकी है। किसी दूसरे व्यक्ति की privacy या rights का उल्लंघन करने, access controls bypass करने, malicious content फैलाने या service resources का दुरुपयोग करने के लिए सेवा का उपयोग न करें।",
+          },
+          account: {
+            title: "आपका खाता",
+            text: "अपने account credentials सुरक्षित रखें और account compromise होने का शक हो तो Support form के ज़रिए हमें बताएं।",
+          },
+          serviceChanges: {
+            title: "सेवा में बदलाव",
+            text: "Product के विकसित होने के साथ Rakhlo features को बदल, बेहतर, suspend या बंद कर सकता है। ये pages मौजूदा service को स्पष्ट रूप से समझाने के लिए हैं और legal advice का विकल्प नहीं हैं।",
+          },
+        },
+      },
+      support: {
+        eyebrow: "सहायता और फीडबैक",
+        title: "जो गलत, confusing या बेहतर करने लायक है, हमें बताएं।",
+        description: "Support सवालों और feedback के लिए नीचे दिए form का उपयोग करें। Submissions सुरक्षित रूप से सेव होती हैं ताकि support queue से उनकी समीक्षा की जा सके।",
+        beforeSendingTitle: "भेजने से पहले",
+        beforeSendingText: "Account समस्या के लिए अपने Rakhlo account में इस्तेमाल होने वाला email दें। Password, OTP या payment-card details कभी न भेजें।",
+        incidentTitle: "Incident की जानकारी चाहिए?",
+        incidentText: "सबसे नए service checks के लिए status page देखें।",
+      },
+      guidelines: {
+        eyebrow: "दिशानिर्देश",
+        title: "Rakhlo को सुरक्षित, निजी और उपयोगी रखें।",
+        description: "ये guidelines बताती हैं कि कौन-सा content और behavior Rakhlo को सभी के लिए reliable बनाए रखता है। ये practical product rules हैं, legal advice नहीं।",
+        sections: {
+          data: {
+            label: "01 · आपका डेटा",
+            title: "वही सेव करें जिसे रखने का अधिकार आपके पास है",
+            text: "केवल ऐसे purchase-related proof upload करें जैसे receipts, invoices, warranty cards और payment proofs जिन्हें store करने का आपको अधिकार है। Rakhlo सामान्य photo या file hosting service नहीं है। जहाँ संभव हो, documents में अनावश्यक sensitive information न रखें।",
+          },
+          accountSafety: {
+            label: "02 · खाते की सुरक्षा",
+            title: "अपने खाते और sessions को सुरक्षित रखें",
+            text: "ऐसा password रखें जिसे आप कहीं और reuse न करते हों, अपने email तक पहुंच सुरक्षित रखें और shared devices से sign out करें। Password, one-time code, recovery code या session token किसी और के साथ साझा न करें।",
+          },
+          support: {
+            label: "03 · सहायता",
+            title: "Support messages को review के लिए सुरक्षित रखें",
+            text: "Page, action और result बताएं। Problem reproduce करने के लिए जितनी जानकारी जरूरी हो, उतनी ही दें। Passwords, OTPs, full payment-card numbers, private keys या दूसरी secrets कभी शामिल न करें।",
+          },
+          fairUse: {
+            label: "04 · उचित उपयोग",
+            title: "Service का abuse या bypass न करें",
+            text: "किसी दूसरे user के records तक पहुंचने, authentication या storage controls bypass करने, private endpoints probe करने, malicious या sexually explicit content upload करने, spam भेजने, Rakhlo को general-purpose file hosting के रूप में इस्तेमाल करने या जानबूझकर harmful traffic पैदा करने की कोशिश न करें।",
+          },
+          security: {
+            label: "05 · Security",
+            title: "Security issue मिला?",
+            text: "Support form का उपयोग करें और जितना छोटा reproducible detail सुरक्षित रूप से साझा कर सकें, उतना बताएं। Report में credentials, secrets या किसी दूसरे user का private data प्रकाशित न करें।",
+          },
+          updates: {
+            title: "हम इन guidelines को बदल सकते हैं",
+            text: "Product और उसके abuse patterns बदलने के साथ Rakhlo इन guidelines को अपडेट कर सकता है। नवीनतम version हमेशा इसी page पर प्रकाशित होगा।",
+          },
+        },
+      },
+      disclaimer: {
+        eyebrow: "अस्वीकरण",
+        title: "Rakhlo याद रखने और व्यवस्थित रखने का tool है, अंतिम सत्य का स्रोत नहीं।",
+        sections: {
+          dates: {
+            title: "तारीखें और रिमाइंडर",
+            text: "Reminder notifications सुविधा के लिए हैं। Return window, warranty terms, renewal dates और seller policies को हमेशा अपने original documents और seller की मौजूदा terms से verify करें।",
+          },
+          documents: {
+            title: "दस्तावेज़",
+            text: "Rakhlo files को व्यवस्थित करने में मदद करता है; यह verify नहीं करता कि कोई receipt, invoice, warranty card या payment proof असली, पूरा या seller द्वारा स्वीकार किया गया है।",
+          },
+          availability: {
+            title: "सेवा की उपलब्धता",
+            text: "कोई भी online service uninterrupted availability, हर notification की delivery या हर failure से recovery की guarantee नहीं दे सकती। जब रिकॉर्ड महत्वपूर्ण हों, तो उनका backup कहीं और भी रखें।",
+          },
+        },
+      },
+      status: {
+        eyebrow: "Rakhlo स्थिति",
+        operationalTitle: "सब कुछ सामान्य दिख रहा है।",
+        attentionTitle: "कुछ services को ध्यान चाहिए।",
+        description: "Rakhlo server से मिला एक हल्का live signal। इससे broad service problem और account-specific issue में फर्क समझने में मदद मिलती है, लेकिन यह guarantee नहीं है कि हर browser या user प्रभावित नहीं है।",
+        currentSignal: "मौजूदा signal",
+        allResponding: "जाँची गई सभी services जवाब दे रही हैं।",
+        authAttention: "Authentication पर ध्यान चाहिए।",
+        webAppDescription: "Web application जवाब दे रहा है। इस page पर live check की गई एकमात्र external dependency authentication है।",
+        operational: "सामान्य",
+        needsAttention: "ध्यान चाहिए",
+        webApp: "Rakhlo web app",
+        webAppStatusText: "यह page जवाब दे रहा है और public site serve कर रहा है।",
+        authService: "Authentication service",
+        authStatusText: "Configured Supabase Auth service पर live health check।",
+        howToRead: "इसे कैसे पढ़ें",
+        greenSignalTitle: "Green signal उपयोगी है, लेकिन पूरी गारंटी नहीं।",
+        greenSignalText: "यह page service के कुछ paths check करता है। Browser, network, cached session या account में तब भी समस्या हो सकती है जब checks green हों। Original action को दोबारा देखें और account-specific issue के लिए Support से संपर्क करें।",
+        needHelp: "मदद चाहिए?",
+        supportTitle: "असल में क्या fail हो रहा है, बताएं।",
+        supportText: "Page, लगभग समय और छोटा-सा विवरण दें। Password, OTP, card number या दूसरी secrets कभी साझा न करें।",
+        openSupport: "Support खोलें",
+        builtBy: "बनाया है",
+        builtTitle: "एक छोटा product, सोच-समझकर बनाया गया।",
+        builtText: "Rakhlo को Kaif Ansari ने independently design, develop और maintain किया है। लक्ष्य सरल है: खरीदारी के बाद काम आने वाली details को paperwork में बदले बिना आसानी से सेव, खोज और इस्तेमाल करने लायक बनाना।",
+        developerPortfolio: "Developer portfolio",
+        lastChecked: "अंतिम जाँच",
+        checkedDescription: "Checks इस page के request होने पर चलते हैं; यह live incident monitor नहीं है।",
+      },
+    },
+
     dashboard: {
       greetingMorning: "सुप्रभात",
       greetingAfternoon: "शुभ दोपहर",
