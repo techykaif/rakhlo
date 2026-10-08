@@ -1,6 +1,14 @@
 export default {
   async scheduled(controller, env, ctx) {
-    ctx.waitUntil(runNotificationProcess(env));
+    ctx.waitUntil(
+      runNotificationProcess(env).catch((error) => {
+        console.error("Rakhlo notification cron failed", {
+          scheduledAt: new Date(controller.scheduledTime).toISOString(),
+          error,
+        });
+        throw error;
+      }),
+    );
   },
 };
 
