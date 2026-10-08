@@ -19,6 +19,11 @@ export function AuthLegalDialog({ legalDocument, onClose }: AuthLegalDialogProps
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!legalDocument) return;
@@ -31,7 +36,7 @@ export function AuthLegalDialog({ legalDocument, onClose }: AuthLegalDialogProps
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         event.preventDefault();
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -70,7 +75,7 @@ export function AuthLegalDialog({ legalDocument, onClose }: AuthLegalDialogProps
       window.removeEventListener("keydown", onKeyDown);
       requestAnimationFrame(() => previousFocusRef.current?.focus());
     };
-  }, [legalDocument, onClose]);
+  }, [legalDocument]);
 
   if (!legalDocument) return null;
 
