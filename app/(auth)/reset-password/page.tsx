@@ -14,6 +14,7 @@ export default function ResetPasswordPage() {
       eyebrow={{ en: BRAND.name, hi: BRAND.name }}
       title={{ en: copy.en.auth.resetTitle, hi: copy.hi.auth.resetTitle }}
       subtitle={{ en: copy.en.auth.resetSubtitle, hi: copy.hi.auth.resetSubtitle }}
+      mode="signin"
     >
       <ResetPasswordForm />
     </AuthCard>
