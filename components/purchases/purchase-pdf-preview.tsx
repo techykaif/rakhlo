@@ -78,6 +78,7 @@ export function PurchasePdfPreview({
   const [downloading, setDownloading] = useState(false);
   const [loadingPreview, setLoadingPreview] = useState(true);
   const [loadingStage, setLoadingStage] = useState<LoadingStage>("starting");
+  const [retryNonce, setRetryNonce] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const hi = language === "hi";
   const pdfUrl = "/api/purchases/" + purchase.id + "/pdf";
@@ -136,7 +137,7 @@ export function PurchasePdfPreview({
       window.clearTimeout(slowTimer);
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [pdfUrl, language, hi]);
+  }, [pdfUrl, language, hi, retryNonce]);
 
   async function downloadPdf() {
     if (downloading) return;
@@ -253,10 +254,18 @@ export function PurchasePdfPreview({
 
       {error ? (
         <div
-          className="rounded-xl border border-[#ead8d8] bg-[#faf1f1] px-3.5 py-3 text-[11px] leading-5 text-[#7d4d4d]"
+          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#ead8d8] bg-[#faf1f1] px-3.5 py-3 text-[11px] leading-5 text-[#7d4d4d]"
           role="alert"
         >
-          {error}
+          <span>{error}</span>
+          <button
+            type="button"
+            className={tw("button button-light min-h-9 text-[10px]")}
+            onClick={() => setRetryNonce((current) => current + 1)}
+            disabled={loadingPreview}
+          >
+            {hi ? "फिर कोशिश करें" : "Try again"}
+          </button>
         </div>
       ) : null}
 
