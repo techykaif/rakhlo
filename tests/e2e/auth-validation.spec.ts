@@ -25,7 +25,13 @@ test("signup keeps terms and privacy inside accessible dialogs", async ({ page }
   await expect(termsDialog).toBeVisible();
   await expect(termsDialog.getByRole("heading", { level: 2 })).toContainText("Rakhlo");
   await expect(termsDialog.getByRole("link", { name: /Read full Terms/i })).toBeVisible();
-  await termsDialog.getByRole("button", { name: /Close document/i }).click();
+
+  await page.keyboard.press("Escape");
+  await expect(termsDialog).toBeHidden();
+
+  await page.getByRole("button", { name: "Terms", exact: true }).click();
+  await expect(termsDialog).toBeVisible();
+  await page.mouse.click(8, 8);
   await expect(termsDialog).toBeHidden();
 
   await page.getByRole("button", { name: "Privacy Policy", exact: true }).click();
