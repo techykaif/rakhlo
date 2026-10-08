@@ -13,6 +13,7 @@ import {
   type OAuthProvider,
 } from "@/lib/auth/oauth";
 import { Icon } from "@/components/ui/icon";
+import { GoogleMark } from "@/components/ui/google-mark";
 import {
   getReturnedAuthErrorMessage,
   getUnexpectedAuthErrorMessage,
@@ -186,7 +187,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             disabled={loading}
           >
             <span className={tw("auth-google-button__icon")} aria-hidden="true">
-              <Icon name="google" size={19} strokeWidth={2} />
+              <GoogleMark size={20} />
             </span>
             <span className={tw("auth-google-button__copy")}>
               <strong>{t.continueWith.replace("{provider}", googleProvider.label)}</strong>
