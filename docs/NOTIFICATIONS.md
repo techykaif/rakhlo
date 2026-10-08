@@ -37,7 +37,22 @@ Configure these values as Cloudflare Worker secrets/variables:
 
 The Cloudflare Worker does not need the Supabase service-role key or VAPID private key. Those remain server-side in Vercel.
 
-Cloudflare Cron Triggers execute on UTC time. The free Workers plan currently includes 100,000 requests per day and supports Cron Triggers, so a 10-minute schedule is well within the request allowance.
+Cloudflare Cron Triggers execute on UTC time.
+
+## Failure alerting
+
+The notification worker intentionally surfaces scheduled-process failures as both a logged error and a failed invocation. Keep Cloudflare Workers Observability enabled for this worker.
+
+Configure an alert destination in the Cloudflare dashboard:
+
+1. Open **Workers & Pages**, select `rakhlo-notification-cron`, then open **Issues**.
+2. Under **Automations**, add an automation for the worker's notification-cron failures.
+3. Use an occurrence threshold suitable for operations. A threshold of 1 is appropriate for a small personal production deployment where every missed notification run matters.
+4. Send the issue to an email or webhook destination and use **Test** to verify delivery.
+
+Workers Issues detects failed invocations, uncaught exceptions, HTTP 5xx responses, and error logs. The worker's catch-and-rethrow path is deliberate so a failure in the Rakhlo notification endpoint, including account-deletion processing, remains visible to the Cloudflare failure monitor.
+
+This monitoring covers a cron invocation that runs and fails. A scheduler that stops invoking the worker entirely produces no failure event, so detecting a completely missing schedule would require a separate heartbeat monitor. That is a later hardening step if needed.
 
 ## Delivery flow
 
