@@ -54,6 +54,16 @@ describe("UI layout regressions", () => {
     expect(styles).toContain('"button-danger-confirm":');
   });
 
+  it("uses a real browser PDF print flow instead of only opening a new tab", () => {
+    const pdf = read("components/purchases/purchase-pdf-preview.tsx");
+
+    expect(pdf).toContain("document.createElement("iframe")");
+    expect(pdf).toContain("printWindow.print()");
+    expect(pdf).toContain('frame.style.opacity = "0.01"');
+    expect(pdf).toContain("window.setTimeout(cleanup, 60000)");
+    expect(pdf).not.toContain('window.open("", "_blank", "noopener,noreferrer")');
+  });
+
   it("uses one shared public footer on the landing page and keeps the auth footer compact", () => {
     const landing = read("components/landing/landing-page.tsx");
     const authCard = read("components/auth/auth-card.tsx");
