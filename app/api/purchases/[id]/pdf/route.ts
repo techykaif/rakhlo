@@ -1,10 +1,9 @@
-import { createRequire } from "node:module";
-import { readFile } from "node:fs/promises";
 import { NextResponse } from "next/server";
 import { PDFDocument, rgb } from "pdf-lib";
 import type { PDFFont, PDFPage } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { createClient } from "@/lib/supabase/server";
+import { PDF_FONT_BASE64 } from "@/lib/generated/pdf-fonts";
 import {
   DOCUMENT_MAX_BYTES,
   DOCUMENT_MAX_COUNT,
@@ -16,8 +15,6 @@ export const runtime = "nodejs";
 
 const A4: [number, number] = [595.28, 841.89];
 const MARGIN = 48;
-const require = createRequire(import.meta.url);
-
 type FontPair = {
   latinRegular: PDFFont;
   latinBold: PDFFont;
@@ -143,6 +140,10 @@ function drawText(
   }
 }
 
+function fontBytes(name: keyof typeof PDF_FONT_BASE64) {
+  return new Uint8Array(Buffer.from(PDF_FONT_BASE64[name], "base64"));
+}
+
 async function embedFonts(pdf: PDFDocument): Promise<FontPair> {
   pdf.registerFontkit(fontkit);
 
@@ -152,17 +153,17 @@ async function embedFonts(pdf: PDFDocument): Promise<FontPair> {
     devanagariRegular,
     devanagariBold,
   ] = await Promise.all([
-    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff")),
-    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff")),
-    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-devanagari-400-normal.woff")),
-    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-devanagari-700-normal.woff")),
+    pdf.embedFont(fontBytes("latinRegular")),
+    pdf.embedFont(fontBytes("latinBold")),
+    pdf.embedFont(fontBytes("devanagariRegular")),
+    pdf.embedFont(fontBytes("devanagariBold")),
   ]);
 
   return {
-    latinRegular: await pdf.embedFont(latinRegular),
-    latinBold: await pdf.embedFont(latinBold),
-    devanagariRegular: await pdf.embedFont(devanagariRegular),
-    devanagariBold: await pdf.embedFont(devanagariBold),
+    latinRegular,
+    latinBold,
+    devanagariRegular,
+    devanagariBold,
   };
 }
 
