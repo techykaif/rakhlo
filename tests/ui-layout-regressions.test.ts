@@ -60,7 +60,7 @@ describe("UI layout regressions", () => {
   it("uses a real browser PDF print flow instead of only opening a new tab", () => {
     const pdf = read("components/purchases/purchase-pdf-preview.tsx");
 
-    expect(pdf).toContain("document.createElement("iframe")");
+    expect(pdf).toContain('document.createElement("iframe")');
     expect(pdf).toContain("printWindow.print()");
     expect(pdf).toContain('frame.style.opacity = "0.01"');
     expect(pdf).toContain("window.setTimeout(cleanup, 60000)");
