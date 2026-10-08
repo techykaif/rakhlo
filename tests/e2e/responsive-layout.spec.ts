@@ -2,6 +2,26 @@ import { expect, test } from "@playwright/test";
 
 const narrowViewports = [320, 375, 390, 430];
 
+test.describe("desktop auth one-page fit", () => {
+  test.use({ viewport: { width: 1280, height: 720 } });
+
+  for (const route of ["/login", "/signup"]) {
+    test(`${route} fits in one desktop viewport without page scrolling`, async ({ page }) => {
+      await page.goto(route);
+      await expect(page.locator("main section > div").first()).toBeVisible();
+      await expect
+        .poll(() =>
+          page.evaluate(() => {
+            const root = document.documentElement;
+            const body = document.body;
+            return Math.max(root.scrollHeight, body.scrollHeight) - window.innerHeight;
+          }),
+        )
+        .toBeLessThanOrEqual(1);
+    });
+  }
+});
+
 for (const width of narrowViewports) {
   test.describe(`responsive public/auth layout at ${width}px`, () => {
     test.use({ viewport: { width, height: 800 } });
@@ -28,7 +48,7 @@ for (const width of narrowViewports) {
 
     test("sign-in card stays inside the viewport", async ({ page }) => {
       await page.goto("/login");
-      const card = page.locator("main > section > div").first();
+      const card = page.locator("main section > div").first();
       const box = await card.boundingBox();
       expect(box).not.toBeNull();
       expect(box!.x).toBeGreaterThanOrEqual(0);
