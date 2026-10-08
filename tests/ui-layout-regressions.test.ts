@@ -29,6 +29,19 @@ describe("UI layout regressions", () => {
     expect(styles).toContain("max-[760px]:!fixed");
   });
 
+
+  it("uses the Rakhlo confirmation dialog for account deletion instead of the browser prompt", () => {
+    const account = read("components/account/account-management.tsx");
+    const styles = read("components/ui/styles.ts");
+
+    expect(account).toContain('import { ConfirmDialog } from "@/components/ui/confirm-dialog";');
+    expect(account).toContain("<ConfirmDialog");
+    expect(account).not.toContain("window.confirm(t.deleteConfirm)");
+    expect(styles).toContain('"confirm-overlay":');
+    expect(styles).toContain('"confirm-dialog":');
+    expect(styles).toContain('"button-danger-confirm":');
+  });
+
   it("uses one shared public footer on the landing page and keeps the auth footer compact", () => {
     const landing = read("components/landing/landing-page.tsx");
     const authCard = read("components/auth/auth-card.tsx");
