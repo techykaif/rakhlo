@@ -9,6 +9,8 @@ export const REMINDER_TYPES = [
 
 export type ReminderType = (typeof REMINDER_TYPES)[number];
 
+export const REMINDER_MAX_OFFSET_DAYS = 3650;
+
 export type ReminderInput = {
   purchase_id: string;
   type: ReminderType;
@@ -84,7 +86,12 @@ function parseOffsets(value: unknown) {
   }
 
   const offsets = value.map((item) => {
-    if (typeof item !== "number" || !Number.isInteger(item) || item < 0 || item > 3650) {
+    if (
+      typeof item !== "number" ||
+      !Number.isInteger(item) ||
+      item < 0 ||
+      item > REMINDER_MAX_OFFSET_DAYS
+    ) {
       return null;
     }
     return item;
@@ -160,7 +167,7 @@ export function validateReminderInput(input: unknown): ReminderValidationResult 
   }
 
   if (!offsets) {
-    errors.reminder_offsets = "Choose at least one reminder offset from 0 to 3650 days.";
+    errors.reminder_offsets = `Choose at least one reminder offset from 0 to ${REMINDER_MAX_OFFSET_DAYS} days.`;
   }
 
   if (typeof enabled !== "boolean") {
@@ -248,7 +255,7 @@ export function validateReminderUpdate(input: unknown): {
 
   if (value.reminder_offsets !== undefined) {
     const offsets = parseOffsets(value.reminder_offsets);
-    if (!offsets) errors.reminder_offsets = "Choose at least one reminder offset from 0 to 3650 days.";
+    if (!offsets) errors.reminder_offsets = `Choose at least one reminder offset from 0 to ${REMINDER_MAX_OFFSET_DAYS} days.`;
     else data.reminder_offsets = offsets;
   }
 
