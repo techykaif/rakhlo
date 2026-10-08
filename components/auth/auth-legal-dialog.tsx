@@ -168,6 +168,20 @@ export function AuthLegalDialog({ legalDocument, onClose }: AuthLegalDialogProps
                   <p>{t.privacyDialogSectionThreeText}</p>
                 </div>
               </section>
+              <section className={tw("auth-legal-section")}>
+                <span>04</span>
+                <div>
+                  <h3>{t.privacyDialogSectionFourTitle}</h3>
+                  <p>{t.privacyDialogSectionFourText}</p>
+                </div>
+              </section>
+              <section className={tw("auth-legal-section")}>
+                <span>05</span>
+                <div>
+                  <h3>{t.privacyDialogSectionFiveTitle}</h3>
+                  <p>{t.privacyDialogSectionFiveText}</p>
+                </div>
+              </section>
             </>
           )}
         </div>
