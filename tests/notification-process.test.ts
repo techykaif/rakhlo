@@ -29,6 +29,6 @@ describe("reminder delivery window", () => {
     const bounds = getReminderProcessingBounds(now);
 
     expect(bounds.earliestDueAt).toBe("2026-09-26T10:00:00.000Z");
-    expect(bounds.latestDueAt).toBe("2036-10-03T10:15:00.000Z");
+    expect(bounds.latestDueAt).toBe("2036-09-30T10:15:00.000Z");
   });
 });
