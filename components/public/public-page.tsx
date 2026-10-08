@@ -41,6 +41,7 @@ export function PublicPageContent({
   const t = copy[language].publicPages[page];
 
   if (page === "privacy") {
+    const t = copy[language].publicPages.privacy;
     return (
       <div className="grid gap-4 text-[12px] leading-7 text-[#5f6059]">
         <section className="rounded-2xl border border-[#deddd6] bg-white p-6">
@@ -68,6 +69,7 @@ export function PublicPageContent({
   }
 
   if (page === "terms") {
+    const t = copy[language].publicPages.terms;
     return (
       <div className="grid gap-4 text-[12px] leading-7 text-[#5f6059]">
         <section className="rounded-2xl border border-[#deddd6] bg-white p-6">
@@ -87,6 +89,7 @@ export function PublicPageContent({
   }
 
   if (page === "support") {
+    const t = copy[language].publicPages.support;
     return (
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
         <ContactForm />
@@ -111,6 +114,7 @@ export function PublicPageContent({
   }
 
   if (page === "guidelines") {
+    const t = copy[language].publicPages.guidelines;
     return (
       <div className="grid gap-4 text-[12px] leading-7 text-[#5f6059]">
         {(
@@ -151,6 +155,7 @@ export function PublicPageContent({
   }
 
   if (page === "disclaimer") {
+    const t = copy[language].publicPages.disclaimer;
     return (
       <div className="grid gap-4 text-[12px] leading-7 text-[#5f6059]">
         <section className="rounded-2xl border border-[#deddd6] bg-white p-6">
@@ -170,6 +175,7 @@ export function PublicPageContent({
   }
 
   if (page === "status") {
+    const t = copy[language].publicPages.status;
     const healthy = Boolean(authHealthy);
     const checkedLabel = checkedAt
       ? new Date(checkedAt).toLocaleString(language === "hi" ? "hi-IN" : "en-IN")
