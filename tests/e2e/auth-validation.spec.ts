@@ -24,6 +24,7 @@ test("signup keeps terms and privacy inside accessible dialogs", async ({ page }
   const termsDialog = page.getByRole("dialog");
   await expect(termsDialog).toBeVisible();
   await expect(termsDialog.getByRole("heading", { level: 2 })).toContainText("Rakhlo");
+  await expect(termsDialog.locator(".auth-legal-section")).toHaveCount(3);
   await expect(termsDialog.getByRole("link", { name: /Read full Terms/i })).toBeVisible();
 
   await page.keyboard.press("Escape");
@@ -37,6 +38,7 @@ test("signup keeps terms and privacy inside accessible dialogs", async ({ page }
   await page.getByRole("button", { name: "Privacy Policy", exact: true }).click();
   const privacyDialog = page.getByRole("dialog");
   await expect(privacyDialog).toBeVisible();
+  await expect(privacyDialog.locator(".auth-legal-section")).toHaveCount(5);
   await expect(privacyDialog.getByRole("heading", { level: 2 })).toContainText("What Rakhlo stores");
   await privacyDialog.getByRole("button", { name: /Close document/i }).click();
   await expect(privacyDialog).toBeHidden();
