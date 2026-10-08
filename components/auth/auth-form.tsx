@@ -202,9 +202,9 @@ export function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       <div className={tw("auth-fields")}>
-        <label>
+        <label className={tw("auth-field")}>
           <span>{t.emailLabel}</span>
-          <input
+          <input className={tw("auth-input")}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             type="email"
@@ -215,9 +215,9 @@ export function AuthForm({ mode }: AuthFormProps) {
           />
         </label>
 
-        <label>
+        <label className={tw("auth-field")}>
           <span>{t.passwordLabel}</span>
-          <input
+          <input className={tw("auth-input")}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             type="password"
@@ -229,9 +229,9 @@ export function AuthForm({ mode }: AuthFormProps) {
         </label>
 
         {mode === "signup" ? (
-          <label>
+          <label className={tw("auth-field")}>
             <span>{t.confirmPasswordLabel}</span>
-            <input
+            <input className={tw("auth-input")}
               value={confirmation}
               onChange={(event) => setConfirmation(event.target.value)}
               type="password"
