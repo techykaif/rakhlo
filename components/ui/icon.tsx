@@ -18,6 +18,7 @@ export type IconName =
   | "github"
   | "chevron-right"
   | "chevron-down"
+  | "close"
   | "info"
   | "trash";
 
@@ -83,6 +84,9 @@ const paths: Record<IconName, ReactNode> = {
   ),
   "chevron-right": <path d="m9 6 6 6-6 6" />,
   "chevron-down": <path d="m6 9 6 6 6-6" />,
+  close: <>
+    <path d="m7 7 10 10M17 7 7 17" />
+  </>,
   info: (
     <>
       <circle cx="12" cy="12" r="8.5" />

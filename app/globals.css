@@ -167,6 +167,26 @@
   }
 }
 
+@keyframes auth-legal-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes auth-legal-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.975);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.002);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes command-overlay-in {
   from {
     opacity: 0;
@@ -203,6 +223,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .auth-legal-overlay,
+  .auth-legal-dialog,
   .command-overlay,
   .command-dialog,
   .command-item {

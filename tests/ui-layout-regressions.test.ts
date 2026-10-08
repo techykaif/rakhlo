@@ -39,6 +39,9 @@ describe("UI layout regressions", () => {
     expect(google).toContain("#34A853");
     expect(legal).toContain('role="dialog"');
     expect(legal).toContain('aria-modal="true"');
+    expect(legal).toContain('role="tablist"');
+    expect(legal).toContain('role="tab"');
+    expect(form).toContain('onDocumentChange={setLegalDocument}');
   });
 
   it("keeps auth styling split between the creative panel and form surface", () => {
@@ -50,6 +53,9 @@ describe("UI layout regressions", () => {
     expect(styles).toContain('"auth-visual":');
     expect(styles).toContain('"auth-memory-card":');
     expect(styles).toContain('"auth-legal-dialog":');
+    expect(styles).toContain('"auth-legal-tabs":');
+    expect(styles).toContain('"auth-legal-section":');
+    expect(styles).toContain('"auth-legal-footer":');
     expect(authCard).toContain('className={tw("auth-visual")}');
     expect(authCard).toContain('className={tw("auth-memory-card")}');
     expect(form).toContain('import { AuthLegalDialog } from "@/components/auth/auth-legal-dialog";');
