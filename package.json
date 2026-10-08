@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/verify-vercel-env.mjs && next build",
+    "build": "node scripts/verify-vercel-env.mjs && npm run prepare:pdf-fonts && next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "typecheck": "npm run prepare:pdf-fonts && tsc --noEmit",
+    "test": "npm run prepare:pdf-fonts && vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "verify": "npm run typecheck && npm run test && npm run build"
+    "verify": "npm run typecheck && npm run test && npm run build",
+    "prepare:pdf-fonts": "node scripts/prepare-pdf-fonts.mjs",
+    "postinstall": "npm run prepare:pdf-fonts"
   },
   "dependencies": {
     "next": "^16.3.8",
