@@ -6,12 +6,32 @@ const read = (file: string) =>
   fs.readFileSync(path.join(process.cwd(), file), "utf8");
 
 describe("UI layout regressions", () => {
-  it("keeps the redesigned auth card in a bounded responsive form surface", () => {
+  it("keeps auth as a split-screen surface without a nested scrolling card", () => {
     const styles = read("components/ui/styles.ts");
 
-    expect(styles).toContain('"auth-card": "w-full rounded-[30px]');
-    expect(styles).toContain('"auth-content": "mx-auto flex w-full max-w-[540px]');
+    expect(styles).toContain('"auth-shell": "grid min-h-[100svh]');
+    expect(styles).toContain('"auth-visual":');
+    expect(styles).toContain('"auth-main":');
+    expect(styles).toContain('"auth-card": "w-full rounded-[26px]');
     expect(styles).not.toContain('auth-card": "w-[min(100%,620px)] overflow-y-auto');
+    expect(styles).not.toContain('auth-card": "w-full rounded-[30px]');
+  });
+
+  it("uses the official Google mark and dialog-based signup legal actions", () => {
+    const form = read("components/auth/auth-form.tsx");
+    const google = read("components/ui/google-mark.tsx");
+    const legal = read("components/auth/auth-legal-dialog.tsx");
+
+    expect(form).toContain('import { GoogleMark } from "@/components/ui/google-mark";');
+    expect(form).not.toContain('Icon name="google"');
+    expect(form).toContain('className={tw("auth-legal-trigger")}');
+    expect(form).toContain('legalDocument={legalDocument}');
+    expect(google).toContain("#4285F4");
+    expect(google).toContain("#EA4335");
+    expect(google).toContain("#FBBC05");
+    expect(google).toContain("#34A853");
+    expect(legal).toContain('role="dialog"');
+    expect(legal).toContain('aria-modal="true"');
   });
 
   it("keeps auth styling split between the creative panel and form surface", () => {
