@@ -27,8 +27,11 @@ describe("UI layout regressions", () => {
 
     expect(styles).toContain('"app-topbar": "glass-light !overflow-visible');
     expect(styles).toContain('"command-dialog": "glass-light-strong !absolute');
-    expect(styles).toContain("max-[760px]:!fixed");
+    expect(styles).toContain("command-dialog-in_300ms");
+    expect(styles).toContain('"command-item":');
+    expect(styles).toContain("command-item-in_360ms");
     expect(styles).toContain('"command-search-skeleton":');
+    expect(styles).toContain('"command-backdrop":');
   });
 
 
