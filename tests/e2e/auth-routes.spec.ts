@@ -13,22 +13,21 @@ test("sign up page renders", async ({ page }) => {
 test("signup keeps Terms and Privacy inside a polished accessible legal center", async ({ page }) => {
   await page.goto("/signup");
 
-  await page.getByRole("button", { name: "Terms" }).click();
+  await page.getByRole("button", { name: "Terms", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole("tab", { name: "Terms" })).toHaveAttribute("aria-selected", "true");
-  await expect(dialog.getByRole("heading")).toContainText(/simple baseline/i);
+  await expect(dialog.getByRole("tab", { name: "Terms", exact: true })).toHaveAttribute("aria-selected", "true");
+  await expect(dialog.getByRole("heading", { level: 2 })).toContainText(/simple baseline/i);
   await expect(dialog.getByText(/rules that keep rakhlo useful/i)).toBeVisible();
 
-  await dialog.getByRole("tab", { name: "Privacy" }).click();
-  await expect(dialog.getByRole("tab", { name: "Privacy" })).toHaveAttribute("aria-selected", "true");
-  await expect(dialog.getByRole("heading")).toContainText(/what rakhlo stores/i);
+  await dialog.getByRole("tab", { name: "Privacy", exact: true }).click();
+  await expect(dialog.getByRole("tab", { name: "Privacy", exact: true })).toHaveAttribute("aria-selected", "true");
+  await expect(dialog.getByRole("heading", { level: 2 })).toContainText(/what rakhlo stores/i);
   await expect(dialog.getByText(/what rakhlo stores, why it is needed/i)).toBeVisible();
 
   await dialog.getByRole("button", { name: /done/i }).click();
   await expect(dialog).toBeHidden();
 });
-
 
 test("signup requires consent before email or Google account creation", async ({ page }) => {
   await page.goto("/signup");
