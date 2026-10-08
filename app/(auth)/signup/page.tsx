@@ -16,6 +16,7 @@ export default async function SignUpPage() {
       eyebrow={{ en: BRAND.name, hi: BRAND.name }}
       title={{ en: copy.en.auth.signUpTitle, hi: copy.hi.auth.signUpTitle }}
       subtitle={{ en: copy.en.auth.signUpSubtitle, hi: copy.hi.auth.signUpSubtitle }}
+      mode="signup"
     >
       <AuthForm mode="signup" />
     </AuthCard>
