@@ -31,6 +31,9 @@ export function AuthLegalDialog({ legalDocument, onClose }: AuthLegalDialogProps
     previousFocusRef.current =
       window.document.activeElement instanceof HTMLElement ? window.document.activeElement : null;
 
+    const previousBodyOverflow = window.document.body.style.overflow;
+    window.document.body.style.overflow = "hidden";
+
     const frame = window.requestAnimationFrame(() => closeRef.current?.focus());
 
     function onKeyDown(event: KeyboardEvent) {
@@ -73,6 +76,7 @@ export function AuthLegalDialog({ legalDocument, onClose }: AuthLegalDialogProps
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("keydown", onKeyDown);
+      window.document.body.style.overflow = previousBodyOverflow;
       requestAnimationFrame(() => previousFocusRef.current?.focus());
     };
   }, [legalDocument]);
