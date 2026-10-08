@@ -16,7 +16,6 @@ test("sign in validates required password", async ({ page }) => {
   await expect(page.getByText("Please enter your password.", { exact: true })).toBeVisible();
 });
 
-
 test("signup keeps terms and privacy inside accessible dialogs", async ({ page }) => {
   await page.goto("/signup");
 
@@ -32,7 +31,7 @@ test("signup keeps terms and privacy inside accessible dialogs", async ({ page }
 
   await page.getByRole("button", { name: "Terms", exact: true }).click();
   await expect(termsDialog).toBeVisible();
-  await page.mouse.click(8, 8);
+  await termsDialog.getByRole("button", { name: /close document/i }).click();
   await expect(termsDialog).toBeHidden();
 
   await page.getByRole("button", { name: "Privacy Policy", exact: true }).click();
@@ -40,6 +39,6 @@ test("signup keeps terms and privacy inside accessible dialogs", async ({ page }
   await expect(privacyDialog).toBeVisible();
   await expect(privacyDialog.locator("section")).toHaveCount(5);
   await expect(privacyDialog.getByRole("heading", { level: 2 })).toContainText("What Rakhlo stores");
-  await privacyDialog.getByRole("button", { name: /Close document/i }).click();
+  await privacyDialog.getByRole("button", { name: /close document/i }).click();
   await expect(privacyDialog).toBeHidden();
 });
