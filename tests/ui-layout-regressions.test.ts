@@ -39,6 +39,8 @@ describe("UI layout regressions", () => {
     expect(google).toContain("#34A853");
     expect(legal).toContain('role="dialog"');
     expect(legal).toContain('aria-modal="true"');
+    expect(legal).toContain("createPortal(content, document.body)");
+    expect(legal).toContain("legalDialogUnderstand");
     expect(legal).toContain('role="tablist"');
     expect(legal).toContain('role="tab"');
     expect(form).toContain('onDocumentChange={setLegalDocument}');
@@ -54,7 +56,7 @@ describe("UI layout regressions", () => {
     expect(styles).toContain('"auth-memory-card":');
     expect(styles).toContain('"auth-legal-dialog":');
     expect(styles).toContain('100dvh');
-    expect(styles).toContain('max-[620px]:items-end');
+    expect(styles).toContain('h-[100dvh]');
     expect(styles).toContain('"auth-legal-body":');
     expect(styles).toContain('overflow-y-auto');
     expect(styles).toContain('"auth-legal-tabs":');
