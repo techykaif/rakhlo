@@ -152,10 +152,10 @@ async function embedFonts(pdf: PDFDocument): Promise<FontPair> {
     devanagariRegular,
     devanagariBold,
   ] = await Promise.all([
-    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2")),
-    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2")),
-    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-devanagari-400-normal.woff2")),
-    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-devanagari-700-normal.woff2")),
+    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff")),
+    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff")),
+    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-devanagari-400-normal.woff")),
+    readFile(require.resolve("@fontsource/noto-sans/files/noto-sans-devanagari-700-normal.woff")),
   ]);
 
   return {
