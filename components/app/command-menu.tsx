@@ -122,6 +122,19 @@ export function CommandMenu({ language }: { language: Language }) {
   }, [items, language, purchaseResults, query]);
 
   useEffect(() => {
+    if (!open) return;
+
+    function onPointerDown(event: PointerEvent) {
+      const target = event.target as Node;
+      if (dialogRef.current?.contains(target) || triggerRef.current?.contains(target)) return;
+      setOpen(false);
+    }
+
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
+  useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key.toLocaleLowerCase() === "k") {
         event.preventDefault();
@@ -223,23 +236,13 @@ export function CommandMenu({ language }: { language: Language }) {
 
       {open ? (
         <>
-          <button
-            type="button"
-            className={tw("command-dismiss")}
-            aria-label={language === "hi" ? "खोज बंद करें" : "Close search"}
-            onPointerDown={(event) => {
-              event.preventDefault();
-              setOpen(false);
-            }}
-            onClick={() => setOpen(false)}
-          />
+
           <div
             ref={dialogRef}
             className={tw("command-dialog")}
             role="dialog"
             aria-modal="true"
             aria-label={t.searchOrJump}
-            onPointerDown={(event) => event.stopPropagation()}
           >
             <div className={tw("command-input-wrap")}>
               <Icon name="search" size={16} />

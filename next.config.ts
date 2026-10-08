@@ -3,14 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  outputFileTracingIncludes: {
-    "/api/purchases/[id]/pdf": [
-      "./node_modules/@fontsource/noto-sans/files/noto-sans-devanagari-400-normal.woff2",
-      "./node_modules/@fontsource/noto-sans/files/noto-sans-devanagari-700-normal.woff2",
-      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2",
-      "./node_modules/@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2",
-    ],
-  },
   async headers() {
     return [
       {

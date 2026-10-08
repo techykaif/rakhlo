@@ -1,13 +1,22 @@
-import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
-
-const require = createRequire(import.meta.url);
+import { PDFDocument } from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
+import { PDF_FONT_BASE64 } from "@/lib/generated/pdf-fonts";
 
 describe("PDF font assets", () => {
-  it("resolves all embedded Latin and Devanagari faces used by the PDF route", () => {
-    expect(() => require.resolve("@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2")).not.toThrow();
-    expect(() => require.resolve("@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2")).not.toThrow();
-    expect(() => require.resolve("@fontsource/noto-sans/files/noto-sans-devanagari-400-normal.woff2")).not.toThrow();
-    expect(() => require.resolve("@fontsource/noto-sans/files/noto-sans-devanagari-700-normal.woff2")).not.toThrow();
+  it("contains all four generated production font assets", () => {
+    for (const value of Object.values(PDF_FONT_BASE64)) {
+      expect(value.length).toBeGreaterThan(1000);
+    }
+  });
+
+  it("can embed the generated font assets with pdf-lib/fontkit", async () => {
+    const pdf = await PDFDocument.create();
+    pdf.registerFontkit(fontkit);
+
+    for (const value of Object.values(PDF_FONT_BASE64)) {
+      const bytes = new Uint8Array(Buffer.from(value, "base64"));
+      await expect(pdf.embedFont(bytes)).resolves.toBeTruthy();
+    }
   });
 });
