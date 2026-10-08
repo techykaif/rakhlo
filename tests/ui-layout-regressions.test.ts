@@ -6,12 +6,11 @@ const read = (file: string) =>
   fs.readFileSync(path.join(process.cwd(), file), "utf8");
 
 describe("UI layout regressions", () => {
-  it("keeps auth cards in normal page flow instead of introducing an inner scrollbar", () => {
+  it("keeps the redesigned auth card in a bounded responsive form surface", () => {
     const styles = read("components/ui/styles.ts");
 
-    expect(styles).toContain('"auth-card": "w-[min(100%,620px)]');
-    expect(styles).not.toContain('"auth-card": "w-[min(100%,560px)] max-h-');
-    expect(styles).not.toContain('"auth-card": "w-[min(100%,620px)] max-h-');
+    expect(styles).toContain('"auth-card": "w-full rounded-[30px]');
+    expect(styles).toContain('"auth-content": "mx-auto flex w-full max-w-[540px]');
     expect(styles).not.toContain('auth-card": "w-[min(100%,620px)] overflow-y-auto');
   });
 
