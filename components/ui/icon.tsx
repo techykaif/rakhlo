@@ -19,7 +19,8 @@ export type IconName =
   | "chevron-right"
   | "chevron-down"
   | "info"
-  | "trash";
+  | "trash"
+  | "x";
 
 const paths: Record<IconName, ReactNode> = {
   home: <path d="M3.5 10.7 12 3.5l8.5 7.2v8a1.8 1.8 0 0 1-1.8 1.8H5.3a1.8 1.8 0 0 1-1.8-1.8z" />,
@@ -95,6 +96,7 @@ const paths: Record<IconName, ReactNode> = {
       <path d="m8 7 .8 12h6.4L16 7M10 10.5v5M14 10.5v5" />
     </>
   ),
+  x: <path d="M6 6l12 12M18 6 6 18" />,
 };
 
 export function Icon({
