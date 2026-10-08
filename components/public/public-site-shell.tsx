@@ -10,9 +10,11 @@ import type { PublicPage } from "@/lib/i18n";
 
 export async function PublicSiteShell({
   page,
+  statusHealthy,
   children,
 }: {
   page: PublicPage;
+  statusHealthy?: boolean;
   children: React.ReactNode;
 }) {
   const cookieStore = await cookies();
@@ -29,7 +31,7 @@ export async function PublicSiteShell({
 
         <main className="flex-1">
           <section className="mx-auto w-[min(960px,calc(100%-32px))] py-14 md:py-20">
-            <PublicPageIntro page={page} />
+            <PublicPageIntro page={page} statusHealthy={statusHealthy} />
             <div className="mt-10">{children}</div>
           </section>
         </main>
