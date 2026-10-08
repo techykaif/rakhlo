@@ -25,7 +25,7 @@ export default async function StatusPage() {
   const checkedAt = new Date().toISOString();
 
   return (
-    <PublicSiteShell page="status">
+    <PublicSiteShell page="status" statusHealthy={authHealthy}>
       <PublicPageContent page="status" authHealthy={authHealthy} checkedAt={checkedAt} />
     </PublicSiteShell>
   );
