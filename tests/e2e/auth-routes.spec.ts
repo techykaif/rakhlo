@@ -25,7 +25,7 @@ test("signup keeps Terms and Privacy inside a polished accessible legal center",
   await expect(dialog.getByRole("heading")).toContainText(/what rakhlo stores/i);
   await expect(dialog.getByText(/what rakhlo stores, why it is needed/i)).toBeVisible();
 
-  await dialog.getByRole("button", { name: /done/i }).click();
+  await dialog.getByRole("button", { name: /i understand/i }).click();
   await expect(dialog).toBeHidden();
 });
 
