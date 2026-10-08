@@ -12,12 +12,14 @@ export default async function HomePage() {
   const cookieStore = await cookies();
   const language = cookieLanguage(cookieStore.get("rakhlo-language")?.value);
 
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getClaims();
+  const authenticated =
+    process.env.E2E_TEST_MODE === "1"
+      ? false
+      : Boolean((await (await createClient()).auth.getClaims()).data?.claims?.sub);
 
   return (
     <LanguageProvider initialLanguage={language}>
-      <LandingPage authenticated={Boolean(data?.claims?.sub)} />
+      <LandingPage authenticated={authenticated} />
     </LanguageProvider>
   );
 }
