@@ -25,8 +25,20 @@ describe("UI layout regressions", () => {
   it("keeps command search as an overlay and not part of the topbar layout", () => {
     const styles = read("components/ui/styles.ts");
 
+    expect(styles).toContain('"app-topbar": "glass-light !overflow-visible');
     expect(styles).toContain('"command-dialog": "glass-light-strong !absolute');
     expect(styles).toContain("max-[760px]:!fixed");
+    expect(styles).toContain('"command-search-skeleton":');
+  });
+
+  it("shows a skeleton while the generated PDF is loading", () => {
+    const pdf = read("components/purchases/purchase-pdf-preview.tsx");
+    const styles = read("components/ui/styles.ts");
+
+    expect(pdf).toContain('className={tw("pdf-preview__loading")}');
+    expect(pdf).toContain("Preparing your complete PDF record");
+    expect(styles).toContain('"pdf-preview__loading-sheet":');
+    expect(styles).toContain('"pdf-preview__loading-title":');
   });
 
   it("uses one shared public footer on the landing page and keeps the auth footer compact", () => {
