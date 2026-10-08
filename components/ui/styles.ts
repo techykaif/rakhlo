@@ -394,6 +394,12 @@ const styles: Record<string, StyleValue> = {
   "pdf-preview__iframe": "block h-[min(78vh,920px)] w-full border-0 bg-white max-[760px]:h-[72vh]",
   "pdf-preview__hint": "px-1 text-[10px] leading-5 text-[#77786f] max-[760px]:pb-6",
   "pdf-preview__loading": "grid min-h-[620px] place-items-center gap-2 text-[11px] font-semibold text-[#6f7068] max-[760px]:min-h-[72vh]",
+  "pdf-preview__loading-sheet": "mx-auto w-[min(82%,720px)] rounded-2xl border border-[#dddcd5] bg-white p-7 shadow-[0_16px_36px_rgba(20,21,18,0.07)] sm:p-9",
+  "pdf-preview__loading-kicker": "h-2 w-28 rounded-full bg-[#deddd6] animate-pulse",
+  "pdf-preview__loading-title": "mt-4 h-7 w-[62%] rounded-lg bg-[#ecebe5] animate-pulse",
+  "pdf-preview__loading-line": "mt-3 h-3 w-[46%] rounded-full bg-[#f0efe9] animate-pulse",
+  "pdf-preview__loading-grid": "mt-8 grid grid-cols-2 gap-3",
+  "pdf-preview__loading-grid > span": "block h-24 rounded-xl bg-[#f3f2ed] animate-pulse sm:h-28",
 
   "account-page": "grid gap-5",
   "account-card": "flex gap-4 rounded-[24px] border border-[#deddd6] bg-white p-5 shadow-[0_12px_30px_rgba(20,21,18,0.035)] md:p-6",
