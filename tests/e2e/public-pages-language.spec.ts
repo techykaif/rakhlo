@@ -6,7 +6,7 @@ const publicPages = [
   { path: "/support", english: "Tell us what's wrong, confusing or worth improving.", hindi: "जो गलत, confusing या बेहतर करने लायक है, हमें बताएं।" },
   { path: "/guidelines", english: "Keep Rakhlo safe, private and useful.", hindi: "Rakhlo को सुरक्षित, निजी और उपयोगी रखें।" },
   { path: "/disclaimer", english: "Rakhlo is a memory and organization tool, not your source of truth.", hindi: "Rakhlo याद रखने और व्यवस्थित रखने का tool है, अंतिम सत्य का स्रोत नहीं।" },
-  { path: "/status", english: "Everything looks operational.", hindi: "सब कुछ सामान्य दिख रहा है।" },
+  { path: "/status", english: "Current signal", hindi: "मौजूदा signal" },
 ] as const;
 
 test.describe("public page language switching", () => {
