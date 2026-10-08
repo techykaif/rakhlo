@@ -33,7 +33,7 @@ export function DeletePurchaseButton({ purchaseId }: { purchaseId: string }) {
 
   return (
     <>
-      <button type="button" className={tw("button button-danger")} onClick={remove} disabled={deleting}>
+      <button type="button" className={tw("button button-danger")} onClick={() => setConfirmOpen(true)} disabled={deleting}>
       <Icon name="trash" size={14} />
       {deleting ? t.deleting : t.deletePurchase}
       </button>
