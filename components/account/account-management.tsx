@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/components/ui/language-provider";
@@ -11,10 +11,16 @@ import { tw } from "@/components/ui/styles";
 
 type Deletion = { requestedAt: string; scheduledFor: string };
 
-function formatDate(value: string, language: "en" | "hi") {
+const DELETION_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+function formatDateTime(value: string, language: "en" | "hi") {
   return new Intl.DateTimeFormat(language === "hi" ? "hi-IN" : "en-IN", {
-    dateStyle: "medium",
-    timeZone: "UTC",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
   }).format(new Date(value));
 }
 
@@ -40,9 +46,27 @@ export function AccountManagement({
   const [deletionState, setDeletionState] = useState<Deletion | null>(deletion);
   const [deletionBusy, setDeletionBusy] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDialogDeadline, setDeleteDialogDeadline] = useState<string | null>(null);
   const [exportBusy, setExportBusy] = useState(false);
   const [exportMessage, setExportMessage] = useState("");
   const [signingOut, setSigningOut] = useState(false);
+
+  useEffect(() => {
+    if (!deleteDialogOpen) {
+      setDeleteDialogDeadline(null);
+      return;
+    }
+
+    const updatePreview = () => {
+      setDeleteDialogDeadline(
+        new Date(Date.now() + DELETION_WINDOW_MS).toISOString(),
+      );
+    };
+
+    updatePreview();
+    const intervalId = window.setInterval(updatePreview, 1000);
+    return () => window.clearInterval(intervalId);
+  }, [deleteDialogOpen]);
 
   async function signOut() {
     if (signingOut) return;
@@ -94,7 +118,10 @@ export function AccountManagement({
       }
 
       setDeletionState({
-        requestedAt: new Date().toISOString(),
+        requestedAt:
+          typeof payload.requestedAt === "string"
+            ? payload.requestedAt
+            : new Date().toISOString(),
         scheduledFor: payload.scheduledFor,
       });
 
@@ -264,7 +291,7 @@ export function AccountManagement({
           <h2>{deletionState ? t.deletionScheduled : t.deleteTitle}</h2>
           <p>
             {deletionState
-              ? t.deletionScheduledText.replace("{date}", formatDate(deletionState.scheduledFor, language))
+              ? t.deletionScheduledText.replace("{date}", formatDateTime(deletionState.scheduledFor, language))
               : t.deleteText}
           </p>
           {deletionState ? (
@@ -289,7 +316,14 @@ export function AccountManagement({
         eyebrow={t.deleteDialogEyebrow}
         title={t.deleteDialogTitle}
         description={t.deleteDialogDescription}
-        detail={t.deleteDialogDetail}
+        detail={t.deleteDialogDetail.replace(
+          "{date}",
+          formatDateTime(
+            deleteDialogDeadline ??
+              new Date(Date.now() + DELETION_WINDOW_MS).toISOString(),
+            language,
+          ),
+        )}
         cancelLabel={t.deleteDialogCancel}
         confirmLabel={t.deleteDialogConfirm}
         onCancel={() => setDeleteDialogOpen(false)}
