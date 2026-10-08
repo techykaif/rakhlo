@@ -222,7 +222,7 @@ export function CommandMenu({ language }: { language: Language }) {
     <div className={tw("command-root")}>
       <button
         type="button"
-        className={tw("command-trigger")}
+        className={tw(open ? "command-trigger command-trigger--open" : "command-trigger")}
         ref={triggerRef}
         onClick={() => setOpen(true)}
         aria-label={t.openCommandMenu}
@@ -275,6 +275,7 @@ export function CommandMenu({ language }: { language: Language }) {
                     type="button"
                     className={tw(index === selectedIndex ? "command-item selected" : "command-item")}
                     key={item.id}
+                    style={{ "--command-index": index } as React.CSSProperties}
                     onMouseEnter={() => setSelectedIndex(index)}
                     onClick={() => navigate(item.href)}
                   >
