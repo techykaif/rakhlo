@@ -5,16 +5,16 @@ import { LanguageProvider } from "@/components/ui/language-provider";
 import type { Language } from "@/lib/i18n";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
+import { PublicPageIntro } from "@/components/public/public-page";
+import type { PublicPage } from "@/lib/i18n";
 
 export async function PublicSiteShell({
-  eyebrow,
-  title,
-  description,
+  page,
+  statusHealthy,
   children,
 }: {
-  eyebrow: string;
-  title: string;
-  description?: string;
+  page: PublicPage;
+  statusHealthy?: boolean;
   children: React.ReactNode;
 }) {
   const cookieStore = await cookies();
@@ -31,20 +31,7 @@ export async function PublicSiteShell({
 
         <main className="flex-1">
           <section className="mx-auto w-[min(960px,calc(100%-32px))] py-14 md:py-20">
-            <div className="max-w-[820px]">
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#8b8c84]">
-                {eyebrow}
-              </span>
-              <h1 className="mt-3 max-w-[780px] text-[clamp(42px,6vw,74px)] font-extrabold leading-[0.98] tracking-[-0.05em] text-[#141512]">
-                {title}
-              </h1>
-              {description ? (
-                <p className="mt-5 max-w-[740px] text-[14px] leading-7 text-[#6f7068]">
-                  {description}
-                </p>
-              ) : null}
-            </div>
-
+            <PublicPageIntro page={page} statusHealthy={statusHealthy} />
             <div className="mt-10">{children}</div>
           </section>
         </main>
