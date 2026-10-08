@@ -7,9 +7,10 @@ import { useLanguage } from "@/components/ui/language-provider";
 import type { PublicPage } from "@/lib/i18n";
 import { copy } from "@/lib/i18n";
 
-export function PublicPageIntro({ page }: { page: PublicPage }) {
+export function PublicPageIntro({ page, statusHealthy }: { page: PublicPage; statusHealthy?: boolean }) {
   const { language } = useLanguage();
   const t = copy[language].publicPages[page];
+  const title = "title" in t ? t.title : statusHealthy ? t.operationalTitle : t.attentionTitle;
 
   return (
     <div className="max-w-[820px]">
@@ -17,7 +18,7 @@ export function PublicPageIntro({ page }: { page: PublicPage }) {
         {t.eyebrow}
       </span>
       <h1 className="mt-3 max-w-[780px] text-[clamp(42px,6vw,74px)] font-extrabold leading-[0.98] tracking-[-0.05em] text-[#141512]">
-        {"title" in t ? t.title : t.operationalTitle}
+        {title}
       </h1>
       {"description" in t && t.description ? (
         <p className="mt-5 max-w-[740px] text-[14px] leading-7 text-[#6f7068]">
