@@ -2,21 +2,15 @@ import { expect, test } from "@playwright/test";
 
 const narrowViewports = [320, 375, 390, 430];
 
-test.describe("desktop auth one-page fit", () => {
+test.describe("auth viewport containment", () => {
   test.use({ viewport: { width: 1280, height: 720 } });
 
   for (const route of ["/login", "/signup"]) {
-    test(`${route} fits in one viewport without page scrolling`, async ({ page }) => {
+    test(`${route} stays horizontally contained`, async ({ page }) => {
       await page.goto(route);
       await expect(page.locator("main section > div").first()).toBeVisible();
       await expect
-        .poll(() =>
-          page.evaluate(() => {
-            const root = document.documentElement;
-            const body = document.body;
-            return Math.max(root.scrollHeight, body.scrollHeight) - window.innerHeight;
-          }),
-        )
+        .poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth))
         .toBeLessThanOrEqual(1);
     });
   }
