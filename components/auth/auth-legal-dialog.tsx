@@ -23,6 +23,7 @@ export function AuthLegalDialog({
   const { language, copy } = useLanguage();
   const t = copy[language].auth;
   const dialogRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const wasOpenRef = useRef(false);
@@ -31,6 +32,10 @@ export function AuthLegalDialog({
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
+
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0 });
+  }, [legalDocument]);
 
   useEffect(() => {
     const open = Boolean(legalDocument);
@@ -188,8 +193,10 @@ export function AuthLegalDialog({
           <div className={tw("auth-legal-tabs")} role="tablist" aria-label={t.legalDialogTabsLabel}>
             <button
               type="button"
+              id="auth-legal-tab-terms"
               role="tab"
               aria-selected={terms}
+              aria-controls="auth-legal-panel"
               className={tw(terms ? "auth-legal-tab auth-legal-tab--active" : "auth-legal-tab")}
               onClick={() => onDocumentChange("terms")}
             >
@@ -197,8 +204,10 @@ export function AuthLegalDialog({
             </button>
             <button
               type="button"
+              id="auth-legal-tab-privacy"
               role="tab"
               aria-selected={!terms}
+              aria-controls="auth-legal-panel"
               className={tw(!terms ? "auth-legal-tab auth-legal-tab--active" : "auth-legal-tab")}
               onClick={() => onDocumentChange("privacy")}
             >
@@ -207,7 +216,13 @@ export function AuthLegalDialog({
           </div>
         </header>
 
-        <div className={tw("auth-legal-body")} role="tabpanel">
+        <div
+          ref={bodyRef}
+          className={tw("auth-legal-body")}
+          role="tabpanel"
+          id="auth-legal-panel"
+          aria-labelledby={terms ? "auth-legal-tab-terms" : "auth-legal-tab-privacy"}
+        >
           <div className={tw("auth-legal-note")}>
             <span className={tw("auth-legal-note__mark")} aria-hidden="true">
               <Icon name={terms ? "info" : "check"} size={14} />

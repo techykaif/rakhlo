@@ -53,6 +53,10 @@ describe("UI layout regressions", () => {
     expect(styles).toContain('"auth-visual":');
     expect(styles).toContain('"auth-memory-card":');
     expect(styles).toContain('"auth-legal-dialog":');
+    expect(styles).toContain('100dvh');
+    expect(styles).toContain('max-[620px]:items-end');
+    expect(styles).toContain('"auth-legal-body":');
+    expect(styles).toContain('overflow-y-auto');
     expect(styles).toContain('"auth-legal-tabs":');
     expect(styles).toContain('"auth-legal-section":');
     expect(styles).toContain('"auth-legal-footer":');
