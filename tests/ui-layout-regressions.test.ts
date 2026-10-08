@@ -65,6 +65,9 @@ describe("UI layout regressions", () => {
     expect(account).toContain('import { ConfirmDialog } from "@/components/ui/confirm-dialog";');
     expect(account).toContain("<ConfirmDialog");
     expect(account).not.toContain("window.confirm(t.deleteConfirm)");
+    expect(account).toContain('formatDateTime(deletionState.scheduledFor, language)');
+    expect(account).toContain('t.deleteDialogDetail.replace("{date}"');
+    expect(account).toContain('typeof payload.requestedAt === "string"');
     expect(styles).toContain('"confirm-overlay":');
     expect(styles).toContain('"confirm-dialog":');
     expect(styles).toContain('"button-danger-confirm":');
