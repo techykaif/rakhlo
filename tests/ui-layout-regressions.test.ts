@@ -27,8 +27,11 @@ describe("UI layout regressions", () => {
 
     expect(styles).toContain('"app-topbar": "glass-light !overflow-visible');
     expect(styles).toContain('"command-dialog": "glass-light-strong !absolute');
-    expect(styles).toContain("max-[760px]:!fixed");
+    expect(styles).toContain("command-dialog-in_300ms");
+    expect(styles).toContain('"command-item":');
+    expect(styles).toContain("command-item-in_360ms");
     expect(styles).toContain('"command-search-skeleton":');
+    expect(styles).toContain('"command-backdrop":');
   });
 
 
@@ -52,6 +55,16 @@ describe("UI layout regressions", () => {
     expect(styles).toContain('"confirm-overlay":');
     expect(styles).toContain('"confirm-dialog":');
     expect(styles).toContain('"button-danger-confirm":');
+  });
+
+  it("uses a real browser PDF print flow instead of only opening a new tab", () => {
+    const pdf = read("components/purchases/purchase-pdf-preview.tsx");
+
+    expect(pdf).toContain('document.createElement("iframe")');
+    expect(pdf).toContain("printWindow.print()");
+    expect(pdf).toContain('frame.style.opacity = "0.01"');
+    expect(pdf).toContain("window.setTimeout(cleanup, 60000)");
+    expect(pdf).not.toContain('window.open("", "_blank", "noopener,noreferrer")');
   });
 
   it("uses one shared public footer on the landing page and keeps the auth footer compact", () => {
