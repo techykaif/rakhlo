@@ -60,11 +60,14 @@ test.describe("public trust and support routes", () => {
     await expect(page.locator('footer a[href^="mailto:"]')).toHaveCount(0);
   });
 
-  test("support page uses the disabled contact form without direct mail links", async ({ page }) => {
+  test("support page exposes the live contact form without direct mail links", async ({ page }) => {
     await page.goto("/support");
     await expect(page.getByRole("heading", { name: /tell us what’s wrong/i })).toBeVisible();
     await expect(page.getByRole("combobox", { name: /what can we help with/i })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Email delivery unavailable" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Send message" })).toBeEnabled();
+    await expect(page.getByLabel("Your email")).toBeVisible();
+    await expect(page.getByLabel("Subject")).toBeVisible();
+    await expect(page.getByLabel("Message")).toBeVisible();
     await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
   });
 
