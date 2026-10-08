@@ -101,9 +101,10 @@ jobs:
 
   e2e:
     name: Production E2E tests
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    env:
+      E2E_TEST_MODE: "1"
 
     steps:
       - name: Checkout
@@ -128,7 +129,5 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: End-to-end tests against production
-        env:
-          E2E_BASE_URL: https://www.rakhlo.xyz
+      - name: Run end-to-end tests against the CI production server
         run: npm run test:e2e
