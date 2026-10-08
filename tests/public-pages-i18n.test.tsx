@@ -15,7 +15,7 @@ const cases: Array<{
   { page: "support", english: "Before sending", hindi: "भेजने से पहले" },
   { page: "guidelines", english: "Store only what you are allowed to keep", hindi: "वही सेव करें जिसे रखने का अधिकार आपके पास है" },
   { page: "disclaimer", english: "Dates and reminders", hindi: "तारीखें और रिमाइंडर" },
-  { page: "status", english: "Rakhlo web app", hindi: "Rakhlo web app" },
+  { page: "status", english: "Current signal", hindi: "मौजूदा signal" },
 ];
 
 describe("public page localization", () => {
