@@ -529,6 +529,12 @@ export type Database = {
         Args: { offsets: number[] }
         Returns: boolean
       }
+      list_orphaned_purchase_document_paths: {
+        Args: { p_limit?: number | null }
+        Returns: {
+          storage_path: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
