@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { LanguageProvider } from "../components/ui/language-provider";
 import { LanguageToggle } from "../components/ui/language-toggle";
 import { PublicPageContent, PublicPageIntro } from "../components/public/public-page";
@@ -19,6 +19,10 @@ const cases: Array<{
 ];
 
 describe("public page localization", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   it.each(cases)("switches $page content from English to Hindi", ({ page, english, hindi }) => {
     render(
       <LanguageProvider>
