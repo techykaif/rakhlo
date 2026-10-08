@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useLanguage } from "@/components/ui/language-provider";
 import { Icon } from "@/components/ui/icon";
@@ -146,7 +147,7 @@ export function AuthLegalDialog({
         },
       ];
 
-  return (
+  const content = (
     <div
       className={tw("auth-legal-overlay")}
       onPointerDown={(event) => {
@@ -262,11 +263,15 @@ export function AuthLegalDialog({
               className={tw("button button-dark auth-legal-done")}
               onClick={onClose}
             >
-              {t.legalDialogDone}
+              {t.legalDialogUnderstand}
             </button>
           </div>
         </footer>
       </div>
     </div>
   );
+
+  return typeof document !== "undefined"
+    ? createPortal(content, document.body)
+    : null;
 }
