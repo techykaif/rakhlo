@@ -158,7 +158,7 @@ export const copy = {
       privacyDialogTab: "Privacy",
       termsDialogNote: "A quick look at the rules that keep Rakhlo useful and safe to use.",
       privacyDialogNote: "A clear summary of what Rakhlo stores, why it is needed and how access is protected.",
-      legalDialogDone: "Done",
+      legalDialogUnderstand: "I understand",
 
       termsDialogEyebrow: "Terms",
       termsDialogTitle: "A simple baseline for using Rakhlo.",
@@ -626,7 +626,7 @@ export const copy = {
       privacyDialogTab: "प्राइवेसी",
       termsDialogNote: "Rakhlo को उपयोगी और सुरक्षित रखने वाली शर्तों का संक्षिप्त सार।",
       privacyDialogNote: "Rakhlo क्या सेव करता है, क्यों ज़रूरी है और access कैसे सुरक्षित रखा जाता है, उसका साफ़ सार।",
-      legalDialogDone: "ठीक है",
+      legalDialogUnderstand: "समझ लिया",
 
       termsDialogEyebrow: "शर्तें",
       termsDialogTitle: "Rakhlo इस्तेमाल करने की सरल बुनियाद।",
