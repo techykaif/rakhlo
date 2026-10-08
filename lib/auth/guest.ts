@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { SupabaseConfigError } from "@/lib/supabase/config";
 
 export async function redirectIfAuthenticated(destination = "/dashboard") {
+  if (process.env.E2E_TEST_MODE === "1") return;
+
   try {
     const supabase = await createClient();
     const { data } = await supabase.auth.getClaims();
