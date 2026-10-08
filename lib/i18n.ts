@@ -1216,6 +1216,7 @@ export const copy = {
   },
 } as const;
 
+export type PublicPage = keyof Copy["publicPages"];
 export type Language = keyof typeof copy;
 export type Copy = (typeof copy)[Language];
 
