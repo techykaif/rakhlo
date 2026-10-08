@@ -13,6 +13,7 @@ import {
   type OAuthProvider,
 } from "@/lib/auth/oauth";
 import { Icon } from "@/components/ui/icon";
+import { LegalDialog } from "@/components/auth/legal-dialog";
 import {
   getReturnedAuthErrorMessage,
   getUnexpectedAuthErrorMessage,
@@ -31,6 +32,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [legalDocument, setLegalDocument] = useState<"terms" | "privacy" | null>(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -248,25 +250,42 @@ export function AuthForm({ mode }: AuthFormProps) {
       {message ? <div className={tw("auth-message auth-message--success")} role="status">{message}</div> : null}
 
       {mode === "signup" ? (
-        <label className="flex items-start gap-2.5 text-[10px] leading-4 text-[#6f7068]">
+        <label className={tw("auth-consent")}>
           <input
             type="checkbox"
             checked={termsAccepted}
             onChange={(event) => setTermsAccepted(event.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 accent-[#171713] focus-visible:outline-2 focus-visible:outline-[#c8f76a] focus-visible:outline-offset-2"
+            className={tw("auth-consent__checkbox")}
             required
           />
           <span>
             {t.termsConsentPrefix}{" "}
-            <Link className="font-bold text-[#171713] underline underline-offset-2" href="/terms">
+            <button
+              type="button"
+              className={tw("auth-consent__link")}
+              onClick={() => setLegalDocument("terms")}
+            >
               {t.termsConsentTerms}
-            </Link>{" "}
+            </button>{" "}
             {t.termsConsentAnd}{" "}
-            <Link className="font-bold text-[#171713] underline underline-offset-2" href="/privacy">
+            <button
+              type="button"
+              className={tw("auth-consent__link")}
+              onClick={() => setLegalDocument("privacy")}
+            >
               {t.termsConsentPrivacy}
-            </Link>
+            </button>
           </span>
         </label>
+      ) : null}
+
+      {mode === "signup" ? (
+        <LegalDialog
+          open={legalDocument !== null}
+          initialDocument={legalDocument ?? "terms"}
+          language={language}
+          onClose={() => setLegalDocument(null)}
+        />
       ) : null}
 
       <button className={tw("button button-dark auth-submit")} type="submit" disabled={loading}>
