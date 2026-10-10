@@ -11,7 +11,7 @@ Existing unresolved entries in docs/OFFLINE-FIRST-CHECKPOINT.md remain active an
 - Branch: feat/offline-foundation-contracts-20261009
 - Head SHA: 9904db9f9aafac2ad1ad06023fb137c28a6153fc
 - Current main-to-head comparison: 5 commits ahead, 0 behind, exactly 3 changed files: docs/OFFLINE-FIRST-CHECKPOINT.md, docs/OFFLINE-FIRST.md, lib/offline/offline-contracts.ts.
-- PR API still reports stale base SHA 5627a24f0e5df5cc7259bf9211ac3ad6d046f4ab and 15 changed files including unrelated localization/PRD changes. Do not merge until reconciled.
+- PR API still reports stale base SHA 5627a24f0e5df5cc7259bf9211ac3ad6d046c133 and 15 changed files including unrelated localization/PRD changes. Do not merge until reconciled.
 - CI run 38016546781 completed successfully for the exact head SHA.
 - Branch-protection read previously returned HTTP 403: Resource not accessible by integration.
 - Next: safely refresh or replace PR metadata, inspect exact current diff and required checks, then decide whether merge is permitted.
